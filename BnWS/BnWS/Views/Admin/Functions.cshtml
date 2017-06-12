@@ -1,0 +1,207 @@
+﻿@{
+    ViewBag.Title = "Functions";
+    Layout = "~/Views/Shared/_Manage.cshtml";
+}
+
+
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>功能维护</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-5 m-b-xs">
+                        </div>
+                        <div class="col-sm-4 m-b-xs">
+
+                        </div>
+                        <div class="col-sm-3">
+                            <button type="button" class="btn btn-sm btn-primary pull-right" data-bind="click:showDialog">添加</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width:30px"></th>
+                                    <th>功能</th>
+                                    <th>路径</th>
+                                    <th>序号</th>
+                                    <th>父功能</th>
+                                    <th style="width:200px">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach:items">
+                                <tr>
+                                    <td data-bind="text:$index()+1"></td>
+                                    <td data-bind="text:Name"></td>
+                                    <td data-bind="text:Url"></td>
+                                    <td data-bind="text:Seq"></td>
+                                    <td data-bind="text:ParentId"></td>
+                                    <td>
+                                        <div class="btn btn-sm btn-primary" data-bind="click:$root.showDialog"><i class="fa fa-pencil">编辑</i></div>
+                                        <div class="btn btn-sm btn-primary" data-bind="click:$root.delete"><i class="fa fa-remove">删除</i></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInRight">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">功能</h4>
+            </div>
+            <div class="modal-body" data-bind="with:item">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">父功能</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" data-bind="options:$root.allItems,value:ParentId,optionsText:'pname',optionsValue:'id',optionsCaption:'请选择...'"></select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">功能名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="value:Name" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">路径</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="value:Url" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">图标</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="value:Icon" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">序号</label>
+                        <div class="col-sm-10">
+                            <input type="text" data-bind="value:Seq" class="form-control">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-bind="click:saveChange">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function ViewModel() {
+            var self = this;
+            self.emptyItem = { Name:'',Url:'',Icon:'',Seq:'',ParentId:'' };
+            self.itemKey = 'FunctionId';
+            self.urls = {
+                load: '@Url.Action("getFunctions")',
+                a: '@Url.Action("AddFunction")',
+                u: '@Url.Action("UpdateFunction")',
+                d: '@Url.Action("DeleteFunction")'
+            }
+            self.detailModal = $('#detailModal');
+
+            self.items = ko.observableArray();
+            self.item = ko.observable();
+
+
+
+
+
+            self.allItems = ko.computed(function () {
+                return $.map(self.items(), function (x) { return { id: x.FunctionId, pname: x.Name }; });
+            }, this);
+            self.load = function () {
+                bnApp.showLoading();
+                $.ajax({
+                    url: self.urls.load,
+                    type: "GET",
+                    success: function(result) {
+                        self.items(result.data);
+                        bnApp.hideLoading();
+                    },
+                    error: function (error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            }
+            self.showDialog = function(data) {
+                if (!data[self.itemKey]) {
+                    data = $.extend(true, {}, self.emptyItem);
+                }
+                self.item(data);
+                self.detailModal.modal("show");
+            };
+
+            self.delete = function (data) {
+                bnApp.showLoading();
+                $.ajax({
+                    url: self.urls.d,
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ itemId: data[self.itemKey] }),
+                    success: function (result) {
+                        bnApp.hideLoading();
+                        self.load();
+                    }
+                });
+            }
+            self.saveChange = function() {
+                var url;
+                var data = self.item();
+                if (data[self.itemKey]) {
+                    url = self.urls.u;
+                } else {
+                    url = self.urls.a;
+                }
+                bnApp.showLoading();
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ item: data }),
+                    success: function (result) {
+                        bnApp.hideLoading();
+                        self.load();
+                    }
+                });
+                self.detailModal.modal("hide");
+            }
+            self.init = function() {
+                self.load();
+            }
+            self.init();
+        }
+
+        ko.applyBindings(new ViewModel());
+
+
+    </script>
+}
+

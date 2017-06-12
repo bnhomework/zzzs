@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BnWS", "BnWS\BnWS.csproj", "{32C22614-556C-4255-9612-22B0F98AF3FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BnWS.Entity", "BnWS.Entity\BnWS.Entity.csproj", "{15326AB3-CE78-4312-B713-25E270CBC6B0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BnWS.Business", "BnWS.Business\BnWS.Business.csproj", "{5EEDD572-EDC1-4365-87B7-89F08A295535}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32C22614-556C-4255-9612-22B0F98AF3FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C22614-556C-4255-9612-22B0F98AF3FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C22614-556C-4255-9612-22B0F98AF3FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C22614-556C-4255-9612-22B0F98AF3FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15326AB3-CE78-4312-B713-25E270CBC6B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15326AB3-CE78-4312-B713-25E270CBC6B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15326AB3-CE78-4312-B713-25E270CBC6B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15326AB3-CE78-4312-B713-25E270CBC6B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EEDD572-EDC1-4365-87B7-89F08A295535}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EEDD572-EDC1-4365-87B7-89F08A295535}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EEDD572-EDC1-4365-87B7-89F08A295535}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EEDD572-EDC1-4365-87B7-89F08A295535}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,351 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BnAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="BnAppEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="T_S_Code" EntityType="BnAppModel.T_S_Code" />
+    <EntitySet Name="T_S_Function" EntityType="BnAppModel.T_S_Function" />
+    <EntitySet Name="T_S_Role" EntityType="BnAppModel.T_S_Role" />
+    <EntitySet Name="T_S_Role_Function" EntityType="BnAppModel.T_S_Role_Function" />
+    <EntitySet Name="T_S_User" EntityType="BnAppModel.T_S_User" />
+    <EntitySet Name="T_S_User_Role" EntityType="BnAppModel.T_S_User_Role" />
+    <EntitySet Name="ZY_Customer" EntityType="BnAppModel.ZY_Customer" />
+    <EntitySet Name="ZY_Session" EntityType="BnAppModel.ZY_Session" />
+    <EntitySet Name="ZY_Shop" EntityType="BnAppModel.ZY_Shop" />
+    <EntitySet Name="ZY_Shop_Desk" EntityType="BnAppModel.ZY_Shop_Desk" />
+    <EntitySet Name="ZY_Shop_Order" EntityType="BnAppModel.ZY_Shop_Order" />
+    <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="BnAppModel.FK_T_S_Role_Function_T_S_Function">
+      <End Role="T_S_Function" EntitySet="T_S_Function" />
+      <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
+    </AssociationSet>
+    <AssociationSet Name="FK_T_S_Role_Function_T_S_Role" Association="BnAppModel.FK_T_S_Role_Function_T_S_Role">
+      <End Role="T_S_Role" EntitySet="T_S_Role" />
+      <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
+    </AssociationSet>
+    <AssociationSet Name="FK_T_S_User_Role_T_S_Role" Association="BnAppModel.FK_T_S_User_Role_T_S_Role">
+      <End Role="T_S_Role" EntitySet="T_S_Role" />
+      <End Role="T_S_User_Role" EntitySet="T_S_User_Role" />
+    </AssociationSet>
+    <AssociationSet Name="FK_T_S_User_Role_T_S_User" Association="BnAppModel.FK_T_S_User_Role_T_S_User">
+      <End Role="T_S_User" EntitySet="T_S_User" />
+      <End Role="T_S_User_Role" EntitySet="T_S_User_Role" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ZY_Session_T_S_User" Association="BnAppModel.FK_ZY_Session_T_S_User">
+      <End Role="T_S_User" EntitySet="T_S_User" />
+      <End Role="ZY_Session" EntitySet="ZY_Session" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ZY_Shop_T_S_User" Association="BnAppModel.FK_ZY_Shop_T_S_User">
+      <End Role="T_S_User" EntitySet="T_S_User" />
+      <End Role="ZY_Shop" EntitySet="ZY_Shop" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ZY_Shop_Order_ZY_Customer" Association="BnAppModel.FK_ZY_Shop_Order_ZY_Customer">
+      <End Role="ZY_Customer" EntitySet="ZY_Customer" />
+      <End Role="ZY_Shop_Order" EntitySet="ZY_Shop_Order" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ZY_Shop_Desk_ZY_Shop" Association="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop">
+      <End Role="ZY_Shop" EntitySet="ZY_Shop" />
+      <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ZY_Shop_Order_ZY_Shop_Desk" Association="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk">
+      <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+      <End Role="ZY_Shop_Order" EntitySet="ZY_Shop_Order" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="T_S_Code">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="CodeCategory" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Code" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Desc" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Seq" Type="Int32" Nullable="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="T_S_Function">
+    <Key>
+      <PropertyRef Name="FunctionId" />
+    </Key>
+    <Property Name="FunctionId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Url" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Icon" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="ParentId" Type="Guid" />
+    <Property Name="Seq" Type="Int32" Nullable="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_Role_Function" Relationship="BnAppModel.FK_T_S_Role_Function_T_S_Function" FromRole="T_S_Function" ToRole="T_S_Role_Function" />
+  </EntityType>
+  <EntityType Name="T_S_Role">
+    <Key>
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="RoleId" Type="Guid" Nullable="false" />
+    <Property Name="RoleName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_Role_Function" Relationship="BnAppModel.FK_T_S_Role_Function_T_S_Role" FromRole="T_S_Role" ToRole="T_S_Role_Function" />
+    <NavigationProperty Name="T_S_User_Role" Relationship="BnAppModel.FK_T_S_User_Role_T_S_Role" FromRole="T_S_Role" ToRole="T_S_User_Role" />
+  </EntityType>
+  <EntityType Name="T_S_Role_Function">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="RoleId" Type="Guid" Nullable="false" />
+    <Property Name="FunctionId" Type="Guid" Nullable="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_Function" Relationship="BnAppModel.FK_T_S_Role_Function_T_S_Function" FromRole="T_S_Role_Function" ToRole="T_S_Function" />
+    <NavigationProperty Name="T_S_Role" Relationship="BnAppModel.FK_T_S_Role_Function_T_S_Role" FromRole="T_S_Role_Function" ToRole="T_S_Role" />
+  </EntityType>
+  <EntityType Name="T_S_User">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Guid" Nullable="false" />
+    <Property Name="LoginName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="IsActive" Type="Boolean" Nullable="false" />
+    <Property Name="Source" Type="Int32" Nullable="false" />
+    <Property Name="OpenId" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="AccessToken" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
+    <Property Name="IsLock" Type="Boolean" Nullable="false" />
+    <Property Name="LastLoginTime" Type="DateTime" Precision="3" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_User_Role" Relationship="BnAppModel.FK_T_S_User_Role_T_S_User" FromRole="T_S_User" ToRole="T_S_User_Role" />
+    <NavigationProperty Name="ZY_Session" Relationship="BnAppModel.FK_ZY_Session_T_S_User" FromRole="T_S_User" ToRole="ZY_Session" />
+    <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_T_S_User" FromRole="T_S_User" ToRole="ZY_Shop" />
+  </EntityType>
+  <EntityType Name="T_S_User_Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="UserId" Type="Guid" Nullable="false" />
+    <Property Name="RoleId" Type="Guid" Nullable="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_Role" Relationship="BnAppModel.FK_T_S_User_Role_T_S_Role" FromRole="T_S_User_Role" ToRole="T_S_Role" />
+    <NavigationProperty Name="T_S_User" Relationship="BnAppModel.FK_T_S_User_Role_T_S_User" FromRole="T_S_User_Role" ToRole="T_S_User" />
+  </EntityType>
+  <EntityType Name="ZY_Customer">
+    <Key>
+      <PropertyRef Name="OpenId" />
+    </Key>
+    <Property Name="OpenId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="UserName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Avatar" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="TokenId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ZY_Shop_Order" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Shop_Order" />
+  </EntityType>
+  <EntityType Name="ZY_Session">
+    <Key>
+      <PropertyRef Name="SessionId" />
+    </Key>
+    <Property Name="SessionId" Type="Guid" Nullable="false" />
+    <Property Name="UserId" Type="Guid" Nullable="false" />
+    <Property Name="ExpireTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_User" Relationship="BnAppModel.FK_ZY_Session_T_S_User" FromRole="ZY_Session" ToRole="T_S_User" />
+  </EntityType>
+  <EntityType Name="ZY_Shop">
+    <Key>
+      <PropertyRef Name="ShopId" />
+    </Key>
+    <Property Name="ShopId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="Longitude" Type="Decimal" Precision="10" Scale="7" />
+    <Property Name="Latitude" Type="Decimal" Precision="10" Scale="7" />
+    <Property Name="Address" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="ShopStatus" Type="Int32" />
+    <Property Name="OwnId" Type="Guid" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="T_S_User" Relationship="BnAppModel.FK_ZY_Shop_T_S_User" FromRole="ZY_Shop" ToRole="T_S_User" />
+    <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop" ToRole="ZY_Shop_Desk" />
+  </EntityType>
+  <EntityType Name="ZY_Shop_Desk">
+    <Key>
+      <PropertyRef Name="DeskId" />
+    </Key>
+    <Property Name="DeskId" Type="Guid" Nullable="false" />
+    <Property Name="ShopId" Type="Guid" Nullable="false" />
+    <Property Name="DeskName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="DeskStatus" Type="Int32" Nullable="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop" />
+    <NavigationProperty Name="ZY_Shop_Order" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop_Order" />
+  </EntityType>
+  <EntityType Name="ZY_Shop_Order">
+    <Key>
+      <PropertyRef Name="OrderId" />
+    </Key>
+    <Property Name="OrderId" Type="Guid" Nullable="false" />
+    <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <Property Name="CustomerOpenId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="DeskId" Type="Guid" Nullable="false" />
+    <Property Name="Position" Type="Guid" Nullable="false" />
+    <Property Name="VersionNo" Type="Int32" Nullable="false" />
+    <Property Name="TransactionId" Type="Guid" Nullable="false" />
+    <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+    <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Customer" FromRole="ZY_Shop_Order" ToRole="ZY_Customer" />
+    <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk" FromRole="ZY_Shop_Order" ToRole="ZY_Shop_Desk" />
+  </EntityType>
+  <Association Name="FK_T_S_Role_Function_T_S_Function">
+    <End Type="BnAppModel.T_S_Function" Role="T_S_Function" Multiplicity="1" />
+    <End Type="BnAppModel.T_S_Role_Function" Role="T_S_Role_Function" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_S_Function">
+        <PropertyRef Name="FunctionId" />
+      </Principal>
+      <Dependent Role="T_S_Role_Function">
+        <PropertyRef Name="FunctionId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_T_S_Role_Function_T_S_Role">
+    <End Type="BnAppModel.T_S_Role" Role="T_S_Role" Multiplicity="1" />
+    <End Type="BnAppModel.T_S_Role_Function" Role="T_S_Role_Function" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_S_Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="T_S_Role_Function">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_T_S_User_Role_T_S_Role">
+    <End Type="BnAppModel.T_S_Role" Role="T_S_Role" Multiplicity="1" />
+    <End Type="BnAppModel.T_S_User_Role" Role="T_S_User_Role" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_S_Role">
+        <PropertyRef Name="RoleId" />
+      </Principal>
+      <Dependent Role="T_S_User_Role">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_T_S_User_Role_T_S_User">
+    <End Type="BnAppModel.T_S_User" Role="T_S_User" Multiplicity="1" />
+    <End Type="BnAppModel.T_S_User_Role" Role="T_S_User_Role" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_S_User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="T_S_User_Role">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ZY_Session_T_S_User">
+    <End Type="BnAppModel.T_S_User" Role="T_S_User" Multiplicity="1" />
+    <End Type="BnAppModel.ZY_Session" Role="ZY_Session" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_S_User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="ZY_Session">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ZY_Shop_T_S_User">
+    <End Type="BnAppModel.T_S_User" Role="T_S_User" Multiplicity="0..1" />
+    <End Type="BnAppModel.ZY_Shop" Role="ZY_Shop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="T_S_User">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="ZY_Shop">
+        <PropertyRef Name="OwnId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ZY_Shop_Order_ZY_Customer">
+    <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="1" />
+    <End Type="BnAppModel.ZY_Shop_Order" Role="ZY_Shop_Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ZY_Customer">
+        <PropertyRef Name="OpenId" />
+      </Principal>
+      <Dependent Role="ZY_Shop_Order">
+        <PropertyRef Name="CustomerOpenId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ZY_Shop_Desk_ZY_Shop">
+    <End Type="BnAppModel.ZY_Shop" Role="ZY_Shop" Multiplicity="1" />
+    <End Type="BnAppModel.ZY_Shop_Desk" Role="ZY_Shop_Desk" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ZY_Shop">
+        <PropertyRef Name="ShopId" />
+      </Principal>
+      <Dependent Role="ZY_Shop_Desk">
+        <PropertyRef Name="ShopId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ZY_Shop_Order_ZY_Shop_Desk">
+    <End Type="BnAppModel.ZY_Shop_Desk" Role="ZY_Shop_Desk" Multiplicity="1" />
+    <End Type="BnAppModel.ZY_Shop_Order" Role="ZY_Shop_Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ZY_Shop_Desk">
+        <PropertyRef Name="DeskId" />
+      </Principal>
+      <Dependent Role="ZY_Shop_Order">
+        <PropertyRef Name="DeskId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
