@@ -45,7 +45,6 @@ namespace BnWS.Controllers
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
             base.OnAuthorization(filterContext);
-            filterContext.RequestContext.HttpContext.Response.
         }
     }
 }

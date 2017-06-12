@@ -33,7 +33,13 @@ namespace BnWS.Business
                 {
                     return GetAllMenus();
                 }
-                return uow.Repository<T_S_Function>().Query().Get().ToList();
+
+                var functions = (from ur in uow.Repository<T_S_User_Role>().Query().Get()
+                    join r in uow.Repository<T_S_Role_Function>().Query().Get() on ur.RoleId equals r.RoleId
+                    join f in uow.Repository<T_S_Function>().Query().Get() on r.FunctionId equals f.FunctionId
+                    where ur.UserId == userId
+                    select f).ToList();
+                return functions;
             }
         }
 
