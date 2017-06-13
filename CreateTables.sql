@@ -50,6 +50,7 @@ CREATE TABLE [dbo].[ZY_Shop_Order](
 	[OrderId] uniqueIdentifier NOT NULL primary key,
 	[OrderDate] datetime not null,
 	[Status] int default(0) not null,
+	[IsInternal] bit default(0) not null,
 	CustomerOpenId nvarchar(256) NOT NULL,
 	[DeskId] uniqueIdentifier  not null,
 	[Position] uniqueIdentifier  not null,

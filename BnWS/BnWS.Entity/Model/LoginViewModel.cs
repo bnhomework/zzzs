@@ -14,4 +14,12 @@ namespace BnWS.Entity
 
         public bool RememberMe { get; set; }
     }
+
+    public class DeskViewModel
+    {
+        public Guid DeskId { get; set; }
+        public string DeskName { get; set; }
+        public string BookedPositions { get; set; }
+        public string InternalBookedPositions { get; set; } 
+    }
 }
