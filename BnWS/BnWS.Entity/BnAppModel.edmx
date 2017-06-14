@@ -99,6 +99,25 @@
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="ZY_Booked_Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="DeskId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Position" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="IsInternal" Type="bit" Nullable="false" />
+          <Property Name="OrderId" Type="uniqueidentifier" />
+          <Property Name="CustomerOpenId" Type="nvarchar" MaxLength="256" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ZY_Customer">
           <Key>
             <PropertyRef Name="OpenId" />
@@ -107,6 +126,21 @@
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="Avatar" Type="nvarchar" MaxLength="256" />
           <Property Name="TokenId" Type="nvarchar" MaxLength="256" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZY_Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustomerOpenId" Type="nvarchar" MaxLength="256" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="VersionNo" Type="int" Nullable="false" />
           <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
@@ -154,23 +188,6 @@
           <Property Name="ShopId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="DeskName" Type="varchar" MaxLength="256" Nullable="false" />
           <Property Name="DeskStatus" Type="int" Nullable="false" />
-          <Property Name="VersionNo" Type="int" Nullable="false" />
-          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
-          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
-          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ZY_Shop_Order">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="OrderDate" Type="datetime" Nullable="false" />
-          <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="CustomerOpenId" Type="nvarchar" MaxLength="256" Nullable="false" />
-          <Property Name="DeskId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Position" Type="uniqueidentifier" Nullable="false" />
           <Property Name="VersionNo" Type="int" Nullable="false" />
           <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
@@ -226,6 +243,54 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Customer">
+          <End Role="ZY_Customer" Type="Self.ZY_Customer" Multiplicity="0..1" />
+          <End Role="ZY_Booked_Position" Type="Self.ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Customer">
+              <PropertyRef Name="OpenId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="CustomerOpenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Order">
+          <End Role="ZY_Order" Type="Self.ZY_Order" Multiplicity="0..1" />
+          <End Role="ZY_Booked_Position" Type="Self.ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Shop_Desk">
+          <End Role="ZY_Shop_Desk" Type="Self.ZY_Shop_Desk" Multiplicity="1" />
+          <End Role="ZY_Booked_Position" Type="Self.ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Shop_Desk">
+              <PropertyRef Name="DeskId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="DeskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Order_ZY_Customer">
+          <End Role="ZY_Customer" Type="Self.ZY_Customer" Multiplicity="0..1" />
+          <End Role="ZY_Order" Type="Self.ZY_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Customer">
+              <PropertyRef Name="OpenId" />
+            </Principal>
+            <Dependent Role="ZY_Order">
+              <PropertyRef Name="CustomerOpenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ZY_Session_T_S_User">
           <End Role="T_S_User" Type="Self.T_S_User" Multiplicity="1" />
           <End Role="ZY_Session" Type="Self.ZY_Session" Multiplicity="*" />
@@ -250,30 +315,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ZY_Shop_Order_ZY_Customer">
-          <End Role="ZY_Customer" Type="Self.ZY_Customer" Multiplicity="1" />
-          <End Role="ZY_Shop_Order" Type="Self.ZY_Shop_Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZY_Customer">
-              <PropertyRef Name="OpenId" />
-            </Principal>
-            <Dependent Role="ZY_Shop_Order">
-              <PropertyRef Name="CustomerOpenId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ZY_Shop_Order_ZY_Shop_Desk">
-          <End Role="ZY_Shop_Desk" Type="Self.ZY_Shop_Desk" Multiplicity="1" />
-          <End Role="ZY_Shop_Order" Type="Self.ZY_Shop_Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZY_Shop_Desk">
-              <PropertyRef Name="DeskId" />
-            </Principal>
-            <Dependent Role="ZY_Shop_Order">
-              <PropertyRef Name="DeskId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ZY_Shop_T_S_User">
           <End Role="T_S_User" Type="Self.T_S_User" Multiplicity="0..1" />
           <End Role="ZY_Shop" Type="Self.ZY_Shop" Multiplicity="*" />
@@ -293,11 +334,12 @@
           <EntitySet Name="T_S_Role_Function" EntityType="Self.T_S_Role_Function" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_User" EntityType="Self.T_S_User" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_User_Role" EntityType="Self.T_S_User_Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZY_Booked_Position" EntityType="Self.ZY_Booked_Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Customer" EntityType="Self.ZY_Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZY_Order" EntityType="Self.ZY_Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Session" EntityType="Self.ZY_Session" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop" EntityType="Self.ZY_Shop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop_Desk" EntityType="Self.ZY_Shop_Desk" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ZY_Shop_Order" EntityType="Self.ZY_Shop_Order" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="Self.FK_T_S_Role_Function_T_S_Function">
             <End Role="T_S_Function" EntitySet="T_S_Function" />
             <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
@@ -314,6 +356,22 @@
             <End Role="T_S_User" EntitySet="T_S_User" />
             <End Role="T_S_User_Role" EntitySet="T_S_User_Role" />
           </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Customer" Association="Self.FK_ZY_Booked_Position_ZY_Customer">
+            <End Role="ZY_Customer" EntitySet="ZY_Customer" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Order" Association="Self.FK_ZY_Booked_Position_ZY_Order">
+            <End Role="ZY_Order" EntitySet="ZY_Order" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Shop_Desk" Association="Self.FK_ZY_Booked_Position_ZY_Shop_Desk">
+            <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Order_ZY_Customer" Association="Self.FK_ZY_Order_ZY_Customer">
+            <End Role="ZY_Customer" EntitySet="ZY_Customer" />
+            <End Role="ZY_Order" EntitySet="ZY_Order" />
+          </AssociationSet>
           <AssociationSet Name="FK_ZY_Session_T_S_User" Association="Self.FK_ZY_Session_T_S_User">
             <End Role="T_S_User" EntitySet="T_S_User" />
             <End Role="ZY_Session" EntitySet="ZY_Session" />
@@ -321,14 +379,6 @@
           <AssociationSet Name="FK_ZY_Shop_Desk_ZY_Shop" Association="Self.FK_ZY_Shop_Desk_ZY_Shop">
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZY_Shop_Order_ZY_Customer" Association="Self.FK_ZY_Shop_Order_ZY_Customer">
-            <End Role="ZY_Customer" EntitySet="ZY_Customer" />
-            <End Role="ZY_Shop_Order" EntitySet="ZY_Shop_Order" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZY_Shop_Order_ZY_Shop_Desk" Association="Self.FK_ZY_Shop_Order_ZY_Shop_Desk">
-            <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
-            <End Role="ZY_Shop_Order" EntitySet="ZY_Shop_Order" />
           </AssociationSet>
           <AssociationSet Name="FK_ZY_Shop_T_S_User" Association="Self.FK_ZY_Shop_T_S_User">
             <End Role="T_S_User" EntitySet="T_S_User" />
@@ -346,11 +396,12 @@
           <EntitySet Name="T_S_Role_Function" EntityType="BnAppModel.T_S_Role_Function" />
           <EntitySet Name="T_S_User" EntityType="BnAppModel.T_S_User" />
           <EntitySet Name="T_S_User_Role" EntityType="BnAppModel.T_S_User_Role" />
+          <EntitySet Name="ZY_Booked_Position" EntityType="BnAppModel.ZY_Booked_Position" />
           <EntitySet Name="ZY_Customer" EntityType="BnAppModel.ZY_Customer" />
+          <EntitySet Name="ZY_Order" EntityType="BnAppModel.ZY_Order" />
           <EntitySet Name="ZY_Session" EntityType="BnAppModel.ZY_Session" />
           <EntitySet Name="ZY_Shop" EntityType="BnAppModel.ZY_Shop" />
           <EntitySet Name="ZY_Shop_Desk" EntityType="BnAppModel.ZY_Shop_Desk" />
-          <EntitySet Name="ZY_Shop_Order" EntityType="BnAppModel.ZY_Shop_Order" />
           <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="BnAppModel.FK_T_S_Role_Function_T_S_Function">
             <End Role="T_S_Function" EntitySet="T_S_Function" />
             <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
@@ -375,17 +426,25 @@
             <End Role="T_S_User" EntitySet="T_S_User" />
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
           </AssociationSet>
-          <AssociationSet Name="FK_ZY_Shop_Order_ZY_Customer" Association="BnAppModel.FK_ZY_Shop_Order_ZY_Customer">
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Customer" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Customer">
             <End Role="ZY_Customer" EntitySet="ZY_Customer" />
-            <End Role="ZY_Shop_Order" EntitySet="ZY_Shop_Order" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Order" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order">
+            <End Role="ZY_Order" EntitySet="ZY_Order" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Shop_Desk" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk">
+            <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Order_ZY_Customer" Association="BnAppModel.FK_ZY_Order_ZY_Customer">
+            <End Role="ZY_Customer" EntitySet="ZY_Customer" />
+            <End Role="ZY_Order" EntitySet="ZY_Order" />
           </AssociationSet>
           <AssociationSet Name="FK_ZY_Shop_Desk_ZY_Shop" Association="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop">
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZY_Shop_Order_ZY_Shop_Desk" Association="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk">
-            <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
-            <End Role="ZY_Shop_Order" EntitySet="ZY_Shop_Order" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="T_S_Code">
@@ -492,6 +551,28 @@
           <NavigationProperty Name="T_S_Role" Relationship="BnAppModel.FK_T_S_User_Role_T_S_Role" FromRole="T_S_User_Role" ToRole="T_S_Role" />
           <NavigationProperty Name="T_S_User" Relationship="BnAppModel.FK_T_S_User_Role_T_S_User" FromRole="T_S_User_Role" ToRole="T_S_User" />
         </EntityType>
+        <EntityType Name="ZY_Booked_Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="DeskId" Type="Guid" Nullable="false" />
+          <Property Name="Position" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsInternal" Type="Boolean" Nullable="false" />
+          <Property Name="OrderId" Type="Guid" />
+          <Property Name="CustomerOpenId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" FromRole="ZY_Booked_Position" ToRole="ZY_Customer" />
+          <NavigationProperty Name="ZY_Order" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Booked_Position" ToRole="ZY_Order" />
+          <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Booked_Position" ToRole="ZY_Shop_Desk" />
+        </EntityType>
         <EntityType Name="ZY_Customer">
           <Key>
             <PropertyRef Name="OpenId" />
@@ -506,7 +587,25 @@
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ZY_Shop_Order" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Shop_Order" />
+          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Booked_Position" />
+          <NavigationProperty Name="ZY_Order" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Order" />
+        </EntityType>
+        <EntityType Name="ZY_Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Guid" Nullable="false" />
+          <Property Name="CustomerOpenId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Order" ToRole="ZY_Booked_Position" />
+          <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Order" ToRole="ZY_Customer" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -557,27 +656,8 @@
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop" />
-          <NavigationProperty Name="ZY_Shop_Order" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop_Order" />
-        </EntityType>
-        <EntityType Name="ZY_Shop_Order">
-          <Key>
-            <PropertyRef Name="OrderId" />
-          </Key>
-          <Property Name="OrderId" Type="Guid" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="CustomerOpenId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="DeskId" Type="Guid" Nullable="false" />
-          <Property Name="Position" Type="Guid" Nullable="false" />
-          <Property Name="VersionNo" Type="Int32" Nullable="false" />
-          <Property Name="TransactionId" Type="Guid" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Customer" FromRole="ZY_Shop_Order" ToRole="ZY_Customer" />
-          <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk" FromRole="ZY_Shop_Order" ToRole="ZY_Shop_Desk" />
         </EntityType>
         <Association Name="FK_T_S_Role_Function_T_S_Function">
           <End Type="BnAppModel.T_S_Function" Role="T_S_Function" Multiplicity="1" />
@@ -651,14 +731,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ZY_Shop_Order_ZY_Customer">
-          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="1" />
-          <End Type="BnAppModel.ZY_Shop_Order" Role="ZY_Shop_Order" Multiplicity="*" />
+        <Association Name="FK_ZY_Booked_Position_ZY_Customer">
+          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="0..1" />
+          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ZY_Customer">
               <PropertyRef Name="OpenId" />
             </Principal>
-            <Dependent Role="ZY_Shop_Order">
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="CustomerOpenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Order">
+          <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="0..1" />
+          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Shop_Desk">
+          <End Type="BnAppModel.ZY_Shop_Desk" Role="ZY_Shop_Desk" Multiplicity="1" />
+          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Shop_Desk">
+              <PropertyRef Name="DeskId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="DeskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Order_ZY_Customer">
+          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="0..1" />
+          <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Customer">
+              <PropertyRef Name="OpenId" />
+            </Principal>
+            <Dependent Role="ZY_Order">
               <PropertyRef Name="CustomerOpenId" />
             </Dependent>
           </ReferentialConstraint>
@@ -672,18 +788,6 @@
             </Principal>
             <Dependent Role="ZY_Shop_Desk">
               <PropertyRef Name="ShopId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ZY_Shop_Order_ZY_Shop_Desk">
-          <End Type="BnAppModel.ZY_Shop_Desk" Role="ZY_Shop_Desk" Multiplicity="1" />
-          <End Type="BnAppModel.ZY_Shop_Order" Role="ZY_Shop_Order" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZY_Shop_Desk">
-              <PropertyRef Name="DeskId" />
-            </Principal>
-            <Dependent Role="ZY_Shop_Order">
-              <PropertyRef Name="DeskId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -793,6 +897,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ZY_Booked_Position">
+            <EntityTypeMapping TypeName="BnAppModel.ZY_Booked_Position">
+              <MappingFragment StoreEntitySet="ZY_Booked_Position">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="CustomerOpenId" ColumnName="CustomerOpenId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="DeskId" ColumnName="DeskId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="ZY_Customer">
             <EntityTypeMapping TypeName="BnAppModel.ZY_Customer">
               <MappingFragment StoreEntitySet="ZY_Customer">
@@ -806,6 +930,22 @@
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="OpenId" ColumnName="OpenId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZY_Order">
+            <EntityTypeMapping TypeName="BnAppModel.ZY_Order">
+              <MappingFragment StoreEntitySet="ZY_Order">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="CustomerOpenId" ColumnName="CustomerOpenId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -856,24 +996,6 @@
                 <ScalarProperty Name="DeskName" ColumnName="DeskName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="DeskId" ColumnName="DeskId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ZY_Shop_Order">
-            <EntityTypeMapping TypeName="BnAppModel.ZY_Shop_Order">
-              <MappingFragment StoreEntitySet="ZY_Shop_Order">
-                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
-                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="DeskId" ColumnName="DeskId" />
-                <ScalarProperty Name="CustomerOpenId" ColumnName="CustomerOpenId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

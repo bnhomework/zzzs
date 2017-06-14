@@ -43,6 +43,17 @@ namespace BnWS.Business
             }
         }
 
+        public List<string> GetUserRoles(Guid userId)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                return  (from ur in uow.Repository<T_S_User_Role>().Query().Get()
+                    join r in uow.Repository<T_S_Role>().Query().Get() on ur.RoleId equals r.RoleId
+                    where ur.UserId == userId
+                    select r.RoleName).ToList();
+            }
+        } 
+
         #region Role
         public List<T_S_Role> GetRoles()
         {

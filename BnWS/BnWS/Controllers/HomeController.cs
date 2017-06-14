@@ -15,8 +15,10 @@ namespace BnWS.Controllers
             var currenUser = CurrentUser;
             if (currenUser == null)
                 return RedirectToAction("Login", "Account");
-
-            ViewBag.Menus = new PermissionBS().GetMenus(currenUser.UserId);
+            var pbs = new PermissionBS();
+            ViewBag.Menus = pbs.GetMenus(currenUser.UserId);
+            ViewBag.User = currenUser.LoginName;
+            ViewBag.Role = pbs.GetUserRoles(currenUser.UserId).OrderBy(x=>x).FirstOrDefault();
             return View();
         }
 

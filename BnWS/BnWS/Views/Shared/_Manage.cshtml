@@ -62,7 +62,9 @@
             hideLoading: function () {
                 $('#loading').hide();
             },
-            showMessage:function(m) {
+
+            showMessage: function (m) {
+                m = m || "操作成功";
                 toastr.success(m);
             },
             showError:function(m) {

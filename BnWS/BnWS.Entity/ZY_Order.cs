@@ -13,14 +13,18 @@ namespace BnWS.Entity
     using System.Collections.Generic;
     
     using Repository;
-    public partial class ZY_Shop_Order:EntityBase,IAuditableEntity
+    public partial class ZY_Order:EntityBase,IAuditableEntity
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ZY_Order()
+        {
+            this.ZY_Booked_Position = new HashSet<ZY_Booked_Position>();
+        }
+    
         public System.Guid OrderId { get; set; }
-        public System.DateTime OrderDate { get; set; }
-        public int Status { get; set; }
         public string CustomerOpenId { get; set; }
-        public System.Guid DeskId { get; set; }
-        public System.Guid Position { get; set; }
+        public int Status { get; set; }
+        public decimal Amount { get; set; }
         public int VersionNo { get; set; }
         public System.Guid TransactionId { get; set; }
         public string CreatedBy { get; set; }
@@ -28,7 +32,8 @@ namespace BnWS.Entity
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }
         public virtual ZY_Customer ZY_Customer { get; set; }
-        public virtual ZY_Shop_Desk ZY_Shop_Desk { get; set; }
     }
 }

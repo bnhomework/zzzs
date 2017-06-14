@@ -5,26 +5,29 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7e0071ffc7da4da38cc09679e076620f" Name="Diagram1">
-        <EntityTypeShape EntityType="BnAppModel.T_S_Code" Width="1.5" PointX="7.75" PointY="3" />
-        <EntityTypeShape EntityType="BnAppModel.T_S_Function" Width="1.5" PointX="0.75" PointY="18" />
+        <EntityTypeShape EntityType="BnAppModel.T_S_Code" Width="1.5" PointX="5.75" PointY="2.875" />
+        <EntityTypeShape EntityType="BnAppModel.T_S_Function" Width="1.5" PointX="0.75" PointY="18.375" />
         <EntityTypeShape EntityType="BnAppModel.T_S_Role" Width="1.5" PointX="0.75" PointY="2.875" />
         <EntityTypeShape EntityType="BnAppModel.T_S_Role_Function" Width="1.5" PointX="3" PointY="0.75" />
         <EntityTypeShape EntityType="BnAppModel.T_S_User" Width="1.5" PointX="0.75" PointY="7.125" />
         <EntityTypeShape EntityType="BnAppModel.T_S_User_Role" Width="1.5" PointX="3" PointY="4.75" />
-        <EntityTypeShape EntityType="BnAppModel.ZY_Customer" Width="1.5" PointX="5.25" PointY="5.75" />
-        <EntityTypeShape EntityType="BnAppModel.ZY_Session" Width="1.5" PointX="3" PointY="13.875" />
-        <EntityTypeShape EntityType="BnAppModel.ZY_Shop" Width="1.5" PointX="3" PointY="9.375" />
-        <EntityTypeShape EntityType="BnAppModel.ZY_Shop_Desk" Width="1.5" PointX="5.25" PointY="9.625" />
-        <EntityTypeShape EntityType="BnAppModel.ZY_Shop_Order" Width="1.5" PointX="7.5" PointY="9.5" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Booked_Position" Width="1.5" PointX="7.5" PointY="12.75" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Customer" Width="1.5" PointX="5.25" PointY="9.25" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Order" Width="1.5" PointX="5.25" PointY="17.25" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Session" Width="1.5" PointX="3" PointY="9.375" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Shop" Width="1.5" PointX="3" PointY="13" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Shop_Desk" Width="1.5" PointX="5.25" PointY="13.25" />
         <AssociationConnector Association="BnAppModel.FK_T_S_Role_Function_T_S_Function" />
         <AssociationConnector Association="BnAppModel.FK_T_S_Role_Function_T_S_Role" />
         <AssociationConnector Association="BnAppModel.FK_T_S_User_Role_T_S_Role" />
         <AssociationConnector Association="BnAppModel.FK_T_S_User_Role_T_S_User" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Session_T_S_User" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_T_S_User" />
-        <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Order_ZY_Customer" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Order_ZY_Customer" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" />
-        <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Order_ZY_Shop_Desk" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using BnWS.Entity;
 using Repository;
@@ -61,36 +60,5 @@ namespace BnWS.Business
                     .FirstOrDefault();
             }
         }
-    }
-
-    public class ShopBS : BaseBS
-    {
-        public List<ZY_Shop> GetShopsByUserId(Guid userId)
-        {
-            using (var uow = GetUnitOfWork())
-            {
-                return uow.Repository<ZY_Shop>().Query().Filter(x => x.OwnId == userId).Get().OrderBy(x=>x.Name).ToList();
-            }
-
-        }
-
-        public List<DeskViewModel> GetShopDesks(Guid shopId, DateTime date)
-        {
-            var id = new System.Data.SqlClient.SqlParameter
-               {
-                   ParameterName = "@shopId",
-                   Value = shopId
-               };
-            var d=new System.Data.SqlClient.SqlParameter
-               {
-                   ParameterName = "@date",
-                   Value = date
-               };
-            using (var db = new BnAppEntities())
-            {
-              var result=db.Database.SqlQuery<DeskViewModel>("sp_GetDesks @shopId,@date", id, d);
-                return result.ToList();
-            }
-        } 
     }
 }

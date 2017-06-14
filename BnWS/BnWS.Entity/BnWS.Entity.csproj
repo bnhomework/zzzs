@@ -96,7 +96,13 @@
     <Compile Include="T_S_User_Role.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ZY_Booked_Position.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZY_Customer.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZY_Order.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZY_Session.cs">
@@ -106,9 +112,6 @@
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZY_Shop_Desk.cs">
-      <DependentUpon>BnAppModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ZY_Shop_Order.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>

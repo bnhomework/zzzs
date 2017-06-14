@@ -42,13 +42,22 @@ namespace BnWS.Controllers
         }
 
         [HttpPost]
-        public ActionResult BookPositionsInternal(Guid deskId, DateTime selectedDate,List<int> positions )
+        public ActionResult BookPositionsInternal(Guid deskId, DateTime selectedDate,List<string> positions )
         {
-            //var desks = BS.GetShopDesks(shopId, selectedDate);
+            BS.BookPositionsInternal(deskId, selectedDate,positions);
             return new JsonResult()
             {
-                Data = desks
+                Data =new {Status="OK"}
             };
+        }
+
+        public ActionResult Order()
+        {
+            return View();
+        }
+        public ActionResult Refund()
+        {
+            return View();
         }
 	}
 }
