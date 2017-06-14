@@ -15,6 +15,24 @@ CREATE TABLE [dbo].[ZY_Shop](
 	[UpdatedBy] [varchar](128) NOT NULL,
 	[UpdatedTime] [datetime] NOT NULL,
 )
+CREATE TABLE [dbo].[ZY_Shop_Img](
+	[Id] uniqueIdentifier NOT NULL primary key,
+	[ShopId] uniqueIdentifier NOT NULL,
+	[Name] [varchar](256) NULL,
+	[Url][varchar](256) not NULL,
+	[ImgType] int default(1) not null,
+	[VersionNo] [int] NOT NULL,
+	[TransactionId] [uniqueIdentifier] NOT NULL,
+	[CreatedBy] [varchar](128) NOT NULL,
+	[CreatedTime] [datetime] NOT NULL,
+	[UpdatedBy] [varchar](128) NOT NULL,
+	[UpdatedTime] [datetime] NOT NULL,
+)
+ALTER TABLE [dbo].[ZY_Shop_Img]  WITH CHECK ADD  CONSTRAINT [FK_ZY_Shop_Img_ZY_Shop] FOREIGN KEY([ShopId])
+REFERENCES [dbo].[ZY_Shop] ([ShopId])
+GO
+ALTER TABLE [dbo].[ZY_Shop_Img] CHECK CONSTRAINT [FK_ZY_Shop_Img_ZY_Shop]
+GO
 
 CREATE TABLE [dbo].[ZY_Shop_Desk](
 	[DeskId] uniqueIdentifier NOT NULL primary key,

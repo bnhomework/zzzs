@@ -19,6 +19,7 @@ namespace BnWS.Entity
         public ZY_Shop()
         {
             this.ZY_Shop_Desk = new HashSet<ZY_Shop_Desk>();
+            this.ZY_Shop_Img = new HashSet<ZY_Shop_Img>();
         }
     
         public System.Guid ShopId { get; set; }
@@ -38,5 +39,7 @@ namespace BnWS.Entity
         public virtual T_S_User T_S_User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Shop_Desk> ZY_Shop_Desk { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ZY_Shop_Img> ZY_Shop_Img { get; set; }
     }
 }

@@ -37,5 +37,6 @@ namespace BnWS.Entity
         public virtual DbSet<ZY_Session> ZY_Session { get; set; }
         public virtual DbSet<ZY_Shop> ZY_Shop { get; set; }
         public virtual DbSet<ZY_Shop_Desk> ZY_Shop_Desk { get; set; }
+        public virtual DbSet<ZY_Shop_Img> ZY_Shop_Img { get; set; }
     }
 }

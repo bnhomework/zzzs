@@ -59,5 +59,11 @@ namespace BnWS.Controllers
         {
             return View();
         }
+
+        //todo
+        public ActionResult Management()
+        {
+            return View();
+        }
 	}
 }

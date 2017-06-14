@@ -124,6 +124,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Controllers\ZYController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\animate.min.css" />
@@ -405,6 +406,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\ZY\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -418,6 +420,7 @@
     <Content Include="Views\Shop\Index.cshtml" />
     <Content Include="Views\Shop\Order.cshtml" />
     <Content Include="Views\Shop\Refund.cshtml" />
+    <Content Include="Views\Shop\Management.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BnWS.Business\BnWS.Business.csproj">

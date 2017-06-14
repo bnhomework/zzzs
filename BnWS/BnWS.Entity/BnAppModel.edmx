@@ -195,6 +195,22 @@
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="ZY_Shop_Img">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ShopId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="256" />
+          <Property Name="Url" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="ImgType" Type="int" Nullable="false" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <Association Name="FK_T_S_Role_Function_T_S_Function">
           <End Role="T_S_Function" Type="Self.T_S_Function" Multiplicity="1" />
           <End Role="T_S_Role_Function" Type="Self.T_S_Role_Function" Multiplicity="*" />
@@ -315,6 +331,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_ZY_Shop_Img_ZY_Shop">
+          <End Role="ZY_Shop" Type="Self.ZY_Shop" Multiplicity="1" />
+          <End Role="ZY_Shop_Img" Type="Self.ZY_Shop_Img" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Shop">
+              <PropertyRef Name="ShopId" />
+            </Principal>
+            <Dependent Role="ZY_Shop_Img">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_ZY_Shop_T_S_User">
           <End Role="T_S_User" Type="Self.T_S_User" Multiplicity="0..1" />
           <End Role="ZY_Shop" Type="Self.ZY_Shop" Multiplicity="*" />
@@ -340,6 +368,7 @@
           <EntitySet Name="ZY_Session" EntityType="Self.ZY_Session" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop" EntityType="Self.ZY_Shop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop_Desk" EntityType="Self.ZY_Shop_Desk" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZY_Shop_Img" EntityType="Self.ZY_Shop_Img" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="Self.FK_T_S_Role_Function_T_S_Function">
             <End Role="T_S_Function" EntitySet="T_S_Function" />
             <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
@@ -379,6 +408,10 @@
           <AssociationSet Name="FK_ZY_Shop_Desk_ZY_Shop" Association="Self.FK_ZY_Shop_Desk_ZY_Shop">
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Shop_Img_ZY_Shop" Association="Self.FK_ZY_Shop_Img_ZY_Shop">
+            <End Role="ZY_Shop" EntitySet="ZY_Shop" />
+            <End Role="ZY_Shop_Img" EntitySet="ZY_Shop_Img" />
           </AssociationSet>
           <AssociationSet Name="FK_ZY_Shop_T_S_User" Association="Self.FK_ZY_Shop_T_S_User">
             <End Role="T_S_User" EntitySet="T_S_User" />
@@ -445,6 +478,11 @@
           <AssociationSet Name="FK_ZY_Shop_Desk_ZY_Shop" Association="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop">
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+          </AssociationSet>
+          <EntitySet Name="ZY_Shop_Img" EntityType="BnAppModel.ZY_Shop_Img" />
+          <AssociationSet Name="FK_ZY_Shop_Img_ZY_Shop" Association="BnAppModel.FK_ZY_Shop_Img_ZY_Shop">
+            <End Role="ZY_Shop" EntitySet="ZY_Shop" />
+            <End Role="ZY_Shop_Img" EntitySet="ZY_Shop_Img" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="T_S_Code">
@@ -641,6 +679,7 @@
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="T_S_User" Relationship="BnAppModel.FK_ZY_Shop_T_S_User" FromRole="ZY_Shop" ToRole="T_S_User" />
           <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop" ToRole="ZY_Shop_Desk" />
+          <NavigationProperty Name="ZY_Shop_Img" Relationship="BnAppModel.FK_ZY_Shop_Img_ZY_Shop" FromRole="ZY_Shop" ToRole="ZY_Shop_Img" />
         </EntityType>
         <EntityType Name="ZY_Shop_Desk">
           <Key>
@@ -787,6 +826,35 @@
               <PropertyRef Name="ShopId" />
             </Principal>
             <Dependent Role="ZY_Shop_Desk">
+              <PropertyRef Name="ShopId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ZY_Shop_Img">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ShopId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ImgType" Type="Int32" Nullable="false" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Img_ZY_Shop" FromRole="ZY_Shop_Img" ToRole="ZY_Shop" />
+        </EntityType>
+        <Association Name="FK_ZY_Shop_Img_ZY_Shop">
+          <End Type="BnAppModel.ZY_Shop" Role="ZY_Shop" Multiplicity="1" />
+          <End Type="BnAppModel.ZY_Shop_Img" Role="ZY_Shop_Img" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Shop">
+              <PropertyRef Name="ShopId" />
+            </Principal>
+            <Dependent Role="ZY_Shop_Img">
               <PropertyRef Name="ShopId" />
             </Dependent>
           </ReferentialConstraint>
@@ -996,6 +1064,23 @@
                 <ScalarProperty Name="DeskName" ColumnName="DeskName" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
                 <ScalarProperty Name="DeskId" ColumnName="DeskId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZY_Shop_Img">
+            <EntityTypeMapping TypeName="BnAppModel.ZY_Shop_Img">
+              <MappingFragment StoreEntitySet="ZY_Shop_Img">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="ImgType" ColumnName="ImgType" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

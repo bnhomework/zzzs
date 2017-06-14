@@ -114,6 +114,9 @@
     <Compile Include="ZY_Shop_Desk.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ZY_Shop_Img.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

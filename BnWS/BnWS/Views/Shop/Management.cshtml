@@ -1,0 +1,197 @@
+﻿@using BnWS.Entity
+@using BnWS.Extention
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Manage.cshtml";
+    var vname = "店铺管理";
+}
+<style>
+    .role-list li {
+        list-style: none;
+    }
+</style>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>店铺管理</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    @*<th style="width:30px"></th>*@
+                                    <th>用户名</th>
+                                    <th>状态</th>
+                                    <th>账户类型</th>
+                                    <th>锁定</th>
+                                    <th>最后登录时间</th>
+                                    <th>角色</th>
+                                    <th style="width:200px">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach:items">
+                                <tr>
+                                    <td data-bind="text:LoginName"></td>
+                                    <td><span class="label" data-bind="css:IsActive?'label-primary':'label-warning',text:IsActive?'已激活':'未激活'"></span></td>
+                                    <td data-bind="text:$root.getSource(Source)"></td>
+                                    <td data-bind="text:IsLock?'是':'否'"></td>
+                                    <td data-bind="text:LastLoginTime"></td>
+                                    <td data-bind="text:'AssginedRoles'"></td>
+                                    <td>
+                                        <div class="btn btn-sm btn-primary" data-bind="click:$root.showEditRoleDialog"><i class="fa fa-pencil">权限</i></div>
+                                        <div class="btn btn-sm btn-primary" data-bind="click:$root.showDialog"><i class="fa fa-pencil">编辑</i></div>
+                                        <div class="btn btn-sm btn-primary" data-bind="click:$root.delete"><i class="fa fa-remove">删除</i></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        function ViewModel() {
+            var self = this;
+            self.urls = {
+                load: '@Url.Action("GetUsers")',
+                a: '@Url.Action("AddUser")',
+                u: '@Url.Action("UpdateUser")',
+                d: '@Url.Action("DeleteUser")',
+                updateRole: '@Url.Action("UpdateUserRole")',
+            }
+
+            self.getSource = function(s) {
+                switch (s) {
+                case 1:
+                    return '平台注册';
+                case 2:
+                    return 'QQ登录';
+                case 3:
+                    return '微信登陆';
+                default:
+                    return '平台注册';
+                }
+            }
+
+            self.detailModal = $('#detailModal');
+            self.items = ko.observableArray();
+            self.item = ko.observable();
+            self.load = function() {
+                bnApp.showLoading();
+                $.ajax({
+                    url: self.urls.load,
+                    type: "GET",
+                    success: function(result) {
+                        self.items(result.data);
+                        bnApp.hideLoading();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            }
+            self.showDialog = function(data) {
+                if (!data[self.itemKey]) {
+                    data = $.extend(true, {}, self.emptyItem);
+                }
+                self.item(data);
+                self.detailModal.modal("show");
+            };
+
+            self.showEditRoleDialog = function(data) {
+                $('#userRoleDetailModal').modal('show');
+                $('#currentUserId').val(data.UserId);
+
+                var roles = $.map(data.T_S_User_Role, function (x) { return x.RoleId; });
+                $('.role-list input[type=checkbox]').each(function(i, c) {
+                    $(c).prop('checked', $.inArray($(c).data('rid'), roles) >= 0);
+                });
+            };
+
+            self.updateRole = function() {
+                bnApp.showLoading();
+                var data = { userId: $('#currentUserId').val(), roles: $.map($('.role-list input[type=checkbox]:checked'), function (x) { return $(x).data('rid'); }) };
+                $('#userRoleDetailModal').modal('hide');
+                $.ajax({
+                    url: self.urls.updateRole,
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function(result) {
+                        bnApp.hideLoading();
+                        self.load();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            }
+            self.delete = function(data) {
+                bnApp.showLoading();
+                $.ajax({
+                    url: self.urls.d,
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ itemId: data[self.itemKey] }),
+                    success: function(result) {
+                        bnApp.hideLoading();
+                        self.load();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            }
+            self.saveChange = function() {
+                var url;
+                var data = self.item();
+                if (data[self.itemKey]) {
+                    url = self.urls.u;
+                } else {
+                    url = self.urls.a;
+                }
+                bnApp.showLoading();
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ item: data }),
+                    success: function(result) {
+                        bnApp.hideLoading();
+                        self.load();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+                self.detailModal.modal("hide");
+            }
+            self.init = function() {
+                self.load();
+            }
+            self.init();
+        }
+
+        ko.applyBindings(new ViewModel());
+
+
+    </script>
+}
