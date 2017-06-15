@@ -10,7 +10,8 @@ namespace Bn.WeiXin
         private static string _token = string.Empty;//"wysbww";
         private static string _appId = string.Empty;//"wxb12d2164cce0e800";
         private static string _appsecret = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
-        private static string _wsUrl = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
+        private static string _wsUrl = string.Empty;
+        private static string _wxUrl = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
 
         //baidu api
         private static string _ak = //"6jOLD3YkipUn18bmZOb2rXhz";
@@ -72,15 +73,16 @@ namespace Bn.WeiXin
                 return _wsUrl;
             }
         }
+
         public static string WebClientUrl
         {
             get
             {
-                if (string.IsNullOrEmpty(_wsUrl))
+                if (string.IsNullOrEmpty(_wxUrl))
                 {
-                    _wsUrl = ConfigurationManager.AppSettings["WebClientSitURL"];
+                    _wxUrl = ConfigurationManager.AppSettings["WebClientSitURL"];
                 }
-                return _wsUrl;
+                return _wxUrl;
             }
         }
 

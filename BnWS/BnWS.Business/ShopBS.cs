@@ -45,7 +45,7 @@ namespace BnWS.Business
                 ParameterName = "@date",
                 Value = date
             };
-            using (var db = new BnAppEntities())
+            using (var db = GetDbContext())
             {
                 var result=db.Database.SqlQuery<DeskViewModel>("sp_GetDesks @shopId,@date", id, d);
                 return result.ToList();

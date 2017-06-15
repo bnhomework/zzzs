@@ -37,7 +37,7 @@ namespace BnWS.Views
            var res= wxHelper.GetJosnData<AccessTokenResponse>(requestData, url);
             if (res!=null&&!string.IsNullOrEmpty(res.openid))
             {
-                var redirectUrl = string.Format(WxConfig.WebClientUrl + "/wx/{0}", res.openid);
+                var redirectUrl = string.Format("{0}/wx/{1}", WxConfig.WebClientUrl ,res.openid);
                 return Redirect(redirectUrl);
             }
             else

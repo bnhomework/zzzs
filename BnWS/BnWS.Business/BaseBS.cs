@@ -28,20 +28,25 @@ namespace BnWS.Business
         }
         protected IUnitOfWork GetUnitOfWork()
         {
-            return new UnitOfWork(DBContext);
+            return new UnitOfWork(GetDbContext());
         }
 
-        private BnAppEntities _db;
-        protected BnAppEntities DBContext
+        protected BnAppEntities GetDbContext()
         {
-            get {
-                if (_db == null)
-                {
-                    _db=new BnAppEntities();
-                }
-                return _db;
-            }
+            return new BnAppEntities(){AuditInfo = AppContext};
         }
+
+        //private BnAppEntities _db;
+        //protected BnAppEntities DBContext
+        //{
+        //    get {
+        //        if (_db == null)
+        //        {
+        //            _db=new BnAppEntities();
+        //        }
+        //        return _db;
+        //    }
+        //}
     }
 
 }

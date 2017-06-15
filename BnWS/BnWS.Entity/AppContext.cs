@@ -11,6 +11,7 @@ namespace BnWS.Entity
         public AppContext()
         {
             TransactionId = Guid.NewGuid();
+            UserName = "anonymous";
         }
         public Guid UserId { get; set; }
         public string UserName { get; set; }
