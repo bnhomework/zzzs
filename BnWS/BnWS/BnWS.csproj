@@ -119,6 +119,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
+    <Compile Include="Controllers\WXController.cs" />
     <Compile Include="Extention\HtmlExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -423,6 +424,14 @@
     <Content Include="Views\Shop\Management.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bn.WeiXin.Handlers\Bn.WeiXin.Handlers.csproj">
+      <Project>{3b013dc1-aff6-4e57-bebd-b50048a979b1}</Project>
+      <Name>Bn.WeiXin.Handlers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Bn.WeiXin\Bn.WeiXin.csproj">
+      <Project>{eac53775-11cb-42c6-9ffa-de5a3b45e12d}</Project>
+      <Name>Bn.WeiXin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BnWS.Business\BnWS.Business.csproj">
       <Project>{5eedd572-edc1-4365-87b7-89f08a295535}</Project>
       <Name>BnWS.Business</Name>
@@ -450,7 +459,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>50861</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:50861/</IISUrl>
+          <IISUrl>http://127.0.0.1:6565/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -1,0 +1,15 @@
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\Bn.WeiXin.dll
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\Bn.WeiXin.pdb
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\EntityFramework.dll
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\Newtonsoft.Json.dll
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\EntityFramework.xml
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\Newtonsoft.Json.xml
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\bin\Debug\zh-Hans\EntityFramework.resources.dll
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\obj\Debug\Bn.WeiXin.dll
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\obj\Debug\Bn.WeiXin.pdb
+C:\bn\work\WK3\XiaoYuan\SourceCode_ZM\Bn.WeiXin\obj\Debug\Bn.WeiXin.csprojResolveAssemblyReference.cache
+C:\Work\test2\zy_admin\BnWS\Bn.WeiXin\bin\Debug\Bn.WeiXin.dll
+C:\Work\test2\zy_admin\BnWS\Bn.WeiXin\bin\Debug\Bn.WeiXin.pdb
+C:\Work\test2\zy_admin\BnWS\Bn.WeiXin\bin\Debug\Newtonsoft.Json.dll
+C:\Work\test2\zy_admin\BnWS\Bn.WeiXin\obj\Debug\Bn.WeiXin.dll
+C:\Work\test2\zy_admin\BnWS\Bn.WeiXin\obj\Debug\Bn.WeiXin.pdb
