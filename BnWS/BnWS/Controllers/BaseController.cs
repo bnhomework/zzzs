@@ -83,9 +83,31 @@ namespace BnWS.Controllers
             return new AccountBS().GetUserByTokenId(token.Value);
 
         }
+
+        private AppContext _appContext;
+
+        private void BuildContext()
+        {
+            _appContext=new AppContext();
+            if (CurrentUser != null)
+            {
+                _appContext.UserId = CurrentUser.UserId;
+                _appContext.UserName = CurrentUser.LoginName;
+            }
+        }
+
+        protected AppContext AppContext
+        {
+            get
+            {
+                if (_appContext == null)
+                    BuildContext();
+                return _appContext;
+            }
+        }
     }
 
-    public class BaseController<T> : BaseController where T :new()
+    public class BaseController<T> : BaseController where T:BaseBS,new()
     {
         protected T _bs;
 
@@ -96,6 +118,7 @@ namespace BnWS.Controllers
                 if (_bs == null)
                 {
                     _bs=new T();
+                    _bs.AppContext = this.AppContext;
                 }
                 return _bs;
             }

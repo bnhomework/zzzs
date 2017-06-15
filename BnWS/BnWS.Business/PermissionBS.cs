@@ -10,6 +10,16 @@ namespace BnWS.Business
 {
     public class PermissionBS:BaseBS
     {
+        public PermissionBS()
+            : base()
+        {
+            
+        }
+        public PermissionBS(AppContext appContext)
+            : base(appContext)
+        {
+
+        }
         //$('#side-menu>li:not(.nav-header)>a:first-child')
         //.each(function(i,x){var url=x.href;var icon=$('i',x)[0].className.replace('fa ','');var name=$('span.nav-label',x)[0].innerHTML;console.log('new BnMenu() {Url = "'+url+'", Icon = "'+icon+'", Name = "'+name+'"},');})
         public List<T_S_Function> GetAllMenus()

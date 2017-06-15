@@ -8,9 +8,8 @@ using BnWS.Entity;
 
 namespace BnWS.Controllers
 {
-    public class AdminController : BaseController
+    public class AdminController : BaseController<PermissionBS>
     {
-        private PermissionBS _permissionBS=new PermissionBS();
         // GET: Admin
         public ActionResult Index()
         {
@@ -20,36 +19,36 @@ namespace BnWS.Controllers
         [HttpGet]
         public ActionResult Roles()
         {
-            ViewBag.Functions = _permissionBS.GetAllMenus();
+            ViewBag.Functions = BS.GetAllMenus();
             return View();
         }
 
         [HttpGet]
         public ActionResult GetRoles()
         {
-            var roles = _permissionBS.GetRoles();
+            var roles = BS.GetRoles();
             return Json(new{data = roles}, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult AddRole(T_S_Role item)
         {
-            _permissionBS.AddRole(item);
+            BS.AddRole(item);
             return Json("");
             
         }
         public ActionResult DeleteRole(Guid itemId)
         {
-            _permissionBS.DeleteRole(itemId);
+            BS.DeleteRole(itemId);
             return Json("");
         }
         public ActionResult UpdateRole(T_S_Role item)
         {
-            _permissionBS.UpdateRole(item);
+            BS.UpdateRole(item);
             return Json("");
         }
         public ActionResult UpdateRoleFunctions(Guid userId, List<Guid> roles)
         {
-            _permissionBS.UpdateRoleFunctions(userId, roles);
+            BS.UpdateRoleFunctions(userId, roles);
             return Json("");
         }
         #endregion
@@ -63,24 +62,24 @@ namespace BnWS.Controllers
         [HttpGet]
         public ActionResult GetFunctions()
         {
-            var roles = _permissionBS.GetFunctions();
+            var roles = BS.GetFunctions();
             return Json(new { data = roles }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult AddFunction(T_S_Function item)
         {
-            _permissionBS.AddFunction(item);
+            BS.AddFunction(item);
             return Json("");
 
         }
         public ActionResult DeleteFunction(Guid itemId)
         {
-            _permissionBS.DeleteFunction(itemId);
+            BS.DeleteFunction(itemId);
             return Json("");
         }
         public ActionResult UpdateFunction(T_S_Function item)
         {
-            _permissionBS.UpdateFunction(item);
+            BS.UpdateFunction(item);
             return Json("");
         }
         #endregion
@@ -88,35 +87,35 @@ namespace BnWS.Controllers
         #region users
         public ActionResult Users()
         {
-            ViewBag.Roles = _permissionBS.GetRoles();
+            ViewBag.Roles = BS.GetRoles();
             return View();
         }
         [HttpGet]
         public ActionResult GetUsers()
         {
-            var roles = _permissionBS.GetUsers();
+            var roles = BS.GetUsers();
             return Json(new { data = roles }, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
         public ActionResult AddUser(T_S_User item)
         {
-            _permissionBS.AddUser(item);
+            BS.AddUser(item);
             return Json("");
 
         }
         public ActionResult DeleteUser(Guid itemId)
         {
-            _permissionBS.DeleteUser(itemId);
+            BS.DeleteUser(itemId);
             return Json("");
         }
         public ActionResult UpdateUser(T_S_User item)
         {
-            _permissionBS.UpdateUser(item);
+            BS.UpdateUser(item);
             return Json("");
         }
         public ActionResult UpdateUserRole(Guid userId,List<Guid> roles)
         {
-            _permissionBS.UpdateUserRole(userId,roles);
+            BS.UpdateUserRole(userId,roles);
             return Json("");
         }
         #endregion

@@ -11,6 +11,7 @@ namespace BnWS.Controllers
 {
     public class AccountController : BaseController<AccountBS>
     {
+        //public AccountController() { }
         //
         // GET: /Account/
         public ActionResult Index()

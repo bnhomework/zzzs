@@ -7,6 +7,15 @@ namespace BnWS.Business
 {
     public class AccountBS : BaseBS
     {
+        public AccountBS():base()
+        {
+            
+        }
+        public AccountBS(AppContext appContext)
+            : base(appContext)
+        {
+
+        }
         public T_S_User SignIn(string email, string password,Guid sessionId)
         {
             using (var uow = GetUnitOfWork())
