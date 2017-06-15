@@ -10,7 +10,7 @@
     </group>
     <group-title>rows = 2</group-title>
     <grid :rows="2">
-      <grid-item :label="'ss'" v-for="(d,i) in shopInfo.desks" :key="i">
+      <grid-item v-for="(d,i) in shopDesks" :key="i">
         <desk :v="d" ></desk>
       </grid-item>
     </grid>
@@ -33,7 +33,8 @@ export default {
   data () {
     return {
       shopId:'',
-      shopInfo:{}
+      shopInfo:{},
+      shopDesks:[],
     }
   },
   created(){
@@ -43,12 +44,25 @@ export default {
     init(){
       this.shopId=this.$route.params.id
       this.loadShopInfo();
+      this.loadDesks(new Date());
     },
     loadShopInfo(){
-      this.shopInfo={address:'xxx xxx xxx xxx',longitude:'121.5273285',latitude:'31.21515044',detailDescription:'',
-      // imgs:['uploads/product/328716.jpg','uploads/product/328716.jpg','uploads/product/328716.jpg'],
-       desks:[{},{},{},{},{},{},{},{},{}]
-       }
+      var url=this.apiServer+'zy/ShopDetail';
+      var data={shopId:this.shopId};
+      var vm=this;
+      this.$http.post(url,data)
+      .then(res=>{
+        this.shopInfo=res.data;
+      });
+    },
+    loadDesks(d){
+      var url=this.apiServer+'zy/ShopDesks';
+      var data={shopId:this.shopId,selectedDate:d};
+      var vm=this;
+      this.$http.post(url,data)
+      .then(res=>{
+        this.shopDesks=res.data;
+      });
     }
   },
   computed:{

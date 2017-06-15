@@ -75,7 +75,7 @@ namespace BnWS.Business
             var d = new System.Data.SqlClient.SqlParameter
             {
                 ParameterName = "@date",
-                Value = condition.selectedDate
+                Value = condition.selectedDate.Date
             };
             using (var db = GetDbContext())
             {
