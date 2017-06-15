@@ -21,10 +21,14 @@
     <![endif]-->
 
     <link rel="shortcut icon" href="favicon.ico">
-    <link href="~/Content/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    @*<link href="~/Content/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
     <link href="~/Content/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="~/Content/css/animate.min.css" rel="stylesheet">
-    <link href="~/Content/css/style.min862f.css?v=4.1.0" rel="stylesheet">
+    <link href="~/Content/css/style.min862f.css?v=4.1.0" rel="stylesheet">*@
+    @Styles.Render("~/Content/css/bootstrap.min14ed.css?v=3.3.6")
+    @Styles.Render("~/Content/css/font-awesome.min93e3.css?v=4.4.0")
+    @Styles.Render("~/Content/css/animate.min.css")
+    @Styles.Render("~/Content/css/style.min862f.css?v=4.1.0")
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -624,13 +628,13 @@
             </a>
         </div>
     </div>
-    <script src="~/Content/js/jquery.min.js?v=2.1.4"></script>
-    <script src="~/Content/js/bootstrap.min.js?v=3.3.6"></script>
-    <script src="~/Content/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="~/Content/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="~/Content/js/plugins/layer/layer.min.js"></script>
-    <script src="~/Content/js/hplus.min.js?v=4.1.0"></script>
-    <script type="text/javascript" src="~/Content/js/contabs.min.js"></script>
-    <script src="~/Content/js/plugins/pace/pace.min.js"></script>
+    @Scripts.Render("~/Content/js/jquery.min.js?v=2.1.4")
+    @Scripts.Render("~/Content/js/bootstrap.min.js?v=3.3.6")
+    @Scripts.Render("~/Content/js/plugins/metisMenu/jquery.metisMenu.js")
+    @Scripts.Render("~/Content/js/plugins/slimscroll/jquery.slimscroll.min.js")
+    @Scripts.Render("~/Content/js/plugins/layer/layer.min.js")
+    @Scripts.Render("~/Content/js/hplus.min.js?v=4.1.0")
+    @Scripts.Render("~/Content/js/contabs.min.js")
+    @Scripts.Render("~/Content/js/plugins/pace/pace.min.js")
 </body>
 </html>

@@ -35,8 +35,10 @@ export default {
   },
   methods:{
     init(){
-      console.log(this.$route.params.openId)
-      this.$store.commit("updateOpenId",{openId:this.$route.params.openId})
+      var openId=this.$route.params.openId;
+      if(openId!=undefined&&openId!=''){
+        this.$store.commit("updateOpenId",{openId:this.$route.params.openId})
+      }
       this.loadShops();
     },
     loadShops(){

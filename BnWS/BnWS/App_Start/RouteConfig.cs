@@ -12,6 +12,7 @@ namespace BnWS
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.IgnoreRoute("public/*");
 
             routes.MapRoute(
                 name: "Default",
