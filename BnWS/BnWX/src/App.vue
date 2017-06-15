@@ -14,7 +14,7 @@
       :left-options="leftOptions"
       :title="title"
       :transition="headerTransition"
-      @on-click-more="onClickMore"></x-header>
+      @on-click-more="onClickMore" v-if="this.$store.state.bn.openId==''||this.$store.state.bn.openId==undefined"></x-header>
 
       <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
         <router-view></router-view>
@@ -112,7 +112,7 @@ export default {
     },
     leftOptions () {
       return {
-        showBack: this.route.path !== '/'
+        showBack: this.route.path !== '/'&&this.route.name!='home'
       }
     },
     rightOptions () {

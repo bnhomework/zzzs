@@ -10,9 +10,9 @@ const router = new Router({
   routes: [
     { path: '/', name: 'shopList', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
     { path: '/:openId', name: 'home', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
-    { path: '/shop/:id', name: 'shop', component: (resolve) => require(['@/components/Shop.vue'], resolve),meta: { allowAnonymous: true,title:'店铺'}},
-    { path: '/shopOnMap/:longitude/:latitude', name: 'shopOnMap', component: (resolve) => require(['@/components/ShopOnMap.vue'], resolve),meta: { allowAnonymous: true,title:'地图'}},
-    { path: '/orders', name: 'orders', component: (resolve) => require(['@/components/Orders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'订单'}}
+    { path: '/shop/:id', name: 'shop', component: (resolve) => require(['@/components/Shop.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'店铺'}},
+    { path: '/shopOnMap/:longitude/:latitude', name: 'shopOnMap', component: (resolve) => require(['@/components/ShopOnMap.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'地图'}},
+    { path: '/orders', name: 'orders', component: (resolve) => require(['@/components/Orders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,showTabbar:true,title:'订单'}}
   ]
 })
 
@@ -56,5 +56,8 @@ router.beforeEach(function (to, from, next) {
 
 router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
+  if(to.meta&&to.meta.title){
+    document.title=to.meta.title
+  }
 })
 export default router
