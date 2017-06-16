@@ -1,0 +1,65 @@
+<template>
+  <div>
+  <h2>{{shopName}}(<span>{{pickDate}}</span>)</h2>
+  <divider></divider>
+    <group-title>rows = 2</group-title>
+    <div style="margin-bottom: 30px">
+    <grid :rows="2">
+      <grid-item v-for="(d,i) in shopDesks" :key="i">
+        <desk :v="d" ></desk>
+      </grid-item>
+    </grid>      
+    </div>
+  </div>
+</template>
+
+<script>
+import { Group, Cell,Swiper,Datetime ,XButton  } from 'vux'
+import utils from '@/mixins/utils'
+import desk from '@/components/sub/desk.vue'
+
+export default {
+  mixins:[utils],
+  components: {
+    Group,
+    Cell,
+    Swiper,
+    desk,Datetime ,XButton 
+  },
+  data () {
+    return {
+      shopId:'',
+      shopName:'',
+      pickDate:this.getCurrentDate(),
+      shopDesks:[],
+    }
+  },
+  created(){
+    this.init();
+  },
+  methods:{
+    init(){
+      this.pickDate=this.$route.params.pickDate;
+      this.shopId=this.$route.params.shopId;
+      this.shopName=this.$route.params.shopName;
+      this.loadDesks();
+    },
+    loadDesks(){
+      var url=this.apiServer+'zy/ShopDesks';
+      var data={shopId:this.shopId,selectedDate:this.pickDate};
+      var vm=this;
+      this.$http.post(url,data)
+      .then(res=>{
+        this.shopDesks=res.data;
+      });
+    },
+    book(){
+      this.$route.push({name:'showDesks',params:{shopId:this.shopId,pickDate:this.pickDate}})
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>

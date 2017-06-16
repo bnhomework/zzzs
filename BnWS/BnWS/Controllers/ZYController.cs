@@ -26,9 +26,9 @@ namespace BnWS.Views
         }
 
         [HttpPost]
-        public ActionResult ShopDetail(Guid shipId)
+        public ActionResult ShopDetail(Guid shopId)
         {
-            var shop = BS.GetShopDetail(shipId);
+            var shop = BS.GetShopDetail(shopId);
 
             return new JsonResult() { Data = shop };  
         }

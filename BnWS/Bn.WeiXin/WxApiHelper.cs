@@ -222,6 +222,7 @@ namespace Bn.WeiXin
 
         public JSSDKConfig JSSDK_Config(string url)
         {
+            url = url.Split('#')[0];
             var nonce_str = Guid.NewGuid().ToString();
             var timestamp = (DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds.ToString();
             var jsapi_ticket = WxApiHelper.Instance.GetJSSDK_Ticket();

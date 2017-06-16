@@ -42,10 +42,12 @@ export default {
     this.init();
   },
   methods:{
+
     init(){
       console.log(this.center)
       var lng=this.$route.params.longitude
       var lat=this.$route.params.latitude
+      
       this.center=[lng,lat];
       console.log(this.center)
     }

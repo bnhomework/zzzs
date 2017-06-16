@@ -9,12 +9,12 @@
 
     <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
       
-      <x-header slot="header"
+     <!--  <x-header slot="header"
       style="width:100%;position:absolute;left:0;top:0;z-index:100;"
       :left-options="leftOptions"
       :title="title"
       :transition="headerTransition"
-      @on-click-more="onClickMore" v-if="this.$store.state.bn.openId==''||this.$store.state.bn.openId==undefined"></x-header>
+      @on-click-more="onClickMore" v-if="this.$store.state.bn.openId==''||this.$store.state.bn.openId==undefined"></x-header> -->
 
       <transition :name="'vux-pop-' + (direction === 'forward' ? 'in' : 'out')">
         <router-view></router-view>

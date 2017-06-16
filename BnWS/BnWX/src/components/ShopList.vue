@@ -2,7 +2,7 @@
   <div>
     <div class="vux-demo">
       <img class="logo" src="../assets/vux_logo.png">
-      <h1>{{this.$store.state.bn.openId}}</h1>
+      <h1></h1>
     </div>
     <group title="cell demo">
       <cell title="Vux" :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in shops">
@@ -19,44 +19,62 @@ import { Group, Cell } from 'vux'
 import utils from '@/mixins/utils'
 
 export default {
-  mixins:[utils],
-  components: {
-    Group,
-    Cell
-  },
-  data () {
-    return {
-      shops:[],
-      msg: 'Hello World!'
+    mixins:[utils],
+    components: {
+        Group,
+        Cell
     }
-  },
-  created(){
-    this.init();
-  },
-  methods:{
-    init(){
-      var openId=this.$route.params.openId;
-      if(openId!=undefined&&openId!=''){
-        this.$store.commit("updateOpenId",{openId:this.$route.params.openId})
-      }
-      this.loadShops();
-    },
-    loadShops(){
-      var url=this.apiServer+'zy/shops'
-      var data={condition:{}};
-      var vm=this;
-      this.$http.post(url,data).then(res=>{
-        this.shops=res.data;
-      });
-      // this.shops=[{shopId:'1',name:'ac',imgUrl:'',description:'111 222 333',dist:'100m'},
-      // {shopId:'2',name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      // {shopId:'3',name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      // {shopId:'1',name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      // {shopId:'1',name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      // {shopId:'1',name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},]
+    ,
+    data () {
+        return {
+            shops: []
+        }
     }
-  }
+    ,
+    created() {
+        this.init();
+    }
+    ,
+    methods: {
+        init() {
+            var openId=this.$route.params.openId;
+            if(openId!=undefined&&openId!='') {
+                this.$store.commit("updateOpenId", {
+                    openId: this.$route.params.openId
+                }
+                )
+            }
+            var vm=this;
+            this.$wechat.getLocation( {
+                type: 'wgs84', success: function (res) {
+                    var userLocation= {
+                        longitude: res.longitude, latitude: res.latitude
+                    };
+                    vm.$store.commit('updateUserLocation', {userLocation: userLocation});
+                    vm.loadShops();
+                }
+                , fail:function() {
+                    vm.loadShops();
+                }
+            }
+            );
+        },
+        loadShops(condition) {
+            var url=this.apiServer+'zy/shops';
+            condition=condition||this.$store.state.bn.userLocation|| {};
+            var data= {
+                condition: condition
+            };
+            var vm=this;
+            this.$http.post(url, data).then(res=> {
+                this.shops=res.data;
+            }
+            );
+        }
+    }
 }
+
+
 </script>
 
 <style>

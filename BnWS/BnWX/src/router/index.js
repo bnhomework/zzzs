@@ -11,15 +11,12 @@ const router = new Router({
     { path: '/', name: 'shopList', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
     { path: '/:openId', name: 'home', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
     { path: '/shop/:id', name: 'shop', component: (resolve) => require(['@/components/Shop.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'店铺'}},
-    { path: '/shopOnMap/:longitude/:latitude', name: 'shopOnMap', component: (resolve) => require(['@/components/ShopOnMap.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'地图'}},
-    { path: '/orders', name: 'orders', component: (resolve) => require(['@/components/Orders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,showTabbar:true,title:'订单'}}
+    // { path: '/shopOnMap/:longitude/:latitude', name: 'shopOnMap', component: (resolve) => require(['@/components/ShopOnMap.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'地图'}},
+    { path: '/orders', name: 'orders', component: (resolve) => require(['@/components/Orders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'订单'}},
+    { path: '/desks', name: 'desks', component: (resolve) => require(['@/components/Desks.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'座位'}}
   ]
 })
 
-const wxConfig=function(){
-  // var c=config.wx.config;
-  // Vue.wechat.config(c);
-}
 const history = window.sessionStorage
 history.clear()
 let historyCount = history.getItem('count') * 1 || 0
@@ -49,14 +46,15 @@ router.beforeEach(function (to, from, next) {
     let url = to.path.split('http')[1]
     window.location.href = `http${url}`
   } else {
-    next()
+    store.dispatch('initWX_JS', next)
+    window.scrollTo(0, 0)
   }
-  next()
 })
 
 router.afterEach(function (to) {
   store.commit('updateLoadingStatus', {isLoading: false})
   if(to.meta&&to.meta.title){
+    console.log(to)
     document.title=to.meta.title
   }
 })

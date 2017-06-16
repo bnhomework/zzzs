@@ -59,6 +59,7 @@ namespace BnWS.Entity
     public class ShopDetail
     {
         public Guid shopId { get; set; }
+        public string  shopName { get; set; }
         public string address { get; set; }
         public decimal? longitude { get; set; }
         public decimal? latitude { get; set; }
@@ -68,7 +69,7 @@ namespace BnWS.Entity
 
     public class SearchDeskCondition
     {
-        public Guid shipId { get; set; }
+        public Guid shopId { get; set; }
         public DateTime selectedDate { get; set; }
     }
     public class DeskDetail

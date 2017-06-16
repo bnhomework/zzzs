@@ -70,7 +70,7 @@ namespace BnWS.Business
             var id = new System.Data.SqlClient.SqlParameter
             {
                 ParameterName = "@shopId",
-                Value = condition.shipId
+                Value = condition.shopId
             };
             var d = new System.Data.SqlClient.SqlParameter
             {
