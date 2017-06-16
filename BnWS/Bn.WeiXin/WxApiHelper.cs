@@ -4,9 +4,11 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 using Bn.WeiXin.Messages;
 using Newtonsoft.Json;
+using Bn.WeiXin.GZH;
 
 namespace Bn.WeiXin
 {
@@ -23,8 +25,6 @@ namespace Bn.WeiXin
         }
         private static readonly WxApiHelper _instance = new WxApiHelper();
         
-        string tokenFileName = "Access_Token";
-
         public T GetJosnData<T>(string requestPara, string url)
         {
             string data = GetData(requestPara, url);
@@ -75,28 +75,76 @@ namespace Bn.WeiXin
 
             return returnVal;
         }
+        public string GetCache(string itemType, int expires_in = 6000)
+        {
+            var value = string.Empty;
+            var folder = string.Format("{0}\\{1}", Environment.CurrentDirectory, itemType);
+            if (Directory.Exists(folder))
+            {
+                var di = new DirectoryInfo(folder);
+                var files = di.GetFiles();
+                var f = files.OrderByDescending(x => x.Name).FirstOrDefault();
+
+                DateTime itemDate;
+                if (f != null
+                    && DateTime.TryParse(f.Name, out itemDate)
+                    && (DateTime.Now - itemDate).TotalSeconds < expires_in)
+                {
+                    using (var sr = new StreamReader(f.FullName.Replace("~", ":")))
+                    {
+                        value = sr.ReadLine();
+                        sr.Close();
+                    }
+                }
+            }
+            return value;
+        }
+
+        public void SaveCache(string itemType, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return;
+            var folder = string.Format("{0}\\{1}", Environment.CurrentDirectory, itemType);
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            var fileName = Path.Combine(folder, DateTime.Now.ToString("yyyy-MM-dd hh~mm~ss"));
+
+            using (var sw = new StreamWriter(fileName, false))
+            {
+                sw.WriteLine(value);
+                sw.Close();
+            }
+        }
         //todo:
         public string GetAccessToken()
         {
-            string token;
-            tokenFileName = string.Format("Access_Token_{0:yyyyMMddHH}", DateTime.Now);
-            var fileName = string.Format("{0}\\{1}", Environment.CurrentDirectory, tokenFileName);
-            if (!File.Exists(fileName))
-            {
-                RenewToken();
-            }
-            using (var sr = new StreamReader(fileName))
-            {
-                token = sr.ReadLine();
-                sr.Close();
-            }
+            string token = GetCache("Access_Token");
             if (string.IsNullOrEmpty(token))
             {
                 token = RenewToken();
             }
             return token;
+            //string token;
+            //tokenFileName = string.Format("Access_Token_{0:yyyyMMddHH}", DateTime.Now);
+            //var fileName = string.Format("{0}\\{1}", Environment.CurrentDirectory, tokenFileName);
+            //if (!File.Exists(fileName))
+            //{
+            //    RenewToken();
+            //}
+            //using (var sr = new StreamReader(fileName))
+            //{
+            //    token = sr.ReadLine();
+            //    sr.Close();
+            //}
+            //if (string.IsNullOrEmpty(token))
+            //{
+            //    token = RenewToken();
+            //}
+            //return token;
         }
-        public string RenewToken()
+        private string RenewToken()
         {
             var token = string.Empty;
             var url = WxConfig.TokenUrl;
@@ -106,12 +154,13 @@ namespace Bn.WeiXin
             {
                 token = temp[1].Replace("\"", "");
             }
-            var fileName = string.Format("{0}\\{1}", Environment.CurrentDirectory, tokenFileName);
-            using (var sw = new StreamWriter(fileName, false))
-            {
-                sw.WriteLine(token);
-                sw.Close();
-            }
+            SaveCache("Access_Token",token);
+//            var fileName = string.Format("{0}\\{1}", Environment.CurrentDirectory, tokenFileName);
+//            using (var sw = new StreamWriter(fileName, false))
+//            {
+//                sw.WriteLine(token);
+//                sw.Close();
+//            }
             return token;
         }
 
@@ -169,5 +218,52 @@ namespace Bn.WeiXin
             return string.Empty;
         }
 
+        #region js sdk
+
+        public JSSDKConfig JSSDK_Config(string url)
+        {
+            var nonce_str = Guid.NewGuid().ToString();
+            var timestamp = (DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds.ToString();
+            var jsapi_ticket = WxApiHelper.Instance.GetJSSDK_Ticket();
+            var raw = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str
+                    + "&timestamp=" + timestamp + "&url=" + url;
+            var signature = Utility.Signature(raw);
+            var jssdk = new JSSDKConfig()
+            {
+                appId = WxConfig.Appid,
+                timestamp = timestamp,
+                nonceStr = nonce_str,
+                signature = signature
+            };
+            return jssdk;
+        }
+        public string GetJSSDK_Ticket()
+        {
+            var ticket = GetCache("JSSDK_Ticket");
+            if (string.IsNullOrEmpty(ticket))
+            {
+                ticket = RenewJSSDK_Ticket();
+            }
+            return ticket;
+        }
+
+        private string RenewJSSDK_Ticket()
+        {
+            var access_token = GetAccessToken();
+            var ticket = string.Empty;
+            var url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
+            var data = string.Format("access_token={0}&type=jsapi", access_token);
+            var res=GetJosnData<JSApiResponse>(data, url);
+            if (res != null)
+            {
+                return res.ticket;
+            }
+            SaveCache("JSSDK_Ticket", ticket);
+            return ticket;
+        }
+        #endregion
+
+
     }
+    
 }

@@ -14,4 +14,20 @@ namespace Bn.WeiXin.GZH
         public string openid { get; set; }
         public string scope { get; set; }
     }
+
+    public class JSApiResponse
+    {
+        public int errcode { get; set; }
+        public string errmsg { get; set; }
+        public string ticket { get; set; }
+        public int expires_in { get; set; }
+    }
+
+    public class JSSDKConfig
+    {
+        public string appId { get; set; }
+        public string timestamp { get; set; }
+        public string nonceStr { get; set; }
+        public string signature { get; set; }
+    }
 }

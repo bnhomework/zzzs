@@ -46,6 +46,12 @@ namespace BnWS.Views
             }
         }
 
+        
+        public ActionResult JSSDK(string url)
+        {
+            var config= WxApiHelper.Instance.JSSDK_Config(url);
+            return new JsonResult() {Data = config, JsonRequestBehavior = JsonRequestBehavior.AllowGet};
+        }
         public ActionResult WX404()
         {
             return Content("微信授权失败,请刷新页面");

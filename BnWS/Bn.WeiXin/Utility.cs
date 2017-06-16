@@ -28,5 +28,18 @@ namespace Bn.WeiXin
 
             return new Guid(buffer);
         }
+
+        public static string Signature(string raw)
+        {
+            var arrString = string.Join("", raw);
+            var sha1 = System.Security.Cryptography.SHA1.Create();
+            var sha1Arr = sha1.ComputeHash(Encoding.UTF8.GetBytes(arrString));
+            var sb = new StringBuilder();
+            foreach (var b in sha1Arr)
+            {
+                sb.AppendFormat("{0:x2}", b);
+            }
+            return sb.ToString();
+        }
     }
 }
