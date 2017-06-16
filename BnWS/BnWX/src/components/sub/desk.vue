@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg">
+		<!-- <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox"> -->
+		<svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
 		<circle :cx="cx" :cy="cy" :r="rdesk2" :fill="fillColor2"/>
 		  <path v-for="item in pList" :d="trackPath" stroke-width="1" :fill="fillColor(item)" stroke="#ffffff"  :transform="trans(item)" :id="'p_'+item"/>
 		<text x="10" y="100" style="fill: #ffffff;" v-for="item in pList" :font-size="fontSize">
@@ -9,7 +9,6 @@
 		    </textPath>
 		</text>          
 		</svg>
-	</div>
 </template>
 <script>
 	export default{
@@ -53,6 +52,9 @@
 		computed:{
 			desk(){
 
+			},
+			viewBox(){
+				return `0 0 ${this.width} ${this.height}`
 			},
 			a(){
 				return 360.00/this.positions;

@@ -57,7 +57,8 @@ namespace BnWS.Business
                         //detailDescription = shop.
                         imgs = shop.ZY_Shop_Img.Select(i => i.Url).ToList(),
                         latitude = shop.Latitude,
-                        longitude = shop.Longitude
+                        longitude = shop.Longitude,
+                        shopName=shop.Name
                     };
                 }
             }
