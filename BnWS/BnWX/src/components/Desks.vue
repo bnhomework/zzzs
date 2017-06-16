@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { Group, Cell,Swiper,Datetime ,XButton  } from 'vux'
+import { Group, Cell,Swiper,Datetime ,XButton,Grid, GridItem  } from 'vux'
 import utils from '@/mixins/utils'
 import desk from '@/components/sub/desk.vue'
 
@@ -24,7 +24,7 @@ export default {
     Group,
     Cell,
     Swiper,
-    desk,Datetime ,XButton 
+    desk,Datetime ,XButton ,Grid, GridItem
   },
   data () {
     return {
