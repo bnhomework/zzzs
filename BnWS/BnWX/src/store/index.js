@@ -45,13 +45,22 @@ store.registerModule('bn', {
                 var jsApiList=config.jsApiList;
                 var url=config.apiServer+'wx/JSSDK'
                 var vm=this;
+                wx.ready(function(){
+                    console.log('init initWX_JS success')
+                    
+                  });
+                  wx.error(function(res){
+                    console.log(res)
+                    console.log('wx config on error')
+                    //context.commit('updateWX_Config', {WX_Config:undefined});
+                  });   
                 Vue.http.get(url,{params:{url:window.location.href}})
                 .then(res=>{
                   var c=res.data;
                   c.jsApiList=jsApiList;
                   wx.config(c);
-                  context.commit('updateWX_Config', {WX_Config:c});                  
-                  console.log('init initWX_JS success')
+                  context.commit('updateWX_Config', {WX_Config:c});
+                  console.log('init initWX_JS config success');
                   next();
                 }).catch(error=>{
                   console.log('init initWX_JS failed')

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Xml.Serialization;
 using Bn.WeiXin.Messages;
 using Newtonsoft.Json;
 using Bn.WeiXin.GZH;
@@ -28,6 +29,11 @@ namespace Bn.WeiXin
         public T GetJosnData<T>(string requestPara, string url)
         {
             string data = GetData(requestPara, url);
+            return JsonConvert.DeserializeObject<T>(data);
+        }
+        public T PostJosnData<T>(string requestPara, string url)
+        {
+            string data = PostData(requestPara, url);
             return JsonConvert.DeserializeObject<T>(data);
         }
 
@@ -223,8 +229,8 @@ namespace Bn.WeiXin
         public JSSDKConfig JSSDK_Config(string url)
         {
             url = url.Split('#')[0];
-            var nonce_str = Guid.NewGuid().ToString();
-            var timestamp = (DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds.ToString();
+            var nonce_str = Utility.GenerateNonceStr();
+            var timestamp = Utility.GetTimeSpan();
             var jsapi_ticket = WxApiHelper.Instance.GetJSSDK_Ticket();
             var raw = "jsapi_ticket=" + jsapi_ticket + "&noncestr=" + nonce_str
                     + "&timestamp=" + timestamp + "&url=" + url;
@@ -262,8 +268,38 @@ namespace Bn.WeiXin
             SaveCache("JSSDK_Ticket", ticket);
             return ticket;
         }
-        #endregion
 
+        public string GetPaymentId(JSSDKPayOrder order)
+        {
+            const string url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+            order.appid = WxConfig.Appid;
+            order.mch_id = WxConfig.mch_id;
+            order.spbill_create_ip = order.spbill_create_ip;
+            order.notify_url = WxConfig.NOTIFY_URL;
+            order.nonce_str = Utility.GenerateNonceStr();
+            var raw = "appid=" + order.appid
+                      + "&attach=" + order.attach
+                      + "&body=" + order.body
+                      + "&detail=" + order.detail
+                      + "&goods_tag=" + order.goods_tag
+                      + "&mch_id=" + order.mch_id
+                      + "&nonce_str=" + order.nonce_str
+                      + "&notify_url=" + order.notify_url
+                      + "&openid=" + order.openid
+                      + "&out_trade_no=" + order.out_trade_no
+                      + "&spbill_create_ip=" + order.spbill_create_ip
+                      + "&total_fee=" + order.total_fee
+                      + "&trade_type=" + order.trade_type;
+
+            order.sign = Utility.Signature(raw,"MD5");
+            var unifiedorder=PostJosnData<UnifiedOrder>(Utility.Serialize<JSSDKPayOrder>(order), url);
+            
+            if (unifiedorder.return_code != "SUCCESS")
+                throw new Exception(unifiedorder.return_msg);
+            return unifiedorder.prepay_id;
+        }
+        #endregion
 
     }
     

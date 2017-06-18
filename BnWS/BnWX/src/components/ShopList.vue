@@ -58,6 +58,7 @@ export default {
                 }
             }
             );
+            vm.loadShops();//test
         },
         loadShops(condition) {
             var url=this.apiServer+'zy/shops';

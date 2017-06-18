@@ -30,14 +30,31 @@ namespace BnWS.Entity
     public class OrderInfo
     {
         public string CustomerOpenId { get; set; }
-        public string PaymentId { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime pickDate { get; set; }
         public Guid DeskId { get; set; }
         public List<string> Positions { get; set; }
-        public decimal Amount { get; set; }
+        public string IP { get; set; }
     }
 
-#region wx
+    public class PlaceResult
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public Guid OrderId { get; set; }
+        public decimal Amount { get; set; }
+
+        public string prepay_id { get; set; }
+        public string appId { get; set; }
+        public string timeStamp { get; set; }
+        public string nonceStr { get; set; }
+        public string package {
+            get { return string.Format("prepay_id={0}", prepay_id); }
+        }//"package": "prepay_id=" + prepay_id,
+        public string signType { get; set; }
+        public string paySign { get; set; }
+    }
+
+    #region wx
     public class SearchShopCondition
     {
         public double? Longitude { get; set; }
@@ -47,7 +64,7 @@ namespace BnWS.Entity
     public class ShopInfo
     {
         public Guid shopId { get; set; }
-        public string name { get; set; }
+        public string shopName { get; set; }
         public string imageUrl { get; set; }
         public string description { get; set; }
         public string dist {
@@ -72,12 +89,24 @@ namespace BnWS.Entity
         public Guid shopId { get; set; }
         public DateTime selectedDate { get; set; }
     }
+
+    public class SearchPositionCondition
+    {
+        public Guid deskId { get; set; }
+        public DateTime selectedDate { get; set; }
+    }
     public class DeskDetail
     {
         public Guid deskId { get; set; }
         public string deskName { get; set; }
-        public string bookedPositions { get; set; }
+        //public string bookedPositions { get; set; }
         public DateTime selectedDate { get; set; }
+        public decimal unitPrice { get; set; }
     }
+    public class DeskPositionDetail
+    {
+        public string bookedPositions { get; set; }
+    }
+   
 #endregion
 }

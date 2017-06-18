@@ -1,9 +1,9 @@
 <template>
 		<!-- <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox"> -->
 		<svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
-		<circle :cx="cx" :cy="cy" :r="rdesk2" :fill="fillColor2"/>
-		  <path v-for="item in pList" :d="trackPath" stroke-width="1" :fill="fillColor(item)" stroke="#ffffff"  :transform="trans(item)" :id="'p_'+item"/>
-		<text x="10" y="100" style="fill: #ffffff;" v-for="item in pList" :font-size="fontSize">
+		<circle :cx="cx" :cy="cy" :r="rdesk2" :fill="fillColor2" />
+		  <path v-for="item in pList" :d="trackPath" stroke-width="1" :fill="fillColor(item)" @click="positionClick(item)" stroke="#ffffff"  :transform="trans(item)" :id="'p_'+item"/>
+		<text x="10" y="100" style="fill: #ffffff;" v-for="item in pList" :font-size="fontSize"  @click="positionClick(item)">
 		    <textPath v-bind:xlink:href="'#p_'+item">
 		        {{item}}
 		    </textPath>
@@ -17,7 +17,8 @@
 				temValue:undefined,
 				visible:true,
 				defaultValue:'Empty',
-				pList:[]
+				pList:[],
+				selectedPosition:[]
 			};
 		},
 		props:{
@@ -26,6 +27,7 @@
 			height:{type:Number,default:400},
 			positions:{type:Number,default:12},
 			avaliableColor:{type:String,default:'#0099FF'},
+			selectedColor:{type:String,default:'#1122FF'},
 			disableColor:{type:String,default:'#dddddd'},
 			fontSize:{type:Number,default:28}
 		},
@@ -33,7 +35,8 @@
 			// this.pList=range(1,this.positions)
 			// console.log(this.pList)
 			for (var i = 0; i <this.positions; i++) {
-				this.pList.push(i+1);
+				var v=''+(i+1)
+				this.pList.push(v);
 			}
 		},
 		methods:{
@@ -45,8 +48,24 @@
 			booked(i){
 				return this.bookedList.indexOf(i+'')>=0;
 			},
+			isSelected(i){
+				return this.selectedPosition.indexOf(i+'')>=0;
+			},
 			fillColor(i){
-				return this.booked(i)?this.disableColor:this.avaliableColor
+				return this.booked(i)?this.disableColor:this.isSelected(i)?this.selectedColor:this.avaliableColor
+			},
+			positionClick(i){
+				console.log('-------'+i)
+				if(this.booked(i))
+					return;
+				var index=this.selectedPosition.indexOf(i)
+				if(index>=0){
+					this.selectedPosition.splice(index,1);
+				}
+				else{
+					this.selectedPosition.push(i);
+				}
+				this.$emit('SelectedPostionChanged',this.selectedPosition);
 			}
 		},
 		computed:{

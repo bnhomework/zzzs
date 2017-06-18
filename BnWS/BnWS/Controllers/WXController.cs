@@ -1,11 +1,18 @@
-﻿using Bn.WeiXin;
+﻿using System;
+using System.IO;
+using System.Text;
+using Bn.WeiXin;
 using System.Web.Mvc;
 using Bn.WeiXin.GZH;
+using Bn.WeiXin.Handlers;
+using BnWS.Business;
+using BnWS.Entity;
 
 namespace BnWS.Views
 {
     public class WXController : Controller
     {
+       
         public ActionResult Index(string signature, string timestamp, string nonce, string echostr)
         {
             if (CheckSignature.Check(signature, timestamp, nonce, WxConfig.Token))
@@ -15,6 +22,29 @@ namespace BnWS.Views
             return Content("failed");
         }
 
+        [HttpPost]
+        [ActionName("Index")]
+        public ActionResult ReceiveMessage(string signature, string timestamp, string nonce, string echostr)
+        {
+            if (!CheckSignature.Check(signature, timestamp, nonce, WxConfig.Token))
+            {
+                return Content("error");
+            }
+            Stream s = System.Web.HttpContext.Current.Request.InputStream;
+            var b = new byte[s.Length];
+            s.Read(b, 0, (int)s.Length);
+            string postStr = Encoding.UTF8.GetString(b);
+            var response = WxHelper.Handle(postStr, new BnWxMessageHander());
+            return Content(response);
+        }
+         [HttpPost]
+        public ActionResult Pay(PayInfo payInfo)
+         {
+             var bs =
+                 new ZYBS(new AppContext() {UserId = new Guid("0D321367-C97F-46B0-81B7-4EDC5D7A2829"), UserName = "WX"});
+             bs.ConfirmPayment(payInfo);
+            return Content("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+        }
         public ActionResult Login()
         {
             //1.get open id

@@ -53,7 +53,7 @@
     @section scripts{
         <script type="text/javascript">
             $(function () {
-                var error = '@ViewBag.Error';
+                var error = '@ViewBag.Message';
                 if (error != null&&error!='') {
                     bnApp.showError(error);
                 }

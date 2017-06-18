@@ -39,5 +39,19 @@ namespace BnWS.Views
             var desks = BS.GetShopDesks(condition);
             return new JsonResult() { Data = desks };  
         }
+
+        public ActionResult DeskPostions(SearchPositionCondition condition)
+        {
+            var deskPositions = BS.GetDeskPostions(condition);
+            return new JsonResult() { Data = deskPositions }; 
+            
+        }
+        [HttpPost]
+        public ActionResult PlaceOrder(OrderInfo orderInfo)
+        {
+            orderInfo.IP=Request.UserHostAddress;
+            var result = BS.PlaceOrder(orderInfo);
+            return new JsonResult() { Data = result }; 
+        }
 	}
 }

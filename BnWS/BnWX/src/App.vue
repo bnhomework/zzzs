@@ -7,7 +7,8 @@
       <actionsheet :menus="menus" v-model="showMenu" @on-click-menu="changeLocale"></actionsheet>
     </div> -->
 
-    <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px">
+    <!-- <view-box ref="viewBox" body-padding-top="46px" body-padding-bottom="55px"> -->
+    <view-box ref="viewBox" body-padding-bottom="55px">
       
      <!--  <x-header slot="header"
       style="width:100%;position:absolute;left:0;top:0;z-index:100;"

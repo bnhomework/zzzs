@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bn.WeiXin;
+using Bn.WeiXin.GZH;
 using BnWS.Entity;
 
 namespace BnWS.Business
@@ -28,7 +30,7 @@ namespace BnWS.Business
                 return shops.Select(x => new ShopInfo()
                 {
                     shopId = x.ShopId,
-                    name = x.Name,
+                    shopName = x.Name,
                     description = x.Address,
                     imageUrl =x.ZY_Shop_Img.Select(i=>i.Url).FirstOrDefault(), //x.ZY_Shop_Img.Count()>0?x.ZY_Shop_Img.First().Url:"", //todo
                     d = GetLantitudeLongitudeDist(condition.Longitude, condition.Latitude, x.Longitude, x.Latitude)
@@ -85,7 +87,95 @@ namespace BnWS.Business
             }
         }
 
+        public DeskPositionDetail GetDeskPostions(SearchPositionCondition condition)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+               var postions= uow.Repository<ZY_Booked_Position>()
+                    .Query()
+                    .Filter(x => x.DeskId == condition.deskId && x.OrderDate == condition.selectedDate)
+                    .Get()
+                    .Select(x => x.Position).ToList();
+                return new DeskPositionDetail(){bookedPositions = string.Join(",",postions)};
+            }
+        } 
 
+        public PlaceResult PlaceOrder(OrderInfo orderInfo)
+        {
+            var result = new PlaceResult(){Success = true,OrderId = Guid.NewGuid()};
+            if (orderInfo.Positions==null||orderInfo.Positions.Count == 0)
+            {
+                result.Success = false;
+                result.Message = "请选择位置";
+                return result;
+            }
+            var o = new JSSDKPayOrder();
+            o.out_trade_no = result.OrderId.ToString();
+            o.body = "";//腾讯充值中心-QQ会员充值
+            o.attach = "";//深圳分店
+            o.spbill_create_ip = orderInfo.IP;//APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
+            result.prepay_id = WxApiHelper.Instance.GetPaymentId(o);
+            result.appId = WxConfig.Appid;
+            result.timeStamp = Utility.GetTimeSpan();
+            result.nonceStr = Utility.GenerateNonceStr();
+            result.signType = "MD5";
+            string payRaw = "appId=" + result.appId
+                            + "&nonceStr=" + result.nonceStr
+                            + "&package=" + result.package
+                            + "&signType=" + result.signType
+                            + "&timeStamp=" + result.timeStamp;
+            result.paySign = Utility.Signature(payRaw, result.signType);
+            try
+            {
+            using (var uow = GetUnitOfWork())
+            {
+                var desk =
+                    uow.Repository<ZY_Shop_Desk>()
+                        .Query()
+                        .Filter(x => x.DeskId == orderInfo.DeskId)
+                        .Get()
+                        .FirstOrDefault();
+                if (desk == null)
+                {
+                    result.Success = false;
+                    result.Message = "没有找到桌子";
+                    return result;
+                }
+                var order = new ZY_Order()
+                {
+                    OrderId = result.OrderId,
+                    Amount = orderInfo.Positions.Count * desk.UnitPrice,
+                    CustomerOpenId = orderInfo.CustomerOpenId,
+                    Status = 0
+                };
+                var positions = new List<ZY_Booked_Position>();
+                orderInfo.Positions.ForEach(x =>
+                {
+                    var p = new ZY_Booked_Position()
+                    {
+                        Id = Guid.NewGuid(),
+                        CustomerOpenId = orderInfo.CustomerOpenId,
+                        OrderDate = orderInfo.pickDate.Date,
+                        DeskId = orderInfo.DeskId,
+                        Position = x,
+                        Status = 1
+                    };
+                    positions.Add(p);
+                });
+                uow.Repository<ZY_Order>().Insert(order);
+                uow.Repository<ZY_Booked_Position>().InsertRange(positions);
+                uow.Save();
+                result.Success = true;
+                result.Message = string.Format("下单成功");//todo message 优化
+            }
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                result.Message = "失败啦";
+            }
+            return result;
+        }
 
         private double rad(double d)
         {
@@ -136,7 +226,54 @@ namespace BnWS.Business
             return dist;  
         }
 
+        public bool ConfirmPayment(PayInfo payInfo)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                var pay = new Pay();
+                pay.Id = Guid.NewGuid();
+                pay.return_code = payInfo.return_code;
+                pay.return_msg = payInfo.return_msg;
+                pay.appid = payInfo.appid;
+                pay.mch_id = payInfo.mch_id;
+                pay.device_info = payInfo.device_info;
+                pay.nonce_str = payInfo.nonce_str;
+                pay.sign = payInfo.sign;
+                pay.sign_type = payInfo.sign_type;
+                pay.result_code = payInfo.result_code;
+                pay.err_code = payInfo.err_code;
+                pay.err_code_des = payInfo.err_code_des;
+                pay.openid = payInfo.openid;
+                pay.is_subscribe = payInfo.is_subscribe;
+                pay.trade_type = payInfo.trade_type;
+                pay.bank_type = payInfo.bank_type;
+                pay.total_fee = payInfo.total_fee;
+                pay.settlement_total_fee = payInfo.settlement_total_fee;
+                pay.fee_type = payInfo.fee_type;
+                pay.cash_fee = payInfo.cash_fee;
+                pay.cash_fee_type = payInfo.cash_fee_type;
+                pay.coupon_fee = payInfo.coupon_fee;
+                pay.coupon_count = payInfo.coupon_count;
+                pay.transaction_id = payInfo.transaction_id;
+                pay.out_trade_no = payInfo.out_trade_no;
+                pay.attach = payInfo.attach;
+                pay.time_end = payInfo.time_end;
+                uow.Repository<Pay>().Insert(pay);
+                Guid orderId;
+                if (Guid.TryParse(payInfo.out_trade_no, out orderId))
+                {
+                    var order =
+                        uow.Repository<ZY_Order>().Query().Filter(x => x.OrderId == orderId).Get().FirstOrDefault();
+                    if (order != null)
+                    {
+                        order.Status = 1;
+                        uow.Repository<ZY_Order>().Update(order);
+                    }
+                }
+                uow.Save();
+            }
+            return true;
+        }
 
-        
     }
 }

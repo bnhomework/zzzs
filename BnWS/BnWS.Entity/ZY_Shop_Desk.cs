@@ -31,6 +31,7 @@ namespace BnWS.Entity
         public System.DateTime CreatedTime { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
+        public decimal UnitPrice { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }

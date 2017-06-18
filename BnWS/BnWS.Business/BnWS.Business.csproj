@@ -59,6 +59,10 @@
     <Compile Include="ZYBS.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bn.WeiXin\Bn.WeiXin.csproj">
+      <Project>{eac53775-11cb-42c6-9ffa-de5a3b45e12d}</Project>
+      <Name>Bn.WeiXin</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BnWS.Entity\BnWS.Entity.csproj">
       <Project>{15326ab3-ce78-4312-b713-25e270cbc6b0}</Project>
       <Name>BnWS.Entity</Name>

@@ -12,6 +12,8 @@ namespace Bn.WeiXin
         private static string _appsecret = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
         private static string _wsUrl = string.Empty;
         private static string _wxUrl = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
+        private static string _mch_id = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
+        private static string _NOTIFY_URL = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
 
         //baidu api
         private static string _ak = //"6jOLD3YkipUn18bmZOb2rXhz";
@@ -37,6 +39,28 @@ namespace Bn.WeiXin
                     _appId = ConfigurationManager.AppSettings["appid"];
                 }
                 return _appId;
+            }
+        }
+        public static string mch_id
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_mch_id))
+                {
+                    _mch_id = ConfigurationManager.AppSettings["mch_id"];
+                }
+                return _mch_id;
+            }
+        }
+        public static string NOTIFY_URL
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_NOTIFY_URL))
+                {
+                    _NOTIFY_URL = ConfigurationManager.AppSettings["NOTIFY_URL"];
+                }
+                return _NOTIFY_URL;
             }
         }
         public static string Secret

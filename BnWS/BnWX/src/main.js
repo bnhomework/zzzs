@@ -8,8 +8,9 @@ import App from './App'
 import store from './store'
 import router from './router'
 // import AMap from 'vue-amap'
-import { AjaxPlugin, WechatPlugin } from 'vux'
+import { AjaxPlugin, WechatPlugin,ToastPlugin } from 'vux'
 
+Vue.use(ToastPlugin)
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
 // Vue.use(AMap)

@@ -76,11 +76,11 @@ export default {
         ,
         book() {
             this.$router.push( {
-                name:'desks',
+                name:'shopDesks',
                 params: {
                     shopId: this.shopId, 
                     pickDate: this.pickDate,
-                    shopName:this.shopName
+                    shopName:this.shopInfo.shopName
                 }}
             )
         }

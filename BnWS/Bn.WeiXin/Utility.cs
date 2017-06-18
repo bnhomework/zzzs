@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Bn.WeiXin
 {
@@ -29,17 +32,46 @@ namespace Bn.WeiXin
             return new Guid(buffer);
         }
 
-        public static string Signature(string raw)
+        public static string Signature(string raw, string hashAlgorithm = "SHA1")
         {
             var arrString = string.Join("", raw);
-            var sha1 = System.Security.Cryptography.SHA1.Create();
-            var sha1Arr = sha1.ComputeHash(Encoding.UTF8.GetBytes(arrString));
+            byte[] sha1Arr;
+            if (hashAlgorithm == "SHA1")
+            {
+                var sha1 = System.Security.Cryptography.SHA1.Create();
+                sha1Arr = sha1.ComputeHash(Encoding.UTF8.GetBytes(arrString));
+            }
+            else
+            {//md5
+
+                sha1Arr = System.Security.Cryptography.MD5.Create().ComputeHash(Encoding.UTF8.GetBytes(arrString));
+            }
             var sb = new StringBuilder();
             foreach (var b in sha1Arr)
             {
                 sb.AppendFormat("{0:x2}", b);
             }
             return sb.ToString();
+        }
+        public static string Serialize<T>(T t)
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                XmlSerializer xz = new XmlSerializer(t.GetType());
+                xz.Serialize(sw, t);
+                return sw.ToString();
+            }
+
+        }
+
+        public static string GetTimeSpan()
+        {
+            return (DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds.ToString();
+        }
+
+        public static string GenerateNonceStr()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
     }
 }

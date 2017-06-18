@@ -30,6 +30,7 @@
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" />
         <EntityTypeShape EntityType="BnAppModel.ZY_Shop_Img" Width="1.5" PointX="5.25" PointY="21.375" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Img_ZY_Shop" />
+        <EntityTypeShape EntityType="BnAppModel.Pay" Width="1.5" PointX="8.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

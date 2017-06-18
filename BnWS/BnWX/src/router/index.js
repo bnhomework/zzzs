@@ -9,11 +9,12 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     { path: '/', name: 'shopList', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
-    { path: '/:openId', name: 'home', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
+    { path: '/wx/:openId', name: 'home', component: (resolve) => require(['@/components/ShopList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'主页'}},
     { path: '/shop/:id', name: 'shop', component: (resolve) => require(['@/components/Shop.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'店铺'}},
     // { path: '/shopOnMap/:longitude/:latitude', name: 'shopOnMap', component: (resolve) => require(['@/components/ShopOnMap.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'地图'}},
     { path: '/orders', name: 'orders', component: (resolve) => require(['@/components/Orders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'订单'}},
-    { path: '/desks', name: 'desks', component: (resolve) => require(['@/components/Desks.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'座位'}}
+    { path: '/shopDesks/:shopId/:pickDate/:shopName', name: 'shopDesks', component: (resolve) => require(['@/components/Desks.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'选择桌子'}},
+    { path: '/deskPositions/:deskId/:pickDate/:deskName/:unitPrice', name: 'deskPositions', component: (resolve) => require(['@/components/Positions.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'选择座位'}}
   ]
 })
 

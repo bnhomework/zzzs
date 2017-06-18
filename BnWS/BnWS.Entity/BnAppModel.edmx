@@ -5,6 +5,52 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Pay">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="VersionNo" />
+            <PropertyRef Name="TransactionId" />
+            <PropertyRef Name="CreatedBy" />
+            <PropertyRef Name="CreatedTime" />
+            <PropertyRef Name="UpdatedBy" />
+            <PropertyRef Name="UpdatedTime" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="return_code" Type="nvarchar" MaxLength="256" />
+          <Property Name="return_msg" Type="nvarchar" MaxLength="256" />
+          <Property Name="appid" Type="nvarchar" MaxLength="256" />
+          <Property Name="mch_id" Type="nvarchar" MaxLength="256" />
+          <Property Name="device_info" Type="nvarchar" MaxLength="256" />
+          <Property Name="nonce_str" Type="nvarchar" MaxLength="256" />
+          <Property Name="sign" Type="nvarchar" MaxLength="256" />
+          <Property Name="sign_type" Type="nvarchar" MaxLength="256" />
+          <Property Name="result_code" Type="nvarchar" MaxLength="256" />
+          <Property Name="err_code" Type="nvarchar" MaxLength="256" />
+          <Property Name="err_code_des" Type="nvarchar" MaxLength="256" />
+          <Property Name="openid" Type="nvarchar" MaxLength="256" />
+          <Property Name="is_subscribe" Type="nvarchar" MaxLength="256" />
+          <Property Name="trade_type" Type="nvarchar" MaxLength="256" />
+          <Property Name="bank_type" Type="nvarchar" MaxLength="256" />
+          <Property Name="total_fee" Type="nvarchar" MaxLength="256" />
+          <Property Name="settlement_total_fee" Type="nvarchar" MaxLength="256" />
+          <Property Name="fee_type" Type="nvarchar" MaxLength="256" />
+          <Property Name="cash_fee" Type="nvarchar" MaxLength="256" />
+          <Property Name="cash_fee_type" Type="nvarchar" MaxLength="256" />
+          <Property Name="coupon_fee" Type="nvarchar" MaxLength="256" />
+          <Property Name="coupon_count" Type="nvarchar" MaxLength="256" />
+          <Property Name="transaction_id" Type="nvarchar" MaxLength="256" />
+          <Property Name="out_trade_no" Type="nvarchar" MaxLength="256" />
+          <Property Name="attach" Type="nvarchar" MaxLength="256" />
+          <Property Name="time_end" Type="nvarchar" MaxLength="256" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="T_S_Code">
           <Key>
             <PropertyRef Name="Id" />
@@ -194,6 +240,7 @@
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="ZY_Shop_Img">
           <Key>
@@ -369,6 +416,43 @@
           <EntitySet Name="ZY_Shop" EntityType="Self.ZY_Shop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop_Desk" EntityType="Self.ZY_Shop_Desk" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop_Img" EntityType="Self.ZY_Shop_Img" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Pay" EntityType="Self.Pay" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Pay].[Id] AS [Id], 
+    [Pay].[return_code] AS [return_code], 
+    [Pay].[return_msg] AS [return_msg], 
+    [Pay].[appid] AS [appid], 
+    [Pay].[mch_id] AS [mch_id], 
+    [Pay].[device_info] AS [device_info], 
+    [Pay].[nonce_str] AS [nonce_str], 
+    [Pay].[sign] AS [sign], 
+    [Pay].[sign_type] AS [sign_type], 
+    [Pay].[result_code] AS [result_code], 
+    [Pay].[err_code] AS [err_code], 
+    [Pay].[err_code_des] AS [err_code_des], 
+    [Pay].[openid] AS [openid], 
+    [Pay].[is_subscribe] AS [is_subscribe], 
+    [Pay].[trade_type] AS [trade_type], 
+    [Pay].[bank_type] AS [bank_type], 
+    [Pay].[total_fee] AS [total_fee], 
+    [Pay].[settlement_total_fee] AS [settlement_total_fee], 
+    [Pay].[fee_type] AS [fee_type], 
+    [Pay].[cash_fee] AS [cash_fee], 
+    [Pay].[cash_fee_type] AS [cash_fee_type], 
+    [Pay].[coupon_fee] AS [coupon_fee], 
+    [Pay].[coupon_count] AS [coupon_count], 
+    [Pay].[transaction_id] AS [transaction_id], 
+    [Pay].[out_trade_no] AS [out_trade_no], 
+    [Pay].[attach] AS [attach], 
+    [Pay].[time_end] AS [time_end], 
+    [Pay].[VersionNo] AS [VersionNo], 
+    [Pay].[TransactionId] AS [TransactionId], 
+    [Pay].[CreatedBy] AS [CreatedBy], 
+    [Pay].[CreatedTime] AS [CreatedTime], 
+    [Pay].[UpdatedBy] AS [UpdatedBy], 
+    [Pay].[UpdatedTime] AS [UpdatedTime]
+    FROM [dbo].[Pay] AS [Pay]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="Self.FK_T_S_Role_Function_T_S_Function">
             <End Role="T_S_Function" EntitySet="T_S_Function" />
             <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
@@ -484,6 +568,7 @@
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Img" EntitySet="ZY_Shop_Img" />
           </AssociationSet>
+          <EntitySet Name="Pay" EntityType="BnAppModel.Pay" />
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -697,6 +782,7 @@
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop" />
+          <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
         </EntityType>
         <Association Name="FK_T_S_Role_Function_T_S_Function">
           <End Type="BnAppModel.T_S_Function" Role="T_S_Function" Multiplicity="1" />
@@ -859,6 +945,50 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Pay">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="VersionNo" />
+            <PropertyRef Name="TransactionId" />
+            <PropertyRef Name="CreatedBy" />
+            <PropertyRef Name="CreatedTime" />
+            <PropertyRef Name="UpdatedBy" />
+            <PropertyRef Name="UpdatedTime" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="return_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="return_msg" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="appid" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="mch_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="device_info" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="nonce_str" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sign" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sign_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="result_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="err_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="err_code_des" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="openid" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="is_subscribe" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="trade_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="bank_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="total_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="settlement_total_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="fee_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="cash_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="cash_fee_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="coupon_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="coupon_count" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="transaction_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="out_trade_no" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="attach" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="time_end" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1054,6 +1184,7 @@
           <EntitySetMapping Name="ZY_Shop_Desk">
             <EntityTypeMapping TypeName="BnAppModel.ZY_Shop_Desk">
               <MappingFragment StoreEntitySet="ZY_Shop_Desk">
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -1080,6 +1211,45 @@
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ShopId" ColumnName="ShopId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pay">
+            <EntityTypeMapping TypeName="BnAppModel.Pay">
+              <MappingFragment StoreEntitySet="Pay">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="time_end" ColumnName="time_end" />
+                <ScalarProperty Name="attach" ColumnName="attach" />
+                <ScalarProperty Name="out_trade_no" ColumnName="out_trade_no" />
+                <ScalarProperty Name="transaction_id" ColumnName="transaction_id" />
+                <ScalarProperty Name="coupon_count" ColumnName="coupon_count" />
+                <ScalarProperty Name="coupon_fee" ColumnName="coupon_fee" />
+                <ScalarProperty Name="cash_fee_type" ColumnName="cash_fee_type" />
+                <ScalarProperty Name="cash_fee" ColumnName="cash_fee" />
+                <ScalarProperty Name="fee_type" ColumnName="fee_type" />
+                <ScalarProperty Name="settlement_total_fee" ColumnName="settlement_total_fee" />
+                <ScalarProperty Name="total_fee" ColumnName="total_fee" />
+                <ScalarProperty Name="bank_type" ColumnName="bank_type" />
+                <ScalarProperty Name="trade_type" ColumnName="trade_type" />
+                <ScalarProperty Name="is_subscribe" ColumnName="is_subscribe" />
+                <ScalarProperty Name="openid" ColumnName="openid" />
+                <ScalarProperty Name="err_code_des" ColumnName="err_code_des" />
+                <ScalarProperty Name="err_code" ColumnName="err_code" />
+                <ScalarProperty Name="result_code" ColumnName="result_code" />
+                <ScalarProperty Name="sign_type" ColumnName="sign_type" />
+                <ScalarProperty Name="sign" ColumnName="sign" />
+                <ScalarProperty Name="nonce_str" ColumnName="nonce_str" />
+                <ScalarProperty Name="device_info" ColumnName="device_info" />
+                <ScalarProperty Name="mch_id" ColumnName="mch_id" />
+                <ScalarProperty Name="appid" ColumnName="appid" />
+                <ScalarProperty Name="return_msg" ColumnName="return_msg" />
+                <ScalarProperty Name="return_code" ColumnName="return_code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
