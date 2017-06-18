@@ -12,6 +12,8 @@ namespace BnWS.Entity
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class BnAppEntities : AuditableDataContext
     {
@@ -39,5 +41,31 @@ namespace BnWS.Entity
         public virtual DbSet<ZY_Shop_Desk> ZY_Shop_Desk { get; set; }
         public virtual DbSet<ZY_Shop_Img> ZY_Shop_Img { get; set; }
         public virtual DbSet<Pay> Pay { get; set; }
+    
+        public virtual ObjectResult<sp_GetDesks_Result> sp_GetDesks(Nullable<System.Guid> shopId, Nullable<System.DateTime> date)
+        {
+            var shopIdParameter = shopId.HasValue ?
+                new ObjectParameter("shopId", shopId) :
+                new ObjectParameter("shopId", typeof(System.Guid));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("date", date) :
+                new ObjectParameter("date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetDesks_Result>("sp_GetDesks", shopIdParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetDesksForCustomer_Result> sp_GetDesksForCustomer(Nullable<System.Guid> shopId, Nullable<System.DateTime> date)
+        {
+            var shopIdParameter = shopId.HasValue ?
+                new ObjectParameter("shopId", shopId) :
+                new ObjectParameter("shopId", typeof(System.Guid));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("date", date) :
+                new ObjectParameter("date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetDesksForCustomer_Result>("sp_GetDesksForCustomer", shopIdParameter, dateParameter);
+        }
     }
 }

@@ -1,33 +1,37 @@
 <template>
   <div>
-    <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
-      <h1> </h1>
-    </div>
-    <group title="cell demo">
-      <cell title="Vux" :value="item.dist" is-link v-for="item in shops">
+    <tab>
+      <tab-item :selected="!historyOrder?'selected':null" @on-item-click="onItemClick(0)">我的预约</tab-item>
+      <tab-item :selected="historyOrder?'selected':null" @on-item-click="onItemClick(1)">历史预约</tab-item>
+    </tab>
+    <group>
+      <cell  is-link v-for="item in orders">
+        <span slot="title">{{item.ShopName}}</span>
+        <span slot="inline-desc">{{item.DeskName}}</span>
+      </cell>
+      <!-- <cell title="Vux" :value="item.dist" is-link v-for="item in orders">
         <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
         <span slot="title">{{item.name}}</span>
         <span slot="inline-desc">{{item.description}}</span>
-      </cell>
+      </cell> -->
     </group>
   </div>
 </template>
 
 <script>
-import { Group, Cell } from 'vux'
+import { Tab, TabItem,Group, Cell } from 'vux'
 import utils from '@/mixins/utils'
 
 export default {
   mixins:[utils],
   components: {
-    Group,
+    Tab, TabItem,Group,
     Cell
   },
   data () {
     return {
-      shops:[],
-      msg: 'Hello World!'
+      orders:[],
+      historyOrder:false
     }
   },
   created(){
@@ -35,15 +39,39 @@ export default {
   },
   methods:{
     init(){
-      this.loadShops();
+      this.loadOrders();
     },
-    loadShops(){
-      this.shops=[{name:'ac',imgUrl:'',description:'111 222 333',dist:'100m'},
-      {name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      {name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      {name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      {name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},
-      {name:'abc',imgUrl:'uploads/product/328716.jpg',description:'111 222 333',dist:'100m'},]
+    onItemClick(v){
+      if(v==0){
+        this.historyOrder=false;
+      }
+      else{
+        this.historyOrder=true;
+      }
+    }
+    ,
+    loadOrders(){
+      var url = this.apiServer + 'zy/GetOrders';
+      var data ={
+        openId: this.$store.state.bn.openId};
+      var vm = this;
+      this.$http.post(url, data)
+        .then(res => {
+          vm.orders = res.data;
+        });
+    }
+  },
+  computed:{
+    showOrders(){
+      var currentDate='';
+      var vm=this;
+      this.orders.filter(function(x){
+        if(vm.historyOrder){
+          return x.OrderDate<currentDate;
+        }else{
+          return x.OrderDate>=currentDate;
+        }
+      })
     }
   }
 }

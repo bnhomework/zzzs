@@ -184,7 +184,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="OrderId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="CustomerOpenId" Type="nvarchar" MaxLength="256" />
+          <Property Name="CustomerOpenId" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
           <Property Name="VersionNo" Type="int" Nullable="false" />
@@ -193,6 +194,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+          <Property Name="Prepay_id" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -343,7 +345,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ZY_Order_ZY_Customer">
-          <End Role="ZY_Customer" Type="Self.ZY_Customer" Multiplicity="0..1" />
+          <End Role="ZY_Customer" Type="Self.ZY_Customer" Multiplicity="1" />
           <End Role="ZY_Order" Type="Self.ZY_Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ZY_Customer">
@@ -402,6 +404,14 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="sp_GetDesks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shopId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="date" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="sp_GetDesksForCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="shopId" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="date" Type="datetime" Mode="In" />
+        </Function>
         <EntityContainer Name="BnAppModelStoreContainer">
           <EntitySet Name="T_S_Code" EntityType="Self.T_S_Code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_Function" EntityType="Self.T_S_Function" Schema="dbo" store:Type="Tables" />
@@ -519,6 +529,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <EntitySet Name="ZY_Session" EntityType="BnAppModel.ZY_Session" />
           <EntitySet Name="ZY_Shop" EntityType="BnAppModel.ZY_Shop" />
           <EntitySet Name="ZY_Shop_Desk" EntityType="BnAppModel.ZY_Shop_Desk" />
+          <EntitySet Name="ZY_Shop_Img" EntityType="BnAppModel.ZY_Shop_Img" />
+          <EntitySet Name="Pay" EntityType="BnAppModel.Pay" />
           <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="BnAppModel.FK_T_S_Role_Function_T_S_Function">
             <End Role="T_S_Function" EntitySet="T_S_Function" />
             <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
@@ -563,12 +575,18 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
           </AssociationSet>
-          <EntitySet Name="ZY_Shop_Img" EntityType="BnAppModel.ZY_Shop_Img" />
           <AssociationSet Name="FK_ZY_Shop_Img_ZY_Shop" Association="BnAppModel.FK_ZY_Shop_Img_ZY_Shop">
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
             <End Role="ZY_Shop_Img" EntitySet="ZY_Shop_Img" />
           </AssociationSet>
-          <EntitySet Name="Pay" EntityType="BnAppModel.Pay" />
+          <FunctionImport Name="sp_GetDesks" ReturnType="Collection(BnAppModel.sp_GetDesks_Result)">
+            <Parameter Name="shopId" Mode="In" Type="Guid" />
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetDesksForCustomer" ReturnType="Collection(BnAppModel.sp_GetDesksForCustomer_Result)">
+            <Parameter Name="shopId" Mode="In" Type="Guid" />
+            <Parameter Name="date" Mode="In" Type="DateTime" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -718,7 +736,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             <PropertyRef Name="OrderId" />
           </Key>
           <Property Name="OrderId" Type="Guid" Nullable="false" />
-          <Property Name="CustomerOpenId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerOpenId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <Property Name="VersionNo" Type="Int32" Nullable="false" />
@@ -729,6 +748,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Order" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Order" ToRole="ZY_Customer" />
+          <Property Name="Prepay_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -780,9 +800,70 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
           <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop" />
-          <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="ZY_Shop_Img">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="ShopId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="ImgType" Type="Int32" Nullable="false" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Img_ZY_Shop" FromRole="ZY_Shop_Img" ToRole="ZY_Shop" />
+        </EntityType>
+        <EntityType Name="Pay">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="VersionNo" />
+            <PropertyRef Name="TransactionId" />
+            <PropertyRef Name="CreatedBy" />
+            <PropertyRef Name="CreatedTime" />
+            <PropertyRef Name="UpdatedBy" />
+            <PropertyRef Name="UpdatedTime" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="return_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="return_msg" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="appid" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="mch_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="device_info" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="nonce_str" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sign" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="sign_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="result_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="err_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="err_code_des" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="openid" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="is_subscribe" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="trade_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="bank_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="total_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="settlement_total_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="fee_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="cash_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="cash_fee_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="coupon_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="coupon_count" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="transaction_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="out_trade_no" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="attach" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="time_end" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK_T_S_Role_Function_T_S_Function">
           <End Type="BnAppModel.T_S_Function" Role="T_S_Function" Multiplicity="1" />
@@ -893,7 +974,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ZY_Order_ZY_Customer">
-          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="0..1" />
+          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="1" />
           <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ZY_Customer">
@@ -916,23 +997,6 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="ZY_Shop_Img">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="ShopId" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
-          <Property Name="ImgType" Type="Int32" Nullable="false" />
-          <Property Name="VersionNo" Type="Int32" Nullable="false" />
-          <Property Name="TransactionId" Type="Guid" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Img_ZY_Shop" FromRole="ZY_Shop_Img" ToRole="ZY_Shop" />
-        </EntityType>
         <Association Name="FK_ZY_Shop_Img_ZY_Shop">
           <End Type="BnAppModel.ZY_Shop" Role="ZY_Shop" Multiplicity="1" />
           <End Type="BnAppModel.ZY_Shop_Img" Role="ZY_Shop_Img" Multiplicity="*" />
@@ -945,50 +1009,19 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="Pay">
-          <Key>
-            <PropertyRef Name="Id" />
-            <PropertyRef Name="VersionNo" />
-            <PropertyRef Name="TransactionId" />
-            <PropertyRef Name="CreatedBy" />
-            <PropertyRef Name="CreatedTime" />
-            <PropertyRef Name="UpdatedBy" />
-            <PropertyRef Name="UpdatedTime" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="return_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="return_msg" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="appid" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="mch_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="device_info" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="nonce_str" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="sign" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="sign_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="result_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="err_code" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="err_code_des" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="openid" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="is_subscribe" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="trade_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="bank_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="total_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="settlement_total_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="fee_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="cash_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="cash_fee_type" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="coupon_fee" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="coupon_count" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="transaction_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="out_trade_no" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="attach" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="time_end" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="VersionNo" Type="Int32" Nullable="false" />
-          <Property Name="TransactionId" Type="Guid" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
+        <ComplexType Name="sp_GetDesks_Result">
+          <Property Type="Guid" Name="DeskId" Nullable="false" />
+          <Property Type="String" Name="DeskName" Nullable="false" MaxLength="256" />
+          <Property Type="String" Name="BookedPositions" Nullable="true" />
+          <Property Type="String" Name="InternalBookedPositions" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_GetDesksForCustomer_Result">
+          <Property Type="Guid" Name="deskId" Nullable="false" />
+          <Property Type="String" Name="deskName" Nullable="false" MaxLength="256" />
+          <Property Type="String" Name="bookedPositions" Nullable="true" />
+          <Property Type="DateTime" Name="selectedDate" Nullable="true" Precision="23" />
+          <Property Type="Decimal" Name="UnitPrice" Nullable="false" Precision="18" Scale="2" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1134,6 +1167,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <EntitySetMapping Name="ZY_Order">
             <EntityTypeMapping TypeName="BnAppModel.ZY_Order">
               <MappingFragment StoreEntitySet="ZY_Order">
+                <ScalarProperty Name="Prepay_id" ColumnName="Prepay_id" />
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -1142,6 +1176,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
                 <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="CustomerOpenId" ColumnName="CustomerOpenId" />
                 <ScalarProperty Name="OrderId" ColumnName="OrderId" />
               </MappingFragment>
@@ -1254,6 +1289,27 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetDesks" FunctionName="BnAppModel.Store.sp_GetDesks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BnAppModel.sp_GetDesks_Result">
+                <ScalarProperty Name="DeskId" ColumnName="DeskId" />
+                <ScalarProperty Name="DeskName" ColumnName="DeskName" />
+                <ScalarProperty Name="BookedPositions" ColumnName="BookedPositions" />
+                <ScalarProperty Name="InternalBookedPositions" ColumnName="InternalBookedPositions" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetDesksForCustomer" FunctionName="BnAppModel.Store.sp_GetDesksForCustomer">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BnAppModel.sp_GetDesksForCustomer_Result">
+                <ScalarProperty Name="deskId" ColumnName="deskId" />
+                <ScalarProperty Name="deskName" ColumnName="deskName" />
+                <ScalarProperty Name="bookedPositions" ColumnName="bookedPositions" />
+                <ScalarProperty Name="selectedDate" ColumnName="selectedDate" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

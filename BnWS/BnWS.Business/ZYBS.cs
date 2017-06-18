@@ -146,6 +146,8 @@ namespace BnWS.Business
                     OrderId = result.OrderId,
                     Amount = orderInfo.Positions.Count * desk.UnitPrice,
                     CustomerOpenId = orderInfo.CustomerOpenId,
+                    OrderDate = orderInfo.pickDate,
+                    Prepay_id = result.prepay_id,
                     Status = 0
                 };
                 var positions = new List<ZY_Booked_Position>();
@@ -275,5 +277,18 @@ namespace BnWS.Business
             return true;
         }
 
+        public List<OrderHistory> GetOrders(string openId)
+        {
+            var id = new System.Data.SqlClient.SqlParameter
+            {
+                ParameterName = "@openId",
+                Value = openId
+            };
+            using (var db = GetDbContext())
+            {
+                var result = db.Database.SqlQuery<OrderHistory>("sp_GetCustomerOrders @openId", openId);
+                return result.ToList();
+            }
+        } 
     }
 }

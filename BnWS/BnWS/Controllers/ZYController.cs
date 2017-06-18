@@ -53,5 +53,13 @@ namespace BnWS.Views
             var result = BS.PlaceOrder(orderInfo);
             return new JsonResult() { Data = result }; 
         }
+
+        [HttpPost]
+        public ActionResult GetOrders(string openId)
+        {
+            var orders = BS.GetOrders(openId);
+
+            return new JsonResult() { Data = orders }; 
+        }
 	}
 }

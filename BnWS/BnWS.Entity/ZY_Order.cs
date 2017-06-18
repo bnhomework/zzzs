@@ -23,6 +23,7 @@ namespace BnWS.Entity
     
         public System.Guid OrderId { get; set; }
         public string CustomerOpenId { get; set; }
+        public System.DateTime OrderDate { get; set; }
         public int Status { get; set; }
         public decimal Amount { get; set; }
         public int VersionNo { get; set; }
@@ -31,6 +32,7 @@ namespace BnWS.Entity
         public System.DateTime CreatedTime { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
+        public string Prepay_id { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }

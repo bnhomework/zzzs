@@ -107,6 +107,14 @@ namespace BnWS.Entity
     {
         public string bookedPositions { get; set; }
     }
-   
+
+    public class OrderHistory
+    {
+        public DateTime OrderDate { get; set; }
+        public string ShopName { get; set; }
+        public string DeskName { get; set; }
+        public string Positions { get; set; }
+        public string Status { get; set; }
+    }
 #endregion
 }
