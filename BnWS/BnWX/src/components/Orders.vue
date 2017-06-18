@@ -63,7 +63,7 @@ export default {
   },
   computed:{
     showOrders(){
-      var currentDate='';
+      var currentDate=this.getCurrentDate();
       var vm=this;
       this.orders.filter(function(x){
         if(vm.historyOrder){

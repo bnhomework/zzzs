@@ -9,7 +9,7 @@
       </div>
     </group>
     <group title="预约">
-      <datetime v-model="pickDate" :title="日期"></datetime>
+      <datetime v-model="pickDate" :title="日期" :start-date="this.getCurrentDate()"></datetime>
     </group>
     <div style="padding:15px;">
       <x-button @click.native="book" type="primary">立即预约</x-button>
