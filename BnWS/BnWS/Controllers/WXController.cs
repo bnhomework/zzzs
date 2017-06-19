@@ -42,8 +42,16 @@ namespace BnWS.Views
          {
              var bs =
                  new ZYBS(new AppContext() {UserId = new Guid("0D321367-C97F-46B0-81B7-4EDC5D7A2829"), UserName = "WX"});
-             bs.ConfirmPayment(payInfo);
-            return Content("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+             var result=bs.ConfirmPayment(payInfo);
+             if (result)
+             {
+                 return Content("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
+                 
+             }
+             else
+             {
+                 return Content("<xml><return_code><![CDATA[FAILED]]></return_code><return_msg><![CDATA[ERROR]]></return_msg></xml>");
+             }
         }
         public ActionResult Login()
         {

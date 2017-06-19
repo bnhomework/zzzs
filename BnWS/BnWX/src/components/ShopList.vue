@@ -7,7 +7,7 @@
     <group title="附近店铺">
       <cell title="Vux" :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in shops">
         <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
-        <span slot="title">{{item.name}}</span>
+        <span slot="title">{{item.shopName}}</span>
         <span slot="inline-desc">{{item.description}}</span>
       </cell>
     </group>
@@ -85,5 +85,6 @@ export default {
 }
 .logo {
   width: 100%;
+  height: 187px;
 }
 </style>

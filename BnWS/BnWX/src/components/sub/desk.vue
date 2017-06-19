@@ -22,7 +22,7 @@
 		<!-- <text x="10" y="100" style="fill: #ffffff;" v-for="item in pList" :font-size="fontSize"  @click="positionClick(item)">
 			<textPath v-bind:xlink:href="'#p_'+item">{{item}}</textPath>
 		</text> -->
-		<image v-for="item in pList" x="10" y="100" width="80" height="80" :transform="trans(item)" @click="positionClick(item)"
+		<image v-for="item in pList" x="10" y="160" width="80" height="80" :transform="trans(item)" @click="positionClick(item)"
    			v-bind:xlink:href="fillColor3(item)" />
 	</svg>
 </template>
@@ -35,10 +35,10 @@
 				defaultValue:'Empty',
 				pList:[],
 				selectedPosition:[],
-				bk_table:require('@/assets/img/bk_table.png'),
-				bk_pickedImg:require('@/assets/img/picked.png'),
-				bk_bookedImg:require('@/assets/img/booked.png'),
-				bk_absentImg:require('@/assets/img/absent.png'),
+				bk_table:require('@/assets/img/bk_table_240.png'),
+				bk_pickedImg:require('@/assets/img/picked_80.png'),
+				bk_bookedImg:require('@/assets/img/booked_80.png'),
+				bk_absentImg:require('@/assets/img/absent_80.png'),
 			};
 		},
 		props:{
