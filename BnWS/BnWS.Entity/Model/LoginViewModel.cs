@@ -99,7 +99,7 @@ namespace BnWS.Entity
     {
         public Guid deskId { get; set; }
         public string deskName { get; set; }
-        //public string bookedPositions { get; set; }
+        public string bookedPositions { get; set; }
         public DateTime selectedDate { get; set; }
         public decimal unitPrice { get; set; }
     }

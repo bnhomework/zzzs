@@ -1,14 +1,30 @@
 <template>
-		<!-- <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox"> -->
-		<svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
-		<circle :cx="cx" :cy="cy" :r="rdesk2" :fill="fillColor2" />
-		  <path v-for="item in pList" :d="trackPath" stroke-width="1" :fill="fillColor(item)" @click="positionClick(item)" stroke="#ffffff"  :transform="trans(item)" :id="'p_'+item"/>
-		<text x="10" y="100" style="fill: #ffffff;" v-for="item in pList" :font-size="fontSize"  @click="positionClick(item)">
-		    <textPath v-bind:xlink:href="'#p_'+item">
-		        {{item}}
-		    </textPath>
-		</text>          
-		</svg>
+	<!-- <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
+	-->
+	<svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
+		<defs>
+			<pattern id="tableImg" x="0" y="0" patternUnits="userSpaceOnUse" :height="height" :width="width">
+				<image :x="cx-rdesk2" :y="cy-rdesk2" :height="2*rdesk2" :width="2*rdesk2" v-bind:xlink:href="bk_table"></image>
+			</pattern>
+
+			<!-- <pattern id="pickedImg" x="0" y="0" patternUnits="userSpaceOnUse" :height="height" :width="width">
+				<image x="0" y="100" height="50" width="100" v-bind:xlink:href="bk_pickedImg"></image>
+			</pattern>
+			<pattern id="bookedImg" x="0" y="0" patternUnits="userSpaceOnUse" :height="height" :width="width">
+				<image x="0" y="100" height="50" :width="100" v-bind:xlink:href="bk_bookedImg"></image>
+			</pattern>
+			<pattern id="absentImg" x="0" y="0" patternUnits="userSpaceOnUse" :height="height" :width="width">
+				<image x="0" y="100" height="50" width="50" v-bind:xlink:href="bk_absentImg"></image>
+			</pattern> -->
+		</defs>
+		<circle :cx="cx" :cy="cy" :r="rdesk2" fill="url(#tableImg)" />
+		<!-- <path v-for="item in pList" :d="trackPath" stroke-width="1" :fill="fillColor(item)" @click="positionClick(item)" stroke="#ffffff"  :transform="trans(item)" :id="'p_'+item"/> -->
+		<!-- <text x="10" y="100" style="fill: #ffffff;" v-for="item in pList" :font-size="fontSize"  @click="positionClick(item)">
+			<textPath v-bind:xlink:href="'#p_'+item">{{item}}</textPath>
+		</text> -->
+		<image v-for="item in pList" x="10" y="100" width="80" height="80" :transform="trans(item)" @click="positionClick(item)"
+   			v-bind:xlink:href="fillColor3(item)" />
+	</svg>
 </template>
 <script>
 	export default{
@@ -18,7 +34,11 @@
 				visible:true,
 				defaultValue:'Empty',
 				pList:[],
-				selectedPosition:[]
+				selectedPosition:[],
+				bk_table:require('@/assets/img/bk_table.png'),
+				bk_pickedImg:require('@/assets/img/picked.png'),
+				bk_bookedImg:require('@/assets/img/booked.png'),
+				bk_absentImg:require('@/assets/img/absent.png'),
 			};
 		},
 		props:{
@@ -29,7 +49,8 @@
 			avaliableColor:{type:String,default:'#0099FF'},
 			selectedColor:{type:String,default:'#1122FF'},
 			disableColor:{type:String,default:'#dddddd'},
-			fontSize:{type:Number,default:28}
+			fontSize:{type:Number,default:28},
+			readOnly:false
 		},
 		created(){
 			// this.pList=range(1,this.positions)
@@ -53,9 +74,15 @@
 			},
 			fillColor(i){
 				return this.booked(i)?this.disableColor:this.isSelected(i)?this.selectedColor:this.avaliableColor
+				// return "url("+this.booked(i)?"#bookedImg":this.isSelected(i)?"#pickedImg":"#absentImg"+")"
+			},
+			fillColor3(i){
+				// return this.booked(i)?this.disableColor:this.isSelected(i)?this.selectedColor:this.avaliableColor
+				return this.booked(i)?this.bk_bookedImg:this.isSelected(i)?this.bk_pickedImg:this.bk_absentImg
 			},
 			positionClick(i){
-				console.log('-------'+i)
+				if(this.readOnly==true)
+					return
 				if(this.booked(i))
 					return;
 				var index=this.selectedPosition.indexOf(i)

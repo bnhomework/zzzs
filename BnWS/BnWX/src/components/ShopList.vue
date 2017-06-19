@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="vux-demo">
-      <img class="logo" src="../assets/vux_logo.png">
+      <img class="logo" :src="homelogo">
       <h1></h1>
     </div>
-    <group title="cell demo">
+    <group title="附近店铺">
       <cell title="Vux" :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in shops">
         <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
         <span slot="title">{{item.name}}</span>
@@ -27,7 +27,8 @@ export default {
     ,
     data () {
         return {
-            shops: []
+            shops: [],
+            homelogo:require('@/assets/img/home.jpg')
         }
     }
     ,
@@ -58,7 +59,7 @@ export default {
                 }
             }
             );
-            vm.loadShops();//test
+            // vm.loadShops();//test
         },
         loadShops(condition) {
             var url=this.apiServer+'zy/shops';
@@ -78,12 +79,11 @@ export default {
 
 </script>
 
-<style>
+<style scoped>
 .vux-demo {
   text-align: center;
 }
 .logo {
-  width: 100px;
-  height: 100px
+  width: 100%;
 }
 </style>
