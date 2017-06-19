@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using BnWS.Entity;
+using LinqKit;
 
 namespace BnWS.Business
 {
@@ -56,10 +58,19 @@ namespace BnWS.Business
         {
             using (var uow = GetUnitOfWork())
             {
-                var orders = new List<ZY_Booked_Position>();
+
+                var order = new ZY_Order()
+                {
+                    OrderId = Guid.NewGuid(),
+                    Amount = 0,
+                    IsInternal = true,
+                    OrderDate = selectedDate,
+                    Status = 1
+                };
+                var bookedPositions = new List<ZY_Booked_Position>();
                 positions.ForEach(p =>
                 {
-                    var order = new ZY_Booked_Position
+                    var bookedPosition = new ZY_Booked_Position
                     {
                         Id = Guid.NewGuid(),
                         IsInternal = true,
@@ -68,17 +79,85 @@ namespace BnWS.Business
                         DeskId = deskId,
                         Status = 1
                     };
-                    orders.Add(order);
+                    bookedPositions.Add(bookedPosition);
                 });
-
-                uow.Repository<ZY_Booked_Position>().InsertRange(orders);
+                uow.Repository<ZY_Order>().Insert(order);
+                uow.Repository<ZY_Booked_Position>().InsertRange(bookedPositions);
                 uow.Save();
             }
         }
 
-        public void BookPositions()
+        public List<OrderReview> GetOrders(SearchOrderCondition condition)
         {
+            var orderPred = PredicateBuilder.New<ZY_Order>();
+            if (condition.From.HasValue)
+            {
+                orderPred = orderPred.And(x => x.OrderDate >= condition.From.Value);
+            }
+            if (condition.To.HasValue)
+            {
+                orderPred = orderPred.And(x => x.OrderDate <= condition.To.Value);
+            }
+            if (condition.Status.HasValue)
+            {
+                orderPred = orderPred.And(x => x.Status.Equals(condition.Status.Value));
+            }
+            var shopPred = PredicateBuilder.New<ZY_Shop>();
+            shopPred = shopPred.And(x => condition.ShopIds.Contains(x.ShopId));
             
+            using (var db = GetDbContext())
+            {
+                var positions = (from bp in db.ZY_Booked_Position
+                    join o in db.ZY_Order.AsExpandable().Where(orderPred) on bp.OrderId equals o.OrderId
+                    join desk in db.ZY_Shop_Desk on bp.DeskId equals desk.DeskId
+                    join shop in db.ZY_Shop.AsExpandable().Where(shopPred) on desk.ShopId equals shop.ShopId
+                    select new
+                    {
+                        o.OrderId,
+                        ShopName=shop.Name,
+                        desk.DeskName,
+                        o.OrderDate,
+                        bp.Position,
+                        o.Status,
+                        o.Amount,
+                        o.IsInternal,
+                        o.CustomerOpenId
+                    }).ToList();
+               return positions.GroupBy(
+                    x => new {x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.IsInternal, x.Amount,x.CustomerOpenId})
+                    .Select(x => new OrderReview()
+                    {
+                        OrderId = x.Key.OrderId,
+                        OrderDate = x.Key.OrderDate,
+                        ShopName = x.Key.ShopName,
+                        DeskName = x.Key.DeskName,
+                        Status = x.Key.Status,
+                        IsInternal = x.Key.IsInternal,
+                        Amount = x.Key.Amount,
+                        Positions = x.Select(p => p.Position).ToList(),
+                        CustomerOpenId = x.Key.CustomerOpenId
+
+                    }).ToList();
+            }
+
+        }
+        public void RefundOrder(Guid orderId)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                var order =
+                    uow.Repository<ZY_Order>().Query().Filter(x => x.OrderId == orderId&&x.Status!=-2).Get().FirstOrDefault();
+                if(order==null)
+                    return;
+                order.Status = -2;
+                var bps = uow.Repository<ZY_Booked_Position>().Query().Filter(x => x.OrderId == orderId).Get().ToList();
+                
+                order.Comments = string.Join(",",bps.Select(x => x.Position).ToList());
+                bps.ForEach(x => uow.Repository<ZY_Booked_Position>().Delete(x));
+                uow.Repository<ZY_Order>().Update(order);
+                uow.Save();
+            }
+
         }
     }
 }

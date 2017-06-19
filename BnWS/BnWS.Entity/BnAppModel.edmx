@@ -195,6 +195,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
           <Property Name="Prepay_id" Type="nvarchar" MaxLength="256" />
+          <Property Name="IsInternal" Type="bit" Nullable="false" />
+          <Property Name="Comments" Type="nvarchar" MaxLength="2000" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -749,6 +751,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Order" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Order" ToRole="ZY_Customer" />
           <Property Name="Prepay_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsInternal" Type="Boolean" Nullable="false" />
+          <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -1167,6 +1171,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <EntitySetMapping Name="ZY_Order">
             <EntityTypeMapping TypeName="BnAppModel.ZY_Order">
               <MappingFragment StoreEntitySet="ZY_Order">
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
                 <ScalarProperty Name="Prepay_id" ColumnName="Prepay_id" />
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />

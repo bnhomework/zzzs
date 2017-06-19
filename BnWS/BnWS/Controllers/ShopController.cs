@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using BnWS.Business;
+using BnWS.Entity;
 
 namespace BnWS.Controllers
 {
@@ -54,6 +55,12 @@ namespace BnWS.Controllers
         public ActionResult Order()
         {
             return View();
+        }
+
+        public ActionResult GetOrders(SearchOrderCondition condition)
+        {
+            var orders = BS.GetOrders(condition);
+            return new JsonResult(){Data = orders};
         }
         public ActionResult Refund()
         {

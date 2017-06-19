@@ -1,15 +1,13 @@
-USE [bn_zy]
-GO
+declare @from datetime
+declare @to datetime
+declare @status nvarchar(256)
+declare @shopId uniqueIdentifier
 
-INSERT INTO [dbo].[ZY_Shop_Img]
-([Id],[ShopId],[Name],[Url],[ImgType],[VersionNo],[TransactionId],[CreatedBy],[CreatedTime],[UpdatedBy],[UpdatedTime])     VALUES
-(NEWID(),'6049D8BA-F428-4448-97AC-1771EF6F54B3','','upload/shop/1.jpg',1,1,NEWID(),'bn',GETDATE(),'bn',GETDATE()		   )
-INSERT INTO [dbo].[ZY_Shop_Img]
-([Id],[ShopId],[Name],[Url],[ImgType],[VersionNo],[TransactionId],[CreatedBy],[CreatedTime],[UpdatedBy],[UpdatedTime])     VALUES
-(NEWID(),'6049D8BA-F428-4448-97AC-1771EF6F54B3','','upload/shop/2.jpg',1,1,NEWID(),'bn',GETDATE(),'bn',GETDATE()		   )
-INSERT INTO [dbo].[ZY_Shop_Img]
-([Id],[ShopId],[Name],[Url],[ImgType],[VersionNo],[TransactionId],[CreatedBy],[CreatedTime],[UpdatedBy],[UpdatedTime])     VALUES
-(NEWID(),'6049D8BA-F428-4448-97AC-1771EF6F54B3','','upload/shop/3.jpg',1,1,NEWID(),'bn',GETDATE(),'bn',GETDATE()		   )
-GO
+
+select * from ZY_Booked_Position a
+left join ZY_Order b on a.OrderId=b.OrderId
+left join ZY_Shop_Desk c on a.DeskId=c.DeskId
+left join ZY_Shop d on c.ShopId=d.ShopId
+where
 
 

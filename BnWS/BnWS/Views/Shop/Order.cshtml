@@ -18,7 +18,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-3">
                             <div class="form-group">
                                 <label class="font-noraml">店铺</label>
                                 <div class="input-group">
@@ -27,53 +27,87 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
-                            <div class="form-group" id="selectedDate" style="width: 300px">
-                                <label class="font-noraml">日期</label>
+                        <div class="col-sm-3">
+                            <div class="form-group" id="selectedDateFrom" style="width: 300px">
+                                <label class="font-noraml">日期从</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                    <input type="text" class="form-control" data-bind="value:selectedDate">
+                                    <input type="text" class="form-control" data-bind="value:From">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group" id="selectedDateTo" style="width: 300px">
+                                <label class="font-noraml">到</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" data-bind="value:To">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="font-noraml">订单状态</label>
+                                <div class="input-group">
+                                    <select data-placeholder="" class="chosen-select" style="width:300px;" tabindex="2"
+                                            data-bind="options: allStatus,optionsText: 'StatusName',value:Status"></select>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="ibox float-e-margins">
-                <div class="ibox-title">
-                    <h5>桌子</h5>
-                    <div class="ibox-tools">
-                        <a class="collapse-link">
-                            <i class="fa fa-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-                <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-12">
-                            <!-- ko foreach: selectedShopDesks -->
-                            <div class="file-box">
-                                <div class="file">
-                                    <a href="#" data-bind="click:function(){$root.openDesk($data)}">
-                                        <span class="corner"></span>
-
-                                        <div class="icon">
-                                            <i class="fa fa-file"></i>
-                                        </div>
-                                        <div class="file-name">
-                                            <span data-bind="text:DeskId"></span>
-                                            <span data-bind="text:DeskName"></span>
-                                            <span data-bind="text:BookedPositions"></span>
-                                            <span data-bind="text:InternalBookedPositions"></span>
-                                        </div>
-                                    </a>
-                                </div>
+                        <div class="col-sm-3 col-sm-offset-9">
+                            <div class="form-group">
+                                <div class="btn btn-primary" data-bind="click:loadOrders">查找</div>
                             </div>
-                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>店铺管理</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        @*<th style="width:30px"></th>*@
+                                        <th>店铺</th>
+                                        <th>日期</th>
+                                        <th>桌号</th>
+                                        <th>客户OpenId</th>
+                                        <th>金额</th>
+                                        <th>订单状态</th>
+                                        <th style="width:200px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach:orders">
+                                    <tr>
+                                        <td data-bind="text:ShopName"></td>
+                                        <td data-bind="text:OrderDate"></td>
+                                        <td data-bind="text:DeskName"></td>
+                                        <td data-bind="text:CustomerOpenId"></td>
+                                        <td data-bind="text:Amount"></td>
+                                        <td data-bind="text:Status"></td>
+                                        <td>
+                                            <div class="btn btn-sm btn-primary" data-bind="click:$root.refund(OrderId)"><i class="fa fa-pencil">退款</i></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -81,49 +115,25 @@
         </div>
     </div>
 
-    <div class="modal" id="deskModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content animated bounceInRight">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title">座位</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- ko foreach: alivablePositions -->
-
-                    <div class="checkbox checkbox-inline" style="min-width: 100px;margin-bottom: 20px">
-                        <input type="checkbox" data-bind="checkedValue: $data,checked:$root.selectedPositions,attr:{id:'positionId'+$data}">
-                        <label data-bind="attr:{for:'positionId'+$data}"> 座位<span data-bind="text:$data"></span></label>
-                    </div>
-                    <!-- /ko -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-white" data-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" data-bind="click:bookPosition">预定</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 @section scripts{
     <script type="text/javascript">
         function ViewModel() {
             var self = this;
-            self.shops = ko.observableArray();
-            self.selectedShop = ko.observable();
-            self.selectedShopDesks = ko.observableArray();
-            self.selectedDate = ko.observable('@DateTime.Now.Date');
-            self.selectedDesk = ko.observable();
 
-            self.allPositions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
-            self.selectedPositions = ko.observableArray();
+            self.From = ko.observable('@DateTime.Now.AddDays(-7).Date');
+            self.To = ko.observable('@DateTime.Now.AddDays(7).Date');
+            self.ShopIds = ko.observableArray([]);
+            self.Status = ko.observable();
+            self.allStatus = [{ StatusName: 'All' }, { StatusName: '未付款', Id: '0' }, { StatusName: '已付款', Id: '1' }, { StatusName: '申请退款', Id: '-1' }, { StatusName: '已退款', Id: '-2' }];
+            self.Orders = ko.observableArray([]);
+            self.shops = ko.observableArray();
+
             self.urls = {
                 GetShops: '@Url.Action("GetShops")',
-                GetShopDesks: '@Url.Action("GetShopDesks")',
-                BookPositionsInternal: '@Url.Action("BookPositionsInternal")',
-                d: '@Url.Action("DeleteFunction")'
+                GetOrders: '@Url.Action("GetOrders")',
+                RefundOrder: '@Url.Action("RefundOrder")',
             }
             self.loadShops = function() {
                 bnApp.showLoading();
@@ -142,21 +152,16 @@
                     }
                 });
             }
-            self.reloadShopDesk=function() {
-                var condition = self.condition();
-                self.loadShopDesk(condition.shop.ShopId, condition.date);
-            }
-            self.loadShopDesk = function(shopId, sdate) {
-
+            self.loadOrders = function() {
                 bnApp.showLoading();
+                var condition = { From: self.From(), To: self.To(), ShopIds: self.ShopIds(), Status: self.Status() };
                 $.ajax({
-                    url: self.urls.GetShopDesks,
-                    type: "POST",
-                    contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({ shopId: shopId, selectedDate: sdate }),
+                    url: self.urls.GetOrders,
+                    type: "Post",
+                    data: JSON.stringify({condition:condition}),
                     success: function(result) {
-                        self.selectedShopDesks.removeAll();
-                        self.selectedShopDesks(result);
+                        self.Orders.removeAll();
+                        self.Orders(result);
                         bnApp.hideLoading();
                     },
                     error: function(error) {
@@ -164,62 +169,24 @@
                         bnApp.hideLoading();
                     }
                 });
-            }
-            self.condition = ko.computed(function() {
-                var shop = self.selectedShop();
-                var date = self.selectedDate();
-                console.log('---conditionchange---');
-                if (shop != undefined && shop.ShopId != undefined && shop.ShopId != null && date != undefined) {
-                    self.loadShopDesk(shop.ShopId, date);
-                }
-                return { shop: shop, date: date };
-            });
-            self.alivablePositions = ko.computed(function() {
-                var sd = self.selectedDesk();
-                if (sd == undefined)
-                    return [];
-                if (sd.BookedPositions && sd.BookedPositions != null) {
-                    var bp = sd.BookedPositions.split(',');
-                    var result = [];
-                    for (var i = 0; i < self.allPositions.length; i++) {
-                        var p = self.allPositions[i];
-                        if (bp.indexOf(p)<0) {
-                            result.push(p);
-                        }
-                    }
-                    return result;
-                } else {
-                    return self.allPositions;
-                }
-            });
-            self.deskModal = $('#deskModal');
-            self.openDesk = function(desk) {
-                self.selectedDesk(desk);
-                self.selectedPositions.removeAll();
-                self.deskModal.modal("show");
-            }
-            self.bookPosition = function() {
-                console.log(JSON.stringify(self.selectedPositions()));
-                var data = { positions: self.selectedPositions(), selectedDate: self.selectedDate(), deskId: self.selectedDesk().DeskId };
+            },
+            self.refund=function(orderId) {
                 bnApp.showLoading();
+                var data = { orderId: orderId };
                 $.ajax({
-                    url: self.urls.BookPositionsInternal,
-                    type: "POST",
-                    contentType: 'application/json; charset=utf-8',
+                    url: self.urls.RefundOrder,
+                    type: "Post",
                     data: JSON.stringify(data),
                     success: function (result) {
-
-                        bnApp.showMessage();
                         bnApp.hideLoading();
-                        self.reloadShopDesk();
+                        bnApp.showMessage('退款成功');
+                        self.loadOrders();
                     },
                     error: function (error) {
                         bnApp.showError(error);
                         bnApp.hideLoading();
-                        self.reloadShopDesk();
                     }
                 });
-                self.deskModal.modal("hide");
             }
             self.init = function() {
                 $('#selectedDate .input-group.date').datepicker({

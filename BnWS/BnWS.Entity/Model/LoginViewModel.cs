@@ -110,11 +110,26 @@ namespace BnWS.Entity
 
     public class OrderHistory
     {
+        public Guid OrderId { get; set; }
         public DateTime OrderDate { get; set; }
         public string ShopName { get; set; }
         public string DeskName { get; set; }
-        public string Positions { get; set; }
-        public string Status { get; set; }
+        public List<string> Positions { get; set; }
+        public int Status { get; set; }
+        public decimal Amount { get; set; }
+    }
+
+    public class SearchOrderCondition
+    {
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
+        public List<Guid> ShopIds { get; set; }
+        public int? Status { get; set; }
+    }
+    public class OrderReview : OrderHistory
+    {
+        public string CustomerOpenId { get; set; }
+        public bool IsInternal { get; set; }
     }
 #endregion
 }
