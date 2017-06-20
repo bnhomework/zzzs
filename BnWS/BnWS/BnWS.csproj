@@ -437,7 +437,6 @@
     <Content Include="Views\Shop\Index.cshtml" />
     <Content Include="Views\Shop\Order.cshtml" />
     <Content Include="Views\Shop\Refund.cshtml" />
-    <Content Include="Views\Shop\Management.cshtml" />
     <None Include="Properties\PublishProfiles\prod.pubxml" />
   </ItemGroup>
   <ItemGroup>

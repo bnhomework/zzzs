@@ -55,9 +55,9 @@ namespace BnWS.Views
         }
 
         [HttpPost]
-        public ActionResult GetOrders(string openId)
+        public ActionResult GetOrders(string orderId)
         {
-            var orders = BS.GetOrders(openId);
+            var orders = BS.GetOrders(orderId);
 
             return new JsonResult() { Data = orders }; 
         }

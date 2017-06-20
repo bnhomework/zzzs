@@ -123,7 +123,7 @@ namespace BnWS.Entity
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
-        public List<Guid> ShopIds { get; set; }
+        public Guid? ShopId { get; set; }
         public int? Status { get; set; }
     }
     public class OrderReview : OrderHistory

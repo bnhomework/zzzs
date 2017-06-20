@@ -75,6 +75,8 @@ namespace BnWS.Views
            var res= wxHelper.GetJosnData<AccessTokenResponse>(requestData, url);
             if (res!=null&&!string.IsNullOrEmpty(res.openid))
             {
+                var bs = new WXBS(new AppContext(){UserId = Guid.NewGuid(),UserName = res.openid});
+                bs.UpsertCustomer(res);
                 var redirectUrl = string.Format("{0}/{1}", WxConfig.WebClientUrl ,res.openid);
                 return Redirect(redirectUrl);
             }

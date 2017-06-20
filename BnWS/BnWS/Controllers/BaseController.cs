@@ -21,6 +21,7 @@ namespace BnWS.Controllers
             {
                 //To ignore the loop reference                 
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                DateFormatString = "yyyy-MM-dd hh:mm:ss"
             };
         }
         /// <summary>

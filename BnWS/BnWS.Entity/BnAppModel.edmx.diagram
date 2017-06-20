@@ -11,7 +11,6 @@
         <EntityTypeShape EntityType="BnAppModel.T_S_Role_Function" Width="1.5" PointX="8" PointY="4.375" />
         <EntityTypeShape EntityType="BnAppModel.T_S_User" Width="1.5" PointX="0.75" PointY="8.625" />
         <EntityTypeShape EntityType="BnAppModel.T_S_User_Role" Width="1.5" PointX="6" PointY="8.375" />
-        <EntityTypeShape EntityType="BnAppModel.ZY_Booked_Position" Width="1.5" PointX="7.5" PointY="12.375" />
         <EntityTypeShape EntityType="BnAppModel.ZY_Customer" Width="1.5" PointX="5.25" PointY="20.875" />
         <EntityTypeShape EntityType="BnAppModel.ZY_Order" Width="1.5" PointX="5.25" PointY="0.75" />
         <EntityTypeShape EntityType="BnAppModel.ZY_Session" Width="1.5" PointX="3" PointY="9.125" />
@@ -25,12 +24,13 @@
         <AssociationConnector Association="BnAppModel.FK_T_S_User_Role_T_S_User" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Session_T_S_User" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_T_S_User" />
-        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" />
-        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order" />
-        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Order_ZY_Customer" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Shop_Img_ZY_Shop" />
+        <EntityTypeShape EntityType="BnAppModel.ZY_Booked_Position" Width="1.5" PointX="7.5" PointY="12.375" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order" />
+        <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -151,7 +151,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           </Key>
           <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
           <Property Name="OrderDate" Type="datetime" Nullable="false" />
-          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="DeskId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Position" Type="nvarchar" MaxLength="256" Nullable="false" />
           <Property Name="IsInternal" Type="bit" Nullable="false" />
@@ -525,7 +525,6 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <EntitySet Name="T_S_Role_Function" EntityType="BnAppModel.T_S_Role_Function" />
           <EntitySet Name="T_S_User" EntityType="BnAppModel.T_S_User" />
           <EntitySet Name="T_S_User_Role" EntityType="BnAppModel.T_S_User_Role" />
-          <EntitySet Name="ZY_Booked_Position" EntityType="BnAppModel.ZY_Booked_Position" />
           <EntitySet Name="ZY_Customer" EntityType="BnAppModel.ZY_Customer" />
           <EntitySet Name="ZY_Order" EntityType="BnAppModel.ZY_Order" />
           <EntitySet Name="ZY_Session" EntityType="BnAppModel.ZY_Session" />
@@ -557,18 +556,6 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             <End Role="T_S_User" EntitySet="T_S_User" />
             <End Role="ZY_Shop" EntitySet="ZY_Shop" />
           </AssociationSet>
-          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Customer" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Customer">
-            <End Role="ZY_Customer" EntitySet="ZY_Customer" />
-            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Order" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order">
-            <End Role="ZY_Order" EntitySet="ZY_Order" />
-            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Shop_Desk" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk">
-            <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
-            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
-          </AssociationSet>
           <AssociationSet Name="FK_ZY_Order_ZY_Customer" Association="BnAppModel.FK_ZY_Order_ZY_Customer">
             <End Role="ZY_Customer" EntitySet="ZY_Customer" />
             <End Role="ZY_Order" EntitySet="ZY_Order" />
@@ -589,6 +576,19 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             <Parameter Name="shopId" Mode="In" Type="Guid" />
             <Parameter Name="date" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="ZY_Booked_Position" EntityType="BnAppModel.ZY_Booked_Position" />
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Customer" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Customer">
+            <End Role="ZY_Customer" EntitySet="ZY_Customer" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Order" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order">
+            <End Role="ZY_Order" EntitySet="ZY_Order" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ZY_Booked_Position_ZY_Shop_Desk" Association="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk">
+            <End Role="ZY_Shop_Desk" EntitySet="ZY_Shop_Desk" />
+            <End Role="ZY_Booked_Position" EntitySet="ZY_Booked_Position" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -694,28 +694,6 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <NavigationProperty Name="T_S_Role" Relationship="BnAppModel.FK_T_S_User_Role_T_S_Role" FromRole="T_S_User_Role" ToRole="T_S_Role" />
           <NavigationProperty Name="T_S_User" Relationship="BnAppModel.FK_T_S_User_Role_T_S_User" FromRole="T_S_User_Role" ToRole="T_S_User" />
         </EntityType>
-        <EntityType Name="ZY_Booked_Position">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="Status" Type="Int32" Nullable="false" />
-          <Property Name="DeskId" Type="Guid" Nullable="false" />
-          <Property Name="Position" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="IsInternal" Type="Boolean" Nullable="false" />
-          <Property Name="OrderId" Type="Guid" />
-          <Property Name="CustomerOpenId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
-          <Property Name="VersionNo" Type="Int32" Nullable="false" />
-          <Property Name="TransactionId" Type="Guid" Nullable="false" />
-          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
-          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" FromRole="ZY_Booked_Position" ToRole="ZY_Customer" />
-          <NavigationProperty Name="ZY_Order" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Booked_Position" ToRole="ZY_Order" />
-          <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Booked_Position" ToRole="ZY_Shop_Desk" />
-        </EntityType>
         <EntityType Name="ZY_Customer">
           <Key>
             <PropertyRef Name="OpenId" />
@@ -730,8 +708,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Order" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Order" />
+          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" FromRole="ZY_Customer" ToRole="ZY_Booked_Position" />
         </EntityType>
         <EntityType Name="ZY_Order">
           <Key>
@@ -748,11 +726,11 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
-          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Order" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Order" ToRole="ZY_Customer" />
           <Property Name="Prepay_id" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="IsInternal" Type="Boolean" Nullable="false" />
           <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Order" ToRole="ZY_Booked_Position" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -805,8 +783,8 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
-          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Shop" Relationship="BnAppModel.FK_ZY_Shop_Desk_ZY_Shop" FromRole="ZY_Shop_Desk" ToRole="ZY_Shop" />
+          <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Shop_Desk" ToRole="ZY_Booked_Position" />
         </EntityType>
         <EntityType Name="ZY_Shop_Img">
           <Key>
@@ -941,42 +919,6 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ZY_Booked_Position_ZY_Customer">
-          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="0..1" />
-          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZY_Customer">
-              <PropertyRef Name="OpenId" />
-            </Principal>
-            <Dependent Role="ZY_Booked_Position">
-              <PropertyRef Name="CustomerOpenId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ZY_Booked_Position_ZY_Order">
-          <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="0..1" />
-          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZY_Order">
-              <PropertyRef Name="OrderId" />
-            </Principal>
-            <Dependent Role="ZY_Booked_Position">
-              <PropertyRef Name="OrderId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ZY_Booked_Position_ZY_Shop_Desk">
-          <End Type="BnAppModel.ZY_Shop_Desk" Role="ZY_Shop_Desk" Multiplicity="1" />
-          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ZY_Shop_Desk">
-              <PropertyRef Name="DeskId" />
-            </Principal>
-            <Dependent Role="ZY_Booked_Position">
-              <PropertyRef Name="DeskId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_ZY_Order_ZY_Customer">
           <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="1" />
           <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="*" />
@@ -1026,6 +968,64 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Type="DateTime" Name="selectedDate" Nullable="true" Precision="23" />
           <Property Type="Decimal" Name="UnitPrice" Nullable="false" Precision="18" Scale="2" />
         </ComplexType>
+        <EntityType Name="ZY_Booked_Position">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="DeskId" Type="Guid" Nullable="false" />
+          <Property Name="Position" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsInternal" Type="Boolean" Nullable="false" />
+          <Property Name="OrderId" Type="Guid" />
+          <Property Name="CustomerOpenId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Customer" FromRole="ZY_Booked_Position" ToRole="ZY_Customer" />
+          <NavigationProperty Name="ZY_Order" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Booked_Position" ToRole="ZY_Order" />
+          <NavigationProperty Name="ZY_Shop_Desk" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Shop_Desk" FromRole="ZY_Booked_Position" ToRole="ZY_Shop_Desk" />
+        </EntityType>
+        <Association Name="FK_ZY_Booked_Position_ZY_Customer">
+          <End Type="BnAppModel.ZY_Customer" Role="ZY_Customer" Multiplicity="0..1" />
+          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Customer">
+              <PropertyRef Name="OpenId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="CustomerOpenId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Order">
+          <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="0..1" />
+          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Order">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ZY_Booked_Position_ZY_Shop_Desk">
+          <End Type="BnAppModel.ZY_Shop_Desk" Role="ZY_Shop_Desk" Multiplicity="1" />
+          <End Type="BnAppModel.ZY_Booked_Position" Role="ZY_Booked_Position" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ZY_Shop_Desk">
+              <PropertyRef Name="DeskId" />
+            </Principal>
+            <Dependent Role="ZY_Booked_Position">
+              <PropertyRef Name="DeskId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1128,26 +1128,6 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
                 <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
                 <ScalarProperty Name="RoleId" ColumnName="RoleId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ZY_Booked_Position">
-            <EntityTypeMapping TypeName="BnAppModel.ZY_Booked_Position">
-              <MappingFragment StoreEntitySet="ZY_Booked_Position">
-                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
-                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
-                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
-                <ScalarProperty Name="CustomerOpenId" ColumnName="CustomerOpenId" />
-                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
-                <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="DeskId" ColumnName="DeskId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -1316,6 +1296,26 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="ZY_Booked_Position">
+            <EntityTypeMapping TypeName="BnAppModel.ZY_Booked_Position">
+              <MappingFragment StoreEntitySet="ZY_Booked_Position">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="CustomerOpenId" ColumnName="CustomerOpenId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="DeskId" ColumnName="DeskId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

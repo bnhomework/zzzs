@@ -56,15 +56,20 @@ namespace BnWS.Controllers
         {
             return View();
         }
-
+        [HttpPost]
         public ActionResult GetOrders(SearchOrderCondition condition)
         {
             var orders = BS.GetOrders(condition);
-            return new JsonResult(){Data = orders};
+            var result= new JsonNetResult() { Data = orders };
+            result.Settings.DateFormatString = "yyyy-MM-dd";
+            return result;
         }
-        public ActionResult Refund()
+
+        [HttpPost]
+        public ActionResult RefundOrder(Guid orderId)
         {
-            return View();
+            BS.RefundOrder(orderId);
+            return new JsonResult() { Data = "OK" };
         }
 
         //todo

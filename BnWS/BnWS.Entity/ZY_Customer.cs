@@ -18,8 +18,8 @@ namespace BnWS.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ZY_Customer()
         {
-            this.ZY_Booked_Position = new HashSet<ZY_Booked_Position>();
             this.ZY_Order = new HashSet<ZY_Order>();
+            this.ZY_Booked_Position = new HashSet<ZY_Booked_Position>();
         }
     
         public string OpenId { get; set; }
@@ -34,8 +34,8 @@ namespace BnWS.Entity
         public System.DateTime UpdatedTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Order> ZY_Order { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }
     }
 }

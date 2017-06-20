@@ -36,8 +36,8 @@ namespace BnWS.Entity
         public bool IsInternal { get; set; }
         public string Comments { get; set; }
     
+        public virtual ZY_Customer ZY_Customer { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }
-        public virtual ZY_Customer ZY_Customer { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace BnWS.Entity
     {
         public System.Guid Id { get; set; }
         public System.DateTime OrderDate { get; set; }
-        public int Status { get; set; }
+        public string Status { get; set; }
         public System.Guid DeskId { get; set; }
         public string Position { get; set; }
         public bool IsInternal { get; set; }

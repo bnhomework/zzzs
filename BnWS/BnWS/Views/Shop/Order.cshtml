@@ -94,16 +94,16 @@
                                         <th style="width:200px">操作</th>
                                     </tr>
                                 </thead>
-                                <tbody data-bind="foreach:orders">
+                                <tbody data-bind="foreach:Orders">
                                     <tr>
                                         <td data-bind="text:ShopName"></td>
                                         <td data-bind="text:OrderDate"></td>
                                         <td data-bind="text:DeskName"></td>
                                         <td data-bind="text:CustomerOpenId"></td>
                                         <td data-bind="text:Amount"></td>
-                                        <td data-bind="text:Status"></td>
+                                        <td data-bind="text:$root.displayStatus(Status)"></td>
                                         <td>
-                                            <div class="btn btn-sm btn-primary" data-bind="click:$root.refund(OrderId)"><i class="fa fa-pencil">退款</i></div>
+                                            <div class="btn btn-sm btn-primary" data-bind="click:function(){$root.refund(OrderId)},visible:Status=='-1'"><i class="fa fa-pencil">退款</i></div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -124,17 +124,24 @@
 
             self.From = ko.observable('@DateTime.Now.AddDays(-7).Date');
             self.To = ko.observable('@DateTime.Now.AddDays(7).Date');
-            self.ShopIds = ko.observableArray([]);
+            //self.ShopIds = ko.observableArray([]);
             self.Status = ko.observable();
             self.allStatus = [{ StatusName: 'All' }, { StatusName: '未付款', Id: '0' }, { StatusName: '已付款', Id: '1' }, { StatusName: '申请退款', Id: '-1' }, { StatusName: '已退款', Id: '-2' }];
             self.Orders = ko.observableArray([]);
             self.shops = ko.observableArray();
-
+            self.selectedShop = ko.observable();
             self.urls = {
                 GetShops: '@Url.Action("GetShops")',
                 GetOrders: '@Url.Action("GetOrders")',
                 RefundOrder: '@Url.Action("RefundOrder")',
             }
+            self.ShopId = ko.computed(function() {
+                var s = self.selectedShop();
+                if (s) {
+                    return s.ShopId;
+                } else
+                    return null;
+            });
             self.loadShops = function() {
                 bnApp.showLoading();
                 $.ajax({
@@ -154,10 +161,11 @@
             }
             self.loadOrders = function() {
                 bnApp.showLoading();
-                var condition = { From: self.From(), To: self.To(), ShopIds: self.ShopIds(), Status: self.Status() };
+                var condition = { From: self.From(), To: self.To(), ShopId: self.ShopId(), Status: self.Status().Id };
                 $.ajax({
                     url: self.urls.GetOrders,
                     type: "Post",
+                    contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify({condition:condition}),
                     success: function(result) {
                         self.Orders.removeAll();
@@ -176,6 +184,7 @@
                 $.ajax({
                     url: self.urls.RefundOrder,
                     type: "Post",
+                    contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify(data),
                     success: function (result) {
                         bnApp.hideLoading();
@@ -189,7 +198,7 @@
                 });
             }
             self.init = function() {
-                $('#selectedDate .input-group.date').datepicker({
+                $('.input-group.date').datepicker({
                     todayBtn: "linked",
                     keyboardNavigation: false,
                     forceParse: false,
@@ -197,6 +206,14 @@
                     autoclose: true
                 });
                 self.loadShops();
+            },
+            self.displayStatus=function(s)
+            {
+                var l = self.allStatus.filter(function (x) { return x.Id == s; });
+                if (l.length>0) {
+                    return l[0].StatusName;
+                }
+                return 'NA';
             }
             self.init();
         }

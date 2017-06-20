@@ -77,7 +77,7 @@ namespace BnWS.Business
                         OrderDate = selectedDate,
                         Position = p,
                         DeskId = deskId,
-                        Status = 1
+                        Status = "1"
                     };
                     bookedPositions.Add(bookedPosition);
                 });
@@ -103,7 +103,11 @@ namespace BnWS.Business
                 orderPred = orderPred.And(x => x.Status.Equals(condition.Status.Value));
             }
             var shopPred = PredicateBuilder.New<ZY_Shop>();
-            shopPred = shopPred.And(x => condition.ShopIds.Contains(x.ShopId));
+            if (!condition.ShopId.HasValue)
+            {
+                condition.ShopId = Guid.NewGuid();
+            }
+            shopPred = shopPred.And(x => condition.ShopId.Value==(x.ShopId));
             
             using (var db = GetDbContext())
             {
@@ -153,7 +157,11 @@ namespace BnWS.Business
                 var bps = uow.Repository<ZY_Booked_Position>().Query().Filter(x => x.OrderId == orderId).Get().ToList();
                 
                 order.Comments = string.Join(",",bps.Select(x => x.Position).ToList());
-                bps.ForEach(x => uow.Repository<ZY_Booked_Position>().Delete(x));
+                bps.ForEach(x =>
+                {
+                    x.Status = x.Id.ToString();
+                    uow.Repository<ZY_Booked_Position>().Update(x);
+                });
                 uow.Repository<ZY_Order>().Update(order);
                 uow.Save();
             }

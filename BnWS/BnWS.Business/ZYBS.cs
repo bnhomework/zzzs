@@ -12,13 +12,15 @@ namespace BnWS.Business
         public ZYBS()
             : base()
         {
-            
+
         }
+
         public ZYBS(AppContext appContext)
             : base(appContext)
         {
 
         }
+
         private const double EarthRadius = 6378137;
 
         public List<ShopInfo> GetShops(SearchShopCondition condition)
@@ -26,15 +28,22 @@ namespace BnWS.Business
 
             using (var uow = GetUnitOfWork())
             {
-                var shops= uow.Repository<ZY_Shop>().Query().Filter(x=>x.ShopStatus==1).Include(x=>x.ZY_Shop_Img).Get().ToList();
+                var shops =
+                    uow.Repository<ZY_Shop>()
+                        .Query()
+                        .Filter(x => x.ShopStatus == 1)
+                        .Include(x => x.ZY_Shop_Img)
+                        .Get()
+                        .ToList();
                 return shops.Select(x => new ShopInfo()
                 {
                     shopId = x.ShopId,
                     shopName = x.Name,
                     description = x.Address,
-                    imageUrl =x.ZY_Shop_Img.Select(i=>i.Url).FirstOrDefault(), //x.ZY_Shop_Img.Count()>0?x.ZY_Shop_Img.First().Url:"", //todo
+                    imageUrl = x.ZY_Shop_Img.Select(i => i.Url).FirstOrDefault(),
+                    //x.ZY_Shop_Img.Count()>0?x.ZY_Shop_Img.First().Url:"", //todo
                     d = GetLantitudeLongitudeDist(condition.Longitude, condition.Latitude, x.Longitude, x.Latitude)
-                }).OrderBy(x=>x.dist).ToList();
+                }).OrderBy(x => x.dist).ToList();
 
             }
         }
@@ -60,7 +69,7 @@ namespace BnWS.Business
                         imgs = shop.ZY_Shop_Img.Select(i => i.Url).ToList(),
                         latitude = shop.Latitude,
                         longitude = shop.Longitude,
-                        shopName=shop.Name
+                        shopName = shop.Name
                     };
                 }
             }
@@ -91,19 +100,19 @@ namespace BnWS.Business
         {
             using (var uow = GetUnitOfWork())
             {
-               var postions= uow.Repository<ZY_Booked_Position>()
+                var postions = uow.Repository<ZY_Booked_Position>()
                     .Query()
                     .Filter(x => x.DeskId == condition.deskId && x.OrderDate == condition.selectedDate)
                     .Get()
                     .Select(x => x.Position).ToList();
-                return new DeskPositionDetail(){bookedPositions = string.Join(",",postions)};
+                return new DeskPositionDetail() {bookedPositions = string.Join(",", postions)};
             }
-        } 
+        }
 
         public PlaceResult PlaceOrder(OrderInfo orderInfo)
         {
-            var result = new PlaceResult(){Success = true,OrderId = Guid.NewGuid()};
-            if (orderInfo.Positions==null||orderInfo.Positions.Count == 0)
+            var result = new PlaceResult() {Success = true, OrderId = Guid.NewGuid()};
+            if (orderInfo.Positions == null || orderInfo.Positions.Count == 0)
             {
                 result.Success = false;
                 result.Message = "请选择位置";
@@ -111,10 +120,10 @@ namespace BnWS.Business
             }
             var o = new JSSDKPayOrder();
             o.out_trade_no = result.OrderId.ToString();
-            o.body = "";//腾讯充值中心-QQ会员充值
-            o.attach = "";//深圳分店
-            o.spbill_create_ip = orderInfo.IP;//APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
-            result.prepay_id = WxApiHelper.Instance.GetPaymentId(o);
+            o.body = ""; //腾讯充值中心-QQ会员充值
+            o.attach = ""; //深圳分店
+            o.spbill_create_ip = orderInfo.IP; //APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
+            //result.prepay_id = WxApiHelper.Instance.GetPaymentId(o);//todo test
             result.appId = WxConfig.Appid;
             result.timeStamp = Utility.GetTimeSpan();
             result.nonceStr = Utility.GenerateNonceStr();
@@ -127,49 +136,50 @@ namespace BnWS.Business
             result.paySign = Utility.Signature(payRaw, result.signType);
             try
             {
-            using (var uow = GetUnitOfWork())
-            {
-                var desk =
-                    uow.Repository<ZY_Shop_Desk>()
-                        .Query()
-                        .Filter(x => x.DeskId == orderInfo.DeskId)
-                        .Get()
-                        .FirstOrDefault();
-                if (desk == null)
+                using (var uow = GetUnitOfWork())
                 {
-                    result.Success = false;
-                    result.Message = "没有找到桌子";
-                    return result;
-                }
-                var order = new ZY_Order()
-                {
-                    OrderId = result.OrderId,
-                    Amount = orderInfo.Positions.Count * desk.UnitPrice,
-                    CustomerOpenId = orderInfo.CustomerOpenId,
-                    OrderDate = orderInfo.pickDate,
-                    Prepay_id = result.prepay_id,
-                    Status = 0
-                };
-                var positions = new List<ZY_Booked_Position>();
-                orderInfo.Positions.ForEach(x =>
-                {
-                    var p = new ZY_Booked_Position()
+                    var desk =
+                        uow.Repository<ZY_Shop_Desk>()
+                            .Query()
+                            .Filter(x => x.DeskId == orderInfo.DeskId)
+                            .Get()
+                            .FirstOrDefault();
+                    if (desk == null)
                     {
-                        Id = Guid.NewGuid(),
+                        result.Success = false;
+                        result.Message = "没有找到桌子";
+                        return result;
+                    }
+                    var order = new ZY_Order()
+                    {
+                        OrderId = result.OrderId,
+                        Amount = orderInfo.Positions.Count*desk.UnitPrice,
                         CustomerOpenId = orderInfo.CustomerOpenId,
                         OrderDate = orderInfo.pickDate.Date,
-                        DeskId = orderInfo.DeskId,
-                        Position = x,
-                        Status = 1
+                        Prepay_id = result.prepay_id,
+                        Status = 0
                     };
-                    positions.Add(p);
-                });
-                uow.Repository<ZY_Order>().Insert(order);
-                uow.Repository<ZY_Booked_Position>().InsertRange(positions);
-                uow.Save();
-                result.Success = true;
-                result.Message = string.Format("下单成功");//todo message 优化
-            }
+                    var positions = new List<ZY_Booked_Position>();
+                    orderInfo.Positions.ForEach(x =>
+                    {
+                        var p = new ZY_Booked_Position()
+                        {
+                            Id = Guid.NewGuid(),
+                            CustomerOpenId = orderInfo.CustomerOpenId,
+                            OrderDate = orderInfo.pickDate.Date,
+                            DeskId = orderInfo.DeskId,
+                            Position = x,
+                            Status = "1",
+                            OrderId = order.OrderId
+                        };
+                        positions.Add(p);
+                    });
+                    uow.Repository<ZY_Order>().Insert(order);
+                    uow.Repository<ZY_Booked_Position>().InsertRange(positions);
+                    uow.Save();
+                    result.Success = true;
+                    result.Message = string.Format("下单成功"); //todo message 优化
+                }
             }
             catch (Exception ex)
             {
@@ -181,51 +191,55 @@ namespace BnWS.Business
 
         private double rad(double d)
         {
-            return d * Math.PI / 180.0;
+            return d*Math.PI/180.0;
         }
 
         private double? GetLantitudeLongitudeDist(double? lon1, double? lat1, decimal? lon2, decimal? lat2)
         {
-            if (!lon1.HasValue || !lat1.HasValue||!lon2.HasValue||!lat2.HasValue)
+            if (!lon1.HasValue || !lat1.HasValue || !lon2.HasValue || !lat2.HasValue)
             {
                 return null;
             }
-            var d = LantitudeLongitudeDist(lon1.Value, lat1.Value, double.Parse(lon2.Value.ToString()), double.Parse(lat2.Value.ToString()));
+            var d = LantitudeLongitudeDist(lon1.Value, lat1.Value, double.Parse(lon2.Value.ToString()),
+                double.Parse(lat2.Value.ToString()));
             return d;
             //return string.Format("{0:F1}km", d);
         }
-        private  double LantitudeLongitudeDist(double lon1, double lat1,double lon2, double lat2) {  
-            double radLat1 = rad(lat1);  
-            double radLat2 = rad(lat2);  
-  
-            double radLon1 = rad(lon1);  
-            double radLon2 = rad(lon2);  
-  
-            if (radLat1 < 0)  
-                radLat1 = Math.PI / 2 + Math.Abs(radLat1);// south  
-            if (radLat1 > 0)
-                radLat1 = Math.PI / 2 - Math.Abs(radLat1);// north  
-            if (radLon1 < 0)
-                radLon1 = Math.PI * 2 - Math.Abs(radLon1);// west  
-            if (radLat2 < 0)
-                radLat2 = Math.PI / 2 + Math.Abs(radLat2);// south  
-            if (radLat2 > 0)
-                radLat2 = Math.PI / 2 - Math.Abs(radLat2);// north  
-            if (radLon2 < 0)
-                radLon2 = Math.PI * 2 - Math.Abs(radLon2);// west  
-            double x1 = EarthRadius * Math.Cos(radLon1) * Math.Sin(radLat1);
-            double y1 = EarthRadius * Math.Sin(radLon1) * Math.Sin(radLat1);
-            double z1 = EarthRadius * Math.Cos(radLat1);
 
-            double x2 = EarthRadius * Math.Cos(radLon2) * Math.Sin(radLat2);
-            double y2 = EarthRadius * Math.Sin(radLon2) * Math.Sin(radLat2);
-            double z2 = EarthRadius * Math.Cos(radLat2);  
-  
-            double d = Math.Sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)+ (z1 - z2) * (z1 - z2));  
+        private double LantitudeLongitudeDist(double lon1, double lat1, double lon2, double lat2)
+        {
+            double radLat1 = rad(lat1);
+            double radLat2 = rad(lat2);
+
+            double radLon1 = rad(lon1);
+            double radLon2 = rad(lon2);
+
+            if (radLat1 < 0)
+                radLat1 = Math.PI/2 + Math.Abs(radLat1); // south  
+            if (radLat1 > 0)
+                radLat1 = Math.PI/2 - Math.Abs(radLat1); // north  
+            if (radLon1 < 0)
+                radLon1 = Math.PI*2 - Math.Abs(radLon1); // west  
+            if (radLat2 < 0)
+                radLat2 = Math.PI/2 + Math.Abs(radLat2); // south  
+            if (radLat2 > 0)
+                radLat2 = Math.PI/2 - Math.Abs(radLat2); // north  
+            if (radLon2 < 0)
+                radLon2 = Math.PI*2 - Math.Abs(radLon2); // west  
+            double x1 = EarthRadius*Math.Cos(radLon1)*Math.Sin(radLat1);
+            double y1 = EarthRadius*Math.Sin(radLon1)*Math.Sin(radLat1);
+            double z1 = EarthRadius*Math.Cos(radLat1);
+
+            double x2 = EarthRadius*Math.Cos(radLon2)*Math.Sin(radLat2);
+            double y2 = EarthRadius*Math.Sin(radLon2)*Math.Sin(radLat2);
+            double z2 = EarthRadius*Math.Cos(radLat2);
+
+            double d = Math.Sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2) + (z1 - z2)*(z1 - z2));
             //余弦定理求夹角  
-            double theta = Math.Acos((EarthRadius * EarthRadius + EarthRadius * EarthRadius - d * d) / (2 * EarthRadius * EarthRadius));  
-            double dist = theta * EarthRadius;  
-            return dist;  
+            double theta =
+                Math.Acos((EarthRadius*EarthRadius + EarthRadius*EarthRadius - d*d)/(2*EarthRadius*EarthRadius));
+            double dist = theta*EarthRadius;
+            return dist;
         }
 
         public bool ConfirmPayment(PayInfo payInfo)
@@ -289,6 +303,53 @@ namespace BnWS.Business
                 var result = db.Database.SqlQuery<OrderHistory>("sp_GetCustomerOrders @openId", openId);
                 return result.ToList();
             }
-        } 
+        }
     }
+
+    public class WXBS : BaseBS
+    {
+          public WXBS()
+            : base()
+        {
+
+        }
+
+        public WXBS(AppContext appContext)
+            : base(appContext)
+        {
+
+        }
+
+        public void UpsertCustomer(AccessTokenResponse response)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                var customer =
+                    uow.Repository<ZY_Customer>()
+                        .Query()
+                        .Filter(x => x.OpenId == response.openid)
+                        .Get()
+                        .FirstOrDefault();
+                if (customer == null)
+                {
+                    customer = new ZY_Customer
+                    {
+                        OpenId = response.openid,
+                        UserName = "",
+                        TokenId = response.access_token
+                    };
+                    uow.Repository<ZY_Customer>().Insert(customer);
+                }
+                else
+                {
+                    customer.TokenId = response.access_token;
+                    uow.Repository<ZY_Customer>().Update(customer);
+                }
+                uow.Save();
+                //todo load name
+            }
+        }
+    
+}
+
 }
