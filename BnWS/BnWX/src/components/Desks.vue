@@ -6,18 +6,16 @@
     <div style="margin-bottom: 30px">
       <grid :rows="2">
         <grid-item v-for="(d,i) in shopDesks" :key="i">
-        <div @click="pickDesk(d)">
-          <desk :v="d" ></desk>
-        </div>
+          <div @click="pickDesk(d)">
+            <desk :v="d"></desk>
+          </div>
         </grid-item>
-      </grid>      
+      </grid>
     </div>
-    
   </div>
 </template>
-
 <script>
-import { Group, Cell,Swiper,Datetime ,XButton,Grid, GridItem,Divider,Toast,XDialog, TransferDomDirective as TransferDom  } from 'vux'
+import { Group, Cell, Swiper, Datetime, XButton, Grid, GridItem, Divider, Toast, XDialog, TransferDomDirective as TransferDom } from 'vux'
 import utils from '@/mixins/utils'
 import desk from '@/components/sub/desk.vue'
 
@@ -78,18 +76,17 @@ export default {
       this.selectedDesk = desk;
       this.showPickPositions = true;
       this.$router.push({
-                name:'deskPositions',
-                params: {
-                    deskId: desk.deskId, 
-                    pickDate: this.pickDate,
-                    deskName:desk.deskName,
-                    unitPrice:desk.unitPrice
-                }});
+        name: 'deskPositions',
+        params: {
+          deskId: desk.deskId,
+          pickDate: this.pickDate,
+          deskName: desk.deskName,
+          unitPrice: desk.unitPrice
+        }
+      });
     }
   }
 }
 </script>
-
 <style>
-
 </style>

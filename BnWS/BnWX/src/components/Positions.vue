@@ -1,27 +1,26 @@
 <template>
   <div>
-     <group>
-          <div style="padding:15px">
-            <desk :v="deskPositionDetail" @SelectedPostionChanged="function(val){selectedPositions=val}" ref="currentDesk"></desk>
-          </div>
-            </group>
-            <div style="position:fixed;bottom:1px;width:100%">
-              <group >
-                <div style="text-align:right;padding:15px">已位选 {{numberOfPositions}} 个位置 </div>
-              </group>
-              <group>
-                <div style="text-align:right;padding:15px">合计:￥{{totalAmount}}</div>
-              </group>
-              <div style="margin:15px">
-              <x-button @click.native="book" type="primary" :disabled="numberOfPositions==0">选好了</x-button>
-              <x-button @click.native="$router.go(-1)" type="warn">取消</x-button></div>
-            </div>
-    
+    <group>
+      <div style="padding:15px">
+        <desk :v="deskPositionDetail" @SelectedPostionChanged="function(val){selectedPositions=val}" ref="currentDesk"></desk>
+      </div>
+    </group>
+    <div style="position:fixed;bottom:1px;width:100%">
+      <group>
+        <div style="text-align:right;padding:15px">已位选 {{numberOfPositions}} 个位置 </div>
+      </group>
+      <group>
+        <div style="text-align:right;padding:15px">合计:￥{{totalAmount}}</div>
+      </group>
+      <div style="margin:15px">
+        <x-button @click.native="book" type="primary" :disabled="numberOfPositions==0">选好了</x-button>
+        <x-button @click.native="$router.go(-1)" type="warn">取消</x-button>
+      </div>
+    </div>
   </div>
 </template>
-
 <script>
-import { Group, Cell,Swiper,Datetime ,XButton,Grid, GridItem,Divider,Toast,XDialog, TransferDomDirective as TransferDom  } from 'vux'
+import { Group, Cell, Swiper, Datetime, XButton, Grid, GridItem, Divider, Toast, XDialog, TransferDomDirective as TransferDom } from 'vux'
 import utils from '@/mixins/utils'
 import desk from '@/components/sub/desk.vue'
 
@@ -97,15 +96,15 @@ export default {
           } else {
             vm.$vux.toast.show({
               text: '出错啦~~',
-              type:'cancel'
+              type: 'cancel'
             })
           }
           vm.loadDesks();
         }).catch(err => {
           vm.$vux.toast.show({
-              text: '出错啦~~',
-              type:'cancel'
-            })
+            text: '出错啦~~',
+            type: 'cancel'
+          })
           vm.loadDesk();
         });
     },
@@ -126,7 +125,7 @@ export default {
           } else {
             vm.$vux.toast.show({
               text: '支付失败！',
-              type:'cancel'
+              type: 'cancel'
             })
           }
         }
@@ -150,7 +149,5 @@ export default {
   }
 }
 </script>
-
 <style>
-
 </style>
