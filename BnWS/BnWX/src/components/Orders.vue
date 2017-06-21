@@ -25,7 +25,7 @@ export default {
     return {
       orders:[],
       historyOrder:false,
-      allStatus : [{ StatusName: 'All' }, { StatusName: '未付款', Id: '0' }, { StatusName: '已付款', Id: '1' }, { StatusName: '申请退款', Id: '-1' }, { StatusName: '已退款', Id: '-2' }]
+      allStatus : [{ StatusName: 'All' }, { StatusName: '未付款', Id: '0' }, { StatusName: '已付款', Id: '1' }, { StatusName: '申请退款中', Id: '-1' }, { StatusName: '已退款', Id: '-2' }]
             
     }
   },
@@ -98,7 +98,7 @@ export default {
       });
       var viewOrders=[];
       for (var i=0; i <olist.length; i++) {
-        var o=olist[0];
+        var o=olist[i];
         var vo={};
         vo.Amount=o.Amount;
         vo.list=[];

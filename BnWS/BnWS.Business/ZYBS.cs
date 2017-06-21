@@ -44,7 +44,7 @@ namespace BnWS.Business
                     imageUrl = x.ZY_Shop_Img.Select(i => i.Url).FirstOrDefault(),
                     //x.ZY_Shop_Img.Count()>0?x.ZY_Shop_Img.First().Url:"", //todo
                     d = GetLantitudeLongitudeDist(condition.Longitude, condition.Latitude, x.Longitude, x.Latitude)
-                }).OrderBy(x => x.dist).ToList();
+                }).OrderBy(x => x.d).ToList();
 
             }
         }
@@ -103,7 +103,7 @@ namespace BnWS.Business
             {
                 var postions = uow.Repository<ZY_Booked_Position>()
                     .Query()
-                    .Filter(x => x.DeskId == condition.deskId && x.OrderDate == condition.selectedDate)
+                    .Filter(x => x.DeskId == condition.deskId && x.OrderDate == condition.selectedDate&&x.Status=="1")
                     .Get()
                     .Select(x => x.Position).ToList();
                 return new DeskPositionDetail() {bookedPositions = string.Join(",", postions)};

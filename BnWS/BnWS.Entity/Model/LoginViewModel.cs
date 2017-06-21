@@ -68,7 +68,7 @@ namespace BnWS.Entity
         public string imageUrl { get; set; }
         public string description { get; set; }
         public string dist {
-            get { return d.HasValue ? string.Format("{0:F1}km", d.Value) : ""; }
+            get { return d.HasValue ? string.Format("{0:F1}km", d.Value/1000) : ""; }
         }
         public double? d { get; set; }
     }
