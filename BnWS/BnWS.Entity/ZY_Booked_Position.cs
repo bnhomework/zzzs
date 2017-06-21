@@ -31,7 +31,7 @@ namespace BnWS.Entity
         public System.DateTime UpdatedTime { get; set; }
     
         public virtual ZY_Customer ZY_Customer { get; set; }
-        public virtual ZY_Order ZY_Order { get; set; }
         public virtual ZY_Shop_Desk ZY_Shop_Desk { get; set; }
+        public virtual ZY_Order ZY_Order { get; set; }
     }
 }

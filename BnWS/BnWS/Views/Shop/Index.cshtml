@@ -18,7 +18,7 @@
                 </div>
                 <div class="ibox-content">
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label class="font-noraml">店铺</label>
                                 <div class="input-group">
@@ -27,12 +27,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group" id="selectedDate" style="width: 300px">
                                 <label class="font-noraml">日期</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                     <input type="text" class="form-control" data-bind="value:selectedDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="font-noraml">&nbsp;</label>
+                                    <div class="input-group">
+                                        <div class="btn btn-primary" data-bind="click:reloadShopDesk">查找</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -61,14 +71,13 @@
                                     <a href="#" data-bind="click:function(){$root.openDesk($data)}">
                                         <span class="corner"></span>
 
-                                        <div class="icon">
-                                            <i class="fa fa-file"></i>
+
+                                        <div class="m-r-md inline">
+                                            <input type="text" data-bind="value:$root.numberOfBookedPostions($data)" data-readonly="true" data-max="12" class="dial m-r-sm" data-fgcolor="#1AB394" data-width="185" data-height="185" />
                                         </div>
-                                        <div class="file-name">
-                                            <span data-bind="text:DeskId"></span>
+
+                                        <div class="file-name" style="text-align: center">
                                             <span data-bind="text:DeskName"></span>
-                                            <span data-bind="text:BookedPositions"></span>
-                                            <span data-bind="text:InternalBookedPositions"></span>
                                         </div>
                                     </a>
                                 </div>
@@ -107,7 +116,9 @@
         </div>
     </div>
 </div>
+@*@Scripts.Render("~/Content/js/plugins/jsKnob/jquery.knob.js")*@
 @section scripts{
+    <script src="~/Content/js/plugins/jsKnob/jquery.knob.js"></script>
     <script type="text/javascript">
         function ViewModel() {
             var self = this;
@@ -157,6 +168,8 @@
                     success: function(result) {
                         self.selectedShopDesks.removeAll();
                         self.selectedShopDesks(result);
+
+                        $(".dial").knob();
                         bnApp.hideLoading();
                     },
                     error: function(error) {
@@ -164,7 +177,12 @@
                         bnApp.hideLoading();
                     }
                 });
-            }
+            };
+            self.numberOfBookedPostions =function(desk) {
+                if (desk.BookedPositions == null)
+                    return 0;
+                return desk.BookedPositions.split(',').length;
+            };
             self.condition = ko.computed(function() {
                 var shop = self.selectedShop();
                 var date = self.selectedDate();
