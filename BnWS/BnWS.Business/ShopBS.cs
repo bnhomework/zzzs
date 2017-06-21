@@ -102,6 +102,10 @@ namespace BnWS.Business
             {
                 orderPred = orderPred.And(x => x.Status.Equals(condition.Status.Value));
             }
+            if (!string.IsNullOrEmpty(condition.CustomerOpenId))
+            {
+                orderPred = orderPred.And(x =>x.CustomerOpenId.Contains(condition.CustomerOpenId));
+            }
             var shopPred = PredicateBuilder.New<ZY_Shop>();
             if (!condition.ShopId.HasValue)
             {
@@ -154,14 +158,14 @@ namespace BnWS.Business
                 if(order==null)
                     return;
                 order.Status = -2;
-                var bps = uow.Repository<ZY_Booked_Position>().Query().Filter(x => x.OrderId == orderId).Get().ToList();
-                
-                order.Comments = string.Join(",",bps.Select(x => x.Position).ToList());
-                bps.ForEach(x =>
-                {
-                    x.Status = x.Id.ToString();
-                    uow.Repository<ZY_Booked_Position>().Update(x);
-                });
+//                var bps = uow.Repository<ZY_Booked_Position>().Query().Filter(x => x.OrderId == orderId).Get().ToList();
+//                
+//                order.Comments = string.Join(",",bps.Select(x => x.Position).ToList());
+//                bps.ForEach(x =>
+//                {
+//                    x.Status = x.Id.ToString();
+//                    uow.Repository<ZY_Booked_Position>().Update(x);
+//                });
                 uow.Repository<ZY_Order>().Update(order);
                 uow.Save();
             }

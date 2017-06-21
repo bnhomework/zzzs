@@ -56,6 +56,15 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-sm-3">
+                                  <div class="form-group" id="selectedDateFrom" style="width: 300px">
+                                      <label class="font-noraml">客户Id</label>
+                                      <div class="input-group">
+                                          <input type="text" class="form-control" data-bind="value:CustomerOpenId">
+                                      </div>
+                                  </div>
+                              </div>
+
                         <div class="col-sm-3 col-sm-offset-9">
                             <div class="form-group">
                                 <div class="btn btn-primary" data-bind="click:loadOrders">查找</div>
@@ -130,6 +139,7 @@
             self.Orders = ko.observableArray([]);
             self.shops = ko.observableArray();
             self.selectedShop = ko.observable();
+            self.CustomerOpenId = ko.observable();
             self.urls = {
                 GetShops: '@Url.Action("GetShops")',
                 GetOrders: '@Url.Action("GetOrders")',
@@ -161,7 +171,7 @@
             }
             self.loadOrders = function() {
                 bnApp.showLoading();
-                var condition = { From: self.From(), To: self.To(), ShopId: self.ShopId(), Status: self.Status().Id };
+                var condition = { From: self.From(), To: self.To(), ShopId: self.ShopId(), Status: self.Status().Id, CustomerOpenId: self.CustomerOpenId()};
                 $.ajax({
                     url: self.urls.GetOrders,
                     type: "Post",

@@ -4,34 +4,29 @@
       <tab-item :selected="!historyOrder?'selected':null" @on-item-click="onItemClick(0)">我的预约</tab-item>
       <tab-item :selected="historyOrder?'selected':null" @on-item-click="onItemClick(1)">历史预约</tab-item>
     </tab>
-    <group>
-      <cell  is-link v-for="item in orders">
-        <span slot="title">{{item.ShopName}}</span>
-        <span slot="inline-desc">{{item.DeskName}}</span>
-      </cell>
-      <!-- <cell title="Vux" :value="item.dist" is-link v-for="item in orders">
-        <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
-        <span slot="title">{{item.name}}</span>
-        <span slot="inline-desc">{{item.description}}</span>
-      </cell> -->
-    </group>
+    <div v-for="item in showOrders">
+    <br>
+      <form-preview header-label="金额" :header-value="item.Amount" :body-items="item.list" :footer-buttons="item.actions" ></form-preview>
+    <br>
+    </div>
   </div>
 </template>
 
 <script>
-import { Tab, TabItem,Group, Cell } from 'vux'
+import { Tab, TabItem,Toast,FormPreview  } from 'vux'
 import utils from '@/mixins/utils'
 
 export default {
   mixins:[utils],
   components: {
-    Tab, TabItem,Group,
-    Cell
+    Tab, TabItem,Toast,FormPreview 
   },
   data () {
     return {
       orders:[],
-      historyOrder:false
+      historyOrder:false,
+      allStatus : [{ StatusName: 'All' }, { StatusName: '未付款', Id: '0' }, { StatusName: '已付款', Id: '1' }, { StatusName: '申请退款', Id: '-1' }, { StatusName: '已退款', Id: '-2' }]
+            
     }
   },
   created(){
@@ -59,19 +54,69 @@ export default {
         .then(res => {
           vm.orders = res.data;
         });
-    }
+    },
+    requestRefund(orderId){
+      var url = this.apiServer + 'zy/RequestRefund';
+      var data ={
+        orderId: orderId};
+      var vm = this;
+      this.$http.post(url, data)
+        .then(res => {
+          if(res.data&&res.data.status==true){
+            vm.$vux.toast.show({
+              text: '申请成功'
+            })
+        }
+        else if(res.data&&(res.data.message!=''||res.data.message!='')){
+          vm.$vux.toast.show({
+              text: res.data.message
+            })
+        }
+        vm.loadOrders();
+      });
+    },
+    displayStatus(s)
+            {
+                var l = this.allStatus.filter(function (x) { return x.Id == s; });
+                if (l.length>0) {
+                    return l[0].StatusName;
+                }
+                return 'NA';
+            }
   },
   computed:{
     showOrders(){
       var currentDate=this.getCurrentDate();
       var vm=this;
-      this.orders.filter(function(x){
+      var olist=this.orders.filter(function(x){
         if(vm.historyOrder){
           return x.OrderDate<currentDate;
         }else{
           return x.OrderDate>=currentDate;
         }
-      })
+      });
+      var viewOrders=[];
+      for (var i=0; i <olist.length; i++) {
+        var o=olist[0];
+        var vo={};
+        vo.Amount=o.Amount;
+        vo.list=[];
+        vo.list.push({label:'日期',value:o.OrderDate})
+        vo.list.push({label:'店名',value:o.ShopName})
+        vo.list.push({label:'桌号',value:o.DeskName})
+        vo.list.push({label:'座位个数',value:o.Positions==null?0:o.Positions.length})         
+        vo.list.push({label:'订单状态',value:vm.displayStatus(o.Status)})
+        vo.actions=[];
+        if(!vm.historyOrder&&o.Status==1){
+          vo.actions.push({style: 'default',
+        text: '申请退款',
+        onButtonClick: () => {
+          vm.requestRefund(o.OrderId);
+        }})
+        }
+        viewOrders.push(vo);
+      }
+      return viewOrders;
     }
   }
 }

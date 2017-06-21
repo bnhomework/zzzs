@@ -119,12 +119,19 @@ namespace BnWS.Entity
         public decimal Amount { get; set; }
     }
 
+    public class OrderDetail : OrderHistory
+    {
+        
+    }
+
     public class SearchOrderCondition
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
         public Guid? ShopId { get; set; }
         public int? Status { get; set; }
+
+        public string CustomerOpenId { get; set; }
     }
     public class OrderReview : OrderHistory
     {

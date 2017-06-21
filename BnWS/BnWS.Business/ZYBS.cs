@@ -4,6 +4,7 @@ using System.Linq;
 using Bn.WeiXin;
 using Bn.WeiXin.GZH;
 using BnWS.Entity;
+using LinqKit;
 
 namespace BnWS.Business
 {
@@ -293,63 +294,87 @@ namespace BnWS.Business
 
         public List<OrderHistory> GetOrders(string openId)
         {
-            var id = new System.Data.SqlClient.SqlParameter
-            {
-                ParameterName = "@openId",
-                Value = openId
-            };
+            var orderPred = PredicateBuilder.New<ZY_Order>();
+
+            orderPred = orderPred.And(x => x.CustomerOpenId == openId);
             using (var db = GetDbContext())
             {
-                var result = db.Database.SqlQuery<OrderHistory>("sp_GetCustomerOrders @openId", openId);
-                return result.ToList();
+                var positions = (from bp in db.ZY_Booked_Position
+                                 join o in db.ZY_Order.AsExpandable().Where(orderPred) on bp.OrderId equals o.OrderId
+                                 join desk in db.ZY_Shop_Desk on bp.DeskId equals desk.DeskId
+                                 join shop in db.ZY_Shop on desk.ShopId equals shop.ShopId
+                                 select new
+                                 {
+                                     o.OrderId,
+                                     ShopName = shop.Name,
+                                     desk.DeskName,
+                                     o.OrderDate,
+                                     bp.Position,
+                                     o.Status,
+                                     o.Amount,
+                                     o.IsInternal,
+                                     o.CustomerOpenId
+                                 }).ToList();
+                return positions.GroupBy(
+                     x => new { x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.Amount })
+                     .Select(x => new OrderHistory()
+                     {
+                         OrderId = x.Key.OrderId,
+                         OrderDate = x.Key.OrderDate,
+                         ShopName = x.Key.ShopName,
+                         DeskName = x.Key.DeskName,
+                         Status = x.Key.Status,
+                         Amount = x.Key.Amount,
+                         Positions = x.Select(p => p.Position).ToList()
+
+                     }).ToList();
             }
+//            var id = new System.Data.SqlClient.SqlParameter
+//            {
+//                ParameterName = "@openId",
+//                Value = openId
+//            };
+//            using (var db = GetDbContext())
+//            {
+//                var result = db.Database.SqlQuery<OrderHistory>("sp_GetCustomerOrders @openId", id);
+//                return result.ToList();
+//            }
         }
-    }
-
-    public class WXBS : BaseBS
-    {
-          public WXBS()
-            : base()
+//        public OrderDetail GetOrderDetail(Guid orderId)
+//        {
+//            var id = new System.Data.SqlClient.SqlParameter
+//            {
+//                ParameterName = "@orderId",
+//                Value = orderId
+//            };
+//            using (var db = GetDbContext())
+//            {
+//                var result = db.Database.SqlQuery<OrderDetail>("sp_GetCustomerOrder @orderId", id);
+//                return result.FirstOrDefault();
+//            }
+//        }
+        public bool RequestRefund(Guid orderId)
         {
-
-        }
-
-        public WXBS(AppContext appContext)
-            : base(appContext)
-        {
-
-        }
-
-        public void UpsertCustomer(AccessTokenResponse response)
-        {
+            var result = false;
             using (var uow = GetUnitOfWork())
             {
-                var customer =
-                    uow.Repository<ZY_Customer>()
-                        .Query()
-                        .Filter(x => x.OpenId == response.openid)
-                        .Get()
-                        .FirstOrDefault();
-                if (customer == null)
+               var order= uow.Repository<ZY_Order>().Query().Filter(x => x.OrderId == orderId&&x.Status==1).Get().FirstOrDefault();
+                if (order != null)
                 {
-                    customer = new ZY_Customer
+                    order.Status = -1;
+                    var bps = uow.Repository<ZY_Booked_Position>().Query().Filter(x => x.OrderId == orderId).Get().ToList();
+                    order.Comments = string.Join(",", bps.Select(x => x.Position).ToList());
+                    bps.ForEach(x =>
                     {
-                        OpenId = response.openid,
-                        UserName = "",
-                        TokenId = response.access_token
-                    };
-                    uow.Repository<ZY_Customer>().Insert(customer);
+                        x.Status = x.Id.ToString();
+                        uow.Repository<ZY_Booked_Position>().Update(x);
+                    });
+                    uow.Repository<ZY_Order>().Update(order);
+                    uow.Save();
+                    result = true;
                 }
-                else
-                {
-                    customer.TokenId = response.access_token;
-                    uow.Repository<ZY_Customer>().Update(customer);
-                }
-                uow.Save();
-                //todo load name
             }
+            return result;
         }
-    
-}
-
+    }
 }

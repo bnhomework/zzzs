@@ -10,6 +10,7 @@ namespace BnWS.Controllers
 {
     public class ShopController : BaseController<ShopBS>
     {
+        #region shop owner
         //
         // GET: /Shop/
         public ActionResult Index()
@@ -77,5 +78,6 @@ namespace BnWS.Controllers
         {
             return View();
         }
-	}
+        #endregion
+    }
 }
