@@ -33,8 +33,8 @@ namespace BnWS.Entity
         public System.DateTime UpdatedTime { get; set; }
         public decimal UnitPrice { get; set; }
     
-        public virtual ZY_Shop ZY_Shop { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }
+        public virtual ZY_Shop ZY_Shop { get; set; }
     }
 }

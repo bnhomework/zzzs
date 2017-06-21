@@ -1,0 +1,177 @@
+﻿@{
+    ViewBag.Title = "店铺管理";
+    Layout = "~/Views/Shared/_Manage.cshtml";
+}
+
+<!DOCTYPE html>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>查询条件</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="font-noraml">店铺</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" data-bind="value:ShopName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="font-noraml">状态</label>
+                                <div class="input-group">
+                                    <select data-placeholder="" class="chosen-select" style="width:300px;" tabindex="2"
+                                            data-bind="options: allShopStatus,optionsText: 'StatusName',value:ShopStatus"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="font-noraml">商家名</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" data-bind="value:Owner">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <label class="font-noraml">&nbsp;</label>
+                                <div class="input-group">
+                                    <div class="btn btn-primary" data-bind="click:loadShops">查找</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>店铺列表</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>店铺</th>
+                                        <th>商家名</th>
+                                        <th>地址</th>
+                                        <th>状态</th>
+                                        <th style="width:200px">操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach:Shops">
+                                    <tr>
+                                        <td data-bind="text:ShopName"></td>
+                                        <td data-bind="text:Owner"></td>
+                                        <td data-bind="text:ShopAddress"></td>
+                                        <td>
+                                            <span class="label" data-bind="css:ShopStatus=='1'?'label-primary':'label-warning',text:$root.displayStatus(ShopStatus)"></span>
+                                        </td>
+                                        <td>
+                                            <div class="btn btn-sm btn-primary" data-bind="click:function(){$root.UpdateShopStatus({shopId:ShopId,status:1})},visible:ShopStatus=='0'"><i class="fa fa-pencil">上线</i></div>
+                                            <div class="btn btn-sm btn-primary" data-bind="click:function(){$root.UpdateShopStatus({shopId:ShopId,status:0})},visible:ShopStatus=='1'"><i class="fa fa-pencil">下线</i></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function ViewModel() {
+            var self = this;
+            self.ShopName = ko.observable();
+            self.ShopStatus = ko.observable();
+            self.Owner = ko.observable();
+            self.allShopStatus = [{ StatusName: 'All' }, { StatusName: '未上线', Id: '0' }, { StatusName: '已上线', Id: '1' }];
+
+            self.Shops = ko.observableArray([]);
+            self.urls = {
+                LoadShops: '@Url.Action("LoadShops")',
+                UpdateShopStatus: '@Url.Action("UpdateShopStatus")'
+            }
+           
+            self.loadShops = function() {
+                bnApp.showLoading();
+                var condition = { ShopName: self.ShopName(), Status: self.ShopStatus().Id, Owner: self.Owner() };
+                $.ajax({
+                    url: self.urls.LoadShops,
+                    type: "Post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({condition:condition}),
+                    success: function(result) {
+                        self.Shops.removeAll();
+                        self.Shops(result);
+                        bnApp.hideLoading();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            },
+            self.UpdateShopStatus = function (data) {
+                bnApp.showLoading();
+                $.ajax({
+                    url: self.urls.UpdateShopStatus,
+                    type: "Post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(data),
+                    success: function (result) {
+                        bnApp.hideLoading();
+                        bnApp.showMessage('修改成功');
+                        self.loadShops();
+                    },
+                    error: function (error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            }
+            self.init = function() {
+
+                $('.chosen-select').chosen();
+            },
+            self.displayStatus=function(s)
+            {
+                var l = self.allShopStatus.filter(function (x) { return x.Id == s; });
+                if (l.length>0) {
+                    return l[0].StatusName;
+                }
+                return 'NA';
+            }
+        }
+
+        var viewModel = new ViewModel();
+        ko.applyBindings(viewModel);
+        viewModel.init();
+    </script>
+}

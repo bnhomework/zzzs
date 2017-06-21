@@ -294,7 +294,7 @@ namespace BnWS.Business
 
         public List<OrderHistory> GetOrders(string openId)
         {
-            var orderPred = PredicateBuilder.New<ZY_Order>();
+            var orderPred = PredicateBuilder.New<ZY_Order>(true);
 
             orderPred = orderPred.And(x => x.CustomerOpenId == openId);
             using (var db = GetDbContext())

@@ -18,13 +18,6 @@ namespace BnWS.Business
 
         }
 
-        public List<ZY_Shop> SearchShops(ShopCriteria shopCriteria)
-        {
-            using (var uow = GetUnitOfWork())
-            {
-                return uow.Repository<ZY_Shop>().Query().Get().ToList();
-            }
-        }
 
         public List<ZY_Shop> GetShopsByUserId(Guid userId)
         {
@@ -89,7 +82,7 @@ namespace BnWS.Business
 
         public List<OrderReview> GetOrders(SearchOrderCondition condition)
         {
-            var orderPred = PredicateBuilder.New<ZY_Order>();
+            var orderPred = PredicateBuilder.New<ZY_Order>(true);
             if (condition.From.HasValue)
             {
                 orderPred = orderPred.And(x => x.OrderDate >= condition.From.Value);
@@ -106,7 +99,7 @@ namespace BnWS.Business
             {
                 orderPred = orderPred.And(x =>x.CustomerOpenId.Contains(condition.CustomerOpenId));
             }
-            var shopPred = PredicateBuilder.New<ZY_Shop>();
+            var shopPred = PredicateBuilder.New<ZY_Shop>(true);
             if (!condition.ShopId.HasValue)
             {
                 condition.ShopId = Guid.NewGuid();

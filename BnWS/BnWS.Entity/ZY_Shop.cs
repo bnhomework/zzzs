@@ -27,7 +27,7 @@ namespace BnWS.Entity
         public Nullable<decimal> Longitude { get; set; }
         public Nullable<decimal> Latitude { get; set; }
         public string Address { get; set; }
-        public Nullable<int> ShopStatus { get; set; }
+        public int ShopStatus { get; set; }
         public Nullable<System.Guid> OwnId { get; set; }
         public int VersionNo { get; set; }
         public System.Guid TransactionId { get; set; }

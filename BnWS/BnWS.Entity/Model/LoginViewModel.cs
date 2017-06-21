@@ -22,11 +22,6 @@ namespace BnWS.Entity
         public string BookedPositions { get; set; }
         public string InternalBookedPositions { get; set; } 
     }
-
-    public class ShopCriteria
-    {
-        public string ShopName { get; set; }
-    }
     public class OrderInfo
     {
         public string CustomerOpenId { get; set; }
@@ -54,6 +49,22 @@ namespace BnWS.Entity
         public string paySign { get; set; }
     }
 
+
+    public class ShopCriteria
+    {
+        public string ShopName { get; set; }
+        public int? Status { get; set; }
+        public string OwnerName { get; set; }
+    }
+
+    public class ShopViewModel
+    {
+        public Guid ShopId { get; set; }
+        public string ShopName { get; set; }
+        public int ShopStatus { get; set; }
+        public string ShopAddress { get; set; }
+        public string Owner { get; set; }
+    }
     #region wx
     public class SearchShopCondition
     {
