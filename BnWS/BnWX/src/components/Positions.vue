@@ -2,7 +2,7 @@
   <div>
      <group>
           <div style="padding:15px">
-            <desk :v="deskPositionDetail" @SelectedPostionChanged="function(val){selectedPositions=val}"></desk>
+            <desk :v="deskPositionDetail" @SelectedPostionChanged="function(val){selectedPositions=val}" ref="currentDesk"></desk>
           </div>
             </group>
             <div style="position:fixed;bottom:1px;width:100%">
@@ -66,6 +66,7 @@ export default {
     },
     loadDesk() {
       this.selectedPositions = [];
+      this.$refs.currentDesk.reset();
       var url = this.apiServer + 'zy/DeskPostions';
       var data = {
         deskId: this.deskId,
