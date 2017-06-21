@@ -95,17 +95,16 @@ export default {
             vm.doPayment(r)
           } else {
             vm.$vux.toast.show({
-              text: '出错啦~~'
+              text: '出错啦~~',
+              type:'cancel'
             })
           }
           vm.loadDesks();
         }).catch(err => {
-          console.log('--order failed-')
-            // vm.toastMessage = "出错啦~~";
-            // vm.showToastMessage = true;
           vm.$vux.toast.show({
-            text: '出错啦~~'
-          })
+              text: '出错啦~~',
+              type:'cancel'
+            })
           vm.loadDesk();
         });
     },
@@ -125,7 +124,8 @@ export default {
             })
           } else {
             vm.$vux.toast.show({
-              text: '支付失败！'
+              text: '支付失败！',
+              type:'cancel'
             })
           }
         }

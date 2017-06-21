@@ -69,7 +69,8 @@ export default {
         }
         else if(res.data&&(res.data.message!=''||res.data.message!='')){
           vm.$vux.toast.show({
-              text: res.data.message
+              text: res.data.message,
+              type:'cancel'
             })
         }
         vm.loadOrders();
