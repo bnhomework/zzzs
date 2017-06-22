@@ -5,7 +5,7 @@
     
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
       
-    <image :x="logoX" :y="logoY" :height="logoHeight" :width="logoWidth" @mousedown="down"  @mouseup="up" v-bind:xlink:href="logoImg" @mouseover="isMouseOver=true" @mouseout="isMouseOver=false"
+    <image id='bnLogo' :x="logoX" :y="logoY" :height="logoHeight" :width="logoWidth" @mousedown="down"  @mouseup="up" v-bind:xlink:href="logoImg" @mouseover="isMouseOver=true" @mouseout="isMouseOver=false"
 :style="{ cursor: logoCursor}"
     ></image>
   </svg>
@@ -17,7 +17,7 @@ export default {
         isMoving:false,
         isResize:false,
         isMouseOver:false,
-        startPosition:{},
+        startPosition:{x:0,y:0},
         logoX:100,
         logoY:100,
         logoWidth:200,
@@ -62,8 +62,8 @@ export default {
           var offSetY=event.clientY-this.startPosition.y;
           this.startPosition.x=event.clientX;
           this.startPosition.y=event.clientY;
-           console.log({offSetX:offSetX,offSetY:offSetY})
-           console.log({logoX:this.logoX,logoY:this.logoY})
+           // console.log({offSetX:offSetX,offSetY:offSetY})
+           // console.log({logoX:this.logoX,logoY:this.logoY})
         if(this.isMoving&&!this.isResize){
           this.logoX+=offSetX;
           this.logoY+=offSetY;
@@ -72,6 +72,15 @@ export default {
           this.logoHeight+=offSetY;
           this.logoWidth+=offSetX
         }
+      },
+      getPosition(eid){
+        var el=document.getElementById(eid);
+        if(!el){
+          return{x:0,y:0}
+        }
+        var xPos = (el.offsetLeft - el.scrollLeft + el.clientLeft);
+     var yPos = (el.offsetTop - el.scrollTop + el.clientTop);
+     return {x:xPos,y:yPos}
       }
     },
     computed: {
@@ -79,10 +88,23 @@ export default {
         return `0 0 ${this.width} ${this.height}`
       },
       logoCursor(){
+        var set=10;
+        // console.log(this.logoPosition.x+set)
+        // console.log(this.logoPosition.x-set)
+        // console.log(this.startPosition.x)
+        if(this.logoPosition.x+set>this.startPosition.x
+          &&this.logoPosition.x-set<this.startPosition.x
+          &&this.logoPosition.y<this.startPosition.y
+          &&this.logoPosition.y+this.logoHeight>this.startPosition.y){
+          return "e-resize"
+        }
         return this.isMouseOver?"move":"auto"
       },
       logoBorderCursor(){
 
+      },
+      logoPosition(){
+        return this.getPosition('bnLogo');
       }
 
     },destory(){
