@@ -12,7 +12,8 @@ const router = new Router({
     { path: '/shop/:id', name: 'shop', component: (resolve) => require(['@/components/Shop.vue'], resolve),meta: { allowAnonymous: true,showTabbar:true,title:'店铺'}},
     { path: '/orders', name: 'orders', component: (resolve) => require(['@/components/Orders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'订单'}},
     { path: '/shopDesks/:shopId/:pickDate/:shopName', name: 'shopDesks', component: (resolve) => require(['@/components/Desks.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'选择桌子'}},
-    { path: '/deskPositions/:deskId/:pickDate/:deskName/:unitPrice', name: 'deskPositions', component: (resolve) => require(['@/components/Positions.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'选择座位'}}
+    { path: '/deskPositions/:deskId/:pickDate/:deskName/:unitPrice', name: 'deskPositions', component: (resolve) => require(['@/components/Positions.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'选择座位'}},
+    { path: '/test', name: 'test', component: (resolve) => require(['@/components/test.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'test'}},
     ]
 })
 
