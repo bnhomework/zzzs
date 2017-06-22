@@ -58,6 +58,7 @@ export default {
   methods: {
     init() {
       this.pickDate = this.$route.params.pickDate;
+      this.pickTime = this.$route.params.pickTime;
       this.deskId = this.$route.params.deskId;
       this.deskName = this.$route.params.deskName;
       this.unitPrice = this.$route.params.unitPrice;
@@ -83,6 +84,7 @@ export default {
         orderInfo: {
           DeskId: this.deskId,
           pickDate: this.pickDate,
+          pickTime: this.pickTime,
           CustomerOpenId: this.$store.state.bn.openId,
           Positions: this.selectedPositions
         }

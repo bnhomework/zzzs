@@ -26,6 +26,7 @@ namespace BnWS.Entity
     {
         public string CustomerOpenId { get; set; }
         public DateTime pickDate { get; set; }
+        public string pickTime { get; set; }
         public Guid DeskId { get; set; }
         public List<string> Positions { get; set; }
         public string IP { get; set; }
@@ -123,6 +124,7 @@ namespace BnWS.Entity
     {
         public Guid OrderId { get; set; }
         public DateTime OrderDate { get; set; }
+        public string PickTime { get; set; }
         public string ShopName { get; set; }
         public string DeskName { get; set; }
         public List<string> Positions { get; set; }

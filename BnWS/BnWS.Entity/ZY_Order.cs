@@ -35,6 +35,7 @@ namespace BnWS.Entity
         public string Prepay_id { get; set; }
         public bool IsInternal { get; set; }
         public string Comments { get; set; }
+        public string PickTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ZY_Booked_Position> ZY_Booked_Position { get; set; }

@@ -122,10 +122,11 @@ namespace BnWS.Business
                         o.Status,
                         o.Amount,
                         o.IsInternal,
-                        o.CustomerOpenId
+                        o.CustomerOpenId,
+                        o.PickTime
                     }).ToList();
                return positions.GroupBy(
-                    x => new {x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.IsInternal, x.Amount,x.CustomerOpenId})
+                    x => new {x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.IsInternal, x.Amount,x.CustomerOpenId,x.PickTime})
                     .Select(x => new OrderReview()
                     {
                         OrderId = x.Key.OrderId,
@@ -136,6 +137,7 @@ namespace BnWS.Business
                         IsInternal = x.Key.IsInternal,
                         Amount = x.Key.Amount,
                         Positions = x.Select(p => p.Position).ToList(),
+                        PickTime = x.Key.PickTime,
                         CustomerOpenId = x.Key.CustomerOpenId
 
                     }).ToList();

@@ -104,6 +104,7 @@ export default {
         vo.Amount = o.Amount;
         vo.list = [];
         vo.list.push({ label: '日期', value: o.OrderDate })
+        vo.list.push({ label: '预计到店时间', value: o.PickTime })
         vo.list.push({ label: '店名', value: o.ShopName })
         vo.list.push({ label: '桌号', value: o.DeskName })
         vo.list.push({ label: '座位个数', value: o.Positions == null ? 0 : o.Positions.length })

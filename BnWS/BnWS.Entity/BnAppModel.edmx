@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Pay">
@@ -197,6 +197,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="Prepay_id" Type="nvarchar" MaxLength="256" />
           <Property Name="IsInternal" Type="bit" Nullable="false" />
           <Property Name="Comments" Type="nvarchar" MaxLength="2000" />
+          <Property Name="PickTime" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="ZY_Session">
           <Key>
@@ -1001,6 +1002,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <Property Name="Comments" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ZY_Booked_Position" Relationship="BnAppModel.FK_ZY_Booked_Position_ZY_Order" FromRole="ZY_Order" ToRole="ZY_Booked_Position" />
           <NavigationProperty Name="ZY_Customer" Relationship="BnAppModel.FK_ZY_Order_ZY_Customer" FromRole="ZY_Order" ToRole="ZY_Customer" />
+          <Property Name="PickTime" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_ZY_Booked_Position_ZY_Order">
           <End Type="BnAppModel.ZY_Order" Role="ZY_Order" Multiplicity="0..1" />
@@ -1299,6 +1301,7 @@ warning 6002: The table/view 'bn_zy.dbo.Pay' does not have a primary key defined
           <EntitySetMapping Name="ZY_Order">
             <EntityTypeMapping TypeName="BnAppModel.ZY_Order">
               <MappingFragment StoreEntitySet="ZY_Order">
+                <ScalarProperty Name="PickTime" ColumnName="PickTime" />
                 <ScalarProperty Name="Comments" ColumnName="Comments" />
                 <ScalarProperty Name="IsInternal" ColumnName="IsInternal" />
                 <ScalarProperty Name="Prepay_id" ColumnName="Prepay_id" />

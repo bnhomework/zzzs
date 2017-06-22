@@ -58,6 +58,7 @@ export default {
       this.pickDate = this.$route.params.pickDate;
       this.shopId = this.$route.params.shopId;
       this.shopName = this.$route.params.shopName;
+      this.pickTime = this.$route.params.pickTime;
       this.loadDesks();
     },
     loadDesks() {
@@ -80,6 +81,7 @@ export default {
         params: {
           deskId: desk.deskId,
           pickDate: this.pickDate,
+          pickTime: this.pickTime,
           deskName: desk.deskName,
           unitPrice: desk.unitPrice
         }

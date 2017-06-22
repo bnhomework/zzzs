@@ -158,6 +158,7 @@ namespace BnWS.Business
                         CustomerOpenId = orderInfo.CustomerOpenId,
                         OrderDate = orderInfo.pickDate.Date,
                         Prepay_id = result.prepay_id,
+                        PickTime = orderInfo.pickTime,
                         Status = 0
                     };
                     var positions = new List<ZY_Booked_Position>();
@@ -313,10 +314,11 @@ namespace BnWS.Business
                                      o.Status,
                                      o.Amount,
                                      o.IsInternal,
-                                     o.CustomerOpenId
+                                     o.CustomerOpenId,
+                                     o.PickTime
                                  }).ToList();
                 return positions.GroupBy(
-                     x => new { x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.Amount })
+                     x => new { x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.Amount,x.PickTime })
                      .Select(x => new OrderHistory()
                      {
                          OrderId = x.Key.OrderId,
@@ -325,6 +327,7 @@ namespace BnWS.Business
                          DeskName = x.Key.DeskName,
                          Status = x.Key.Status,
                          Amount = x.Key.Amount,
+                         PickTime = x.Key.PickTime,
                          Positions = x.Select(p => p.Position).ToList()
 
                      }).ToList();

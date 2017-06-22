@@ -26,7 +26,7 @@
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
           <span slot="label">主页</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/orders'}" :selected="route.path === '/orders'" badge="9">
+        <tabbar-item :link="{path:'/orders'}" :selected="route.path === '/orders'"> <!-- badge="9"> -->
           <span class="zy-icon-22" slot="icon">&#xe633;</span>
           <span slot="label"><span v-if="componentName" class="zy-tabbar-component">{{componentName}}</span><span v-else>我的订单</span></span>
         </tabbar-item>

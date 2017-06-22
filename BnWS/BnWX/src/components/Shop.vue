@@ -11,6 +11,9 @@
     <group title="预约">
       <datetime v-model="pickDate" :title="日期" :start-date="this.getCurrentDate()"></datetime>
     </group>
+    <group title="预计到店时间">
+      <datetime v-model="pickTime" format="HH:mm"></datetime>
+    </group>
     <div style="padding:15px;">
       <x-button @click.native="book" type="primary">立即预约</x-button>
     </div>
@@ -33,7 +36,8 @@ export default {
     return {
       shopId: '',
       shopInfo: {},
-      pickDate: this.getCurrentDate()
+      pickDate: this.getCurrentDate(),
+      pickTime:'09:00'
     }
   },
   created() {
@@ -71,7 +75,8 @@ export default {
         params: {
           shopId: this.shopId,
           pickDate: this.pickDate,
-          shopName: this.shopInfo.shopName
+          shopName: this.shopInfo.shopName,
+          pickTime:this.pickTime
         }
       })
     }
