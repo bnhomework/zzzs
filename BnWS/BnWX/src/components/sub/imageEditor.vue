@@ -1,114 +1,127 @@
 <template>
-  <!-- <svg :width="width" :height="height" xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
-	-->
   <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
-    
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
-      
-    <image id='bnLogo' :x="logoX" :y="logoY" :height="logoHeight" :width="logoWidth" @mousedown="down"  @mouseup="up" v-bind:xlink:href="logoImg" @mouseover="isMouseOver=true" @mouseout="isMouseOver=false"
-:style="{ cursor: logoCursor}"
-    ></image>
+    <path :d="borderPath.top" :style="borderStyle('n-resize')" @mousedown="down2"></path>
+    <path :d="borderPath.right" :style="borderStyle('e-resize')" @mousedown="down2"></path>
+    <path :d="borderPath.bottom" :style="borderStyle('n-resize')" @mousedown="down2"></path>
+    <path :d="borderPath.left" :style="borderStyle('e-resize')" @mousedown="down2"></path>
+
+    <path :d="borderPath.top" :style="borderStyle2()" @mousedown="down2"></path>
+    <path :d="borderPath.right" :style="borderStyle2()" @mousedown="down2"></path>
+    <path :d="borderPath.bottom" :style="borderStyle2()" @mousedown="down2"></path>
+    <path :d="borderPath.left" :style="borderStyle2()" @mousedown="down2"></path>
+    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" @mousedown="down" @mouseup="up" v-bind:xlink:href="logoImg" @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"></image>
   </svg>
 </template>
 <script>
 export default {
   data() {
       return {
-        isMoving:false,
-        isResize:false,
-        isMouseOver:false,
-        startPosition:{x:0,y:0},
-        logoX:100,
-        logoY:100,
-        logoWidth:200,
-        logoHeight:200
+        isMoving: false,
+        isResize: false,
+        isMouseOver: false,
+        startPosition: { x: 0, y: 0 },
+        logo:{x:100,y:100,width:200,height:200},
+        logoNaturalSize:{x:1,y:1}
       };
     },
     props: {
       width: { type: Number, default: 400 },
       height: { type: Number, default: 400 },
-      bgImg:{type:String},
-      logoImg:{type:String}
+      bgImg: { type: String },
+      logoImg: { type: String }
     },
     created() {
       this.init();
     },
+
     methods: {
-      init(){
-        window.addEventListener('mousemove',this.move,false);
+      init() {
+        window.addEventListener('mousemove', this.move, false);
+        window.addEventListener('mouseup', this.up, false);
       },
-      up(){
+      borderStyle(cursor){
+        return  `stroke:transparent;stroke-width:20;cursor:${cursor}`
+      },
+      borderStyle2(){
+        return  `stroke:#000000;stroke-width:0.4;stroke-dasharray:10;stroke-linejoin = round`
+      },
+      up() {
 
         console.log('-----up-----')
-        this.isMoving=false;
-        this.isResize=false;
+        this.isMoving = false;
+        this.isResize = false;
       },
-      down(event){
+      down(event) {
         console.log(event)
-        this.startPosition.x=parseInt(event.clientX);
-        this.startPosition.y=parseInt(event.clientY);
-
-        if(event.ctrlKey){
-
-        this.isResize=true;
-      }else{
-
-        this.isMoving=true;
-      }
+        this.startPosition.x = parseInt(event.clientX);
+        this.startPosition.y = parseInt(event.clientY);
+        this.isMoving = true;
       },
-      move(event){
+      down2(event) {
+        this.startPosition.x = parseInt(event.clientX);
+        this.startPosition.y = parseInt(event.clientY);
+        this.isResize = true;        
+      },
+      move(event) {
 
-          var offSetX=event.clientX-this.startPosition.x;
-          var offSetY=event.clientY-this.startPosition.y;
-          this.startPosition.x=event.clientX;
-          this.startPosition.y=event.clientY;
-           // console.log({offSetX:offSetX,offSetY:offSetY})
-           // console.log({logoX:this.logoX,logoY:this.logoY})
-        if(this.isMoving&&!this.isResize){
-          this.logoX+=offSetX;
-          this.logoY+=offSetY;
+        var offSetX = event.clientX - this.startPosition.x;
+        var offSetY = event.clientY - this.startPosition.y;
+        this.startPosition.x = event.clientX;
+        this.startPosition.y = event.clientY;
+        if (this.isMoving && !this.isResize) {
+          this.logo.x += offSetX;
+          this.logo.y += offSetY;
         }
-        if(this.isResize&&!this.isMoving){
-          this.logoHeight+=offSetY;
-          this.logoWidth+=offSetX
+        if (this.isResize && !this.isMoving) {
+          this.logo.height += offSetY;
+          this.logo.width += offSetX
         }
       },
-      getPosition(eid){
-        var el=document.getElementById(eid);
-        if(!el){
-          return{x:0,y:0}
+      getPosition(eid) {
+        var el = document.getElementById(eid);
+        if (!el) {
+          return { x: 0, y: 0 }
         }
         var xPos = (el.offsetLeft - el.scrollLeft + el.clientLeft);
-     var yPos = (el.offsetTop - el.scrollTop + el.clientTop);
-     return {x:xPos,y:yPos}
+        var yPos = (el.offsetTop - el.scrollTop + el.clientTop);
+        return { x: xPos, y: yPos }
       }
     },
     computed: {
       viewBox() {
         return `0 0 ${this.width} ${this.height}`
       },
-      logoCursor(){
-        var set=10;
+      borderPath(){
+        var A={x:this.logo.x,y:this.logo.y};
+        var B={x:this.logo.x+this.logo.width,y:this.logo.y};
+        var C={x:this.logo.x+this.logo.width,y:this.logo.y+this.logo.height};
+        var D={x:this.logo.x,y:this.logo.y+this.logo.height};
+        var p= {
+          top:`M${A.x} ${A.y} L${B.x} ${B.y}`,
+          right:`M${B.x} ${B.y} L${C.x} ${C.y}`,
+          bottom:`M${C.x} ${C.y} L${D.x} ${D.y}`,
+          left:`M${D.x} ${D.y} L${A.x} ${A.y}`,
+        }
+        return p
+      },
+      logoCursor() {
+        var set = 10;
         // console.log(this.logoPosition.x+set)
         // console.log(this.logoPosition.x-set)
         // console.log(this.startPosition.x)
-        if(this.logoPosition.x+set>this.startPosition.x
-          &&this.logoPosition.x-set<this.startPosition.x
-          &&this.logoPosition.y<this.startPosition.y
-          &&this.logoPosition.y+this.logoHeight>this.startPosition.y){
+        if (this.logoPosition.x + set > this.startPosition.x && this.logoPosition.x - set < this.startPosition.x && this.logoPosition.y < this.startPosition.y && this.logoPosition.y + this.logoHeight > this.startPosition.y) {
           return "e-resize"
         }
-        return this.isMouseOver?"move":"auto"
+        return this.isMouseOver ? "move" : "auto"
       },
-      logoBorderCursor(){
-
-      },
-      logoPosition(){
+      logoPosition() {
         return this.getPosition('bnLogo');
       }
 
-    },destory(){
-      window.removeEventListener('mousemove',this.move)
+    }, destory() {
+      window.removeEventListener('mousemove', this.move)
+        window.removeEventListener('mouseup', this.up);
     }
 }
 </script>
