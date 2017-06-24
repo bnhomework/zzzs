@@ -20,6 +20,9 @@ store.registerModule('bn', {
   mutations: {
     updateOpenId (state, payload) {
       state.openId = payload.openId
+      if(payload.openId){
+        Vue.http.defaults.headers.common["ZY_Auth"]=payload.openId;
+      }
     },
     updateLoadingStatus (state, payload) {
       state.isLoading = payload.isLoading

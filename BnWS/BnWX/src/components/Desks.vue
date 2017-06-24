@@ -1,13 +1,17 @@
 <template>
   <div>
-    <h2>{{shopName}}(<span>{{pickDate}}</span>)</h2>
+    <div  style="text-align:center;font-size:20px;color:#5d5d5d">
+      <div>{{shopName}}</div>
+      <div>{{pickDate}}</div>
+    </div>
     <divider></divider>
     <group-title></group-title>
     <div style="margin-bottom: 30px">
       <grid :rows="2">
         <grid-item v-for="(d,i) in shopDesks" :key="i">
           <div @click="pickDesk(d)">
-            <desk :v="d"></desk>
+            <desk :v="d" :readOnly="true"></desk>
+            <div style="text-align:center;color:#5d5d5d">{{d.deskName}}</div>
           </div>
         </grid-item>
       </grid>
@@ -90,5 +94,6 @@ export default {
   }
 }
 </script>
-<style>
+<style scoped>
+
 </style>

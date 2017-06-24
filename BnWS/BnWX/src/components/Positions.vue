@@ -1,26 +1,50 @@
 <template>
   <div>
+    <div style="text-align:center;font-size:20px;color:#5d5d5d">
+      <div>{{deskName}}</div>
+    </div>
+    <div>
+      <desk :v="deskPositionDetail" @SelectedPostionChanged="function(val){selectedPositions=val}" ref="currentDesk"></desk>
+    </div>
     <group>
-      <div style="padding:15px">
-        <desk :v="deskPositionDetail" @SelectedPostionChanged="function(val){selectedPositions=val}" ref="currentDesk"></desk>
-      </div>
+      <div style="text-align:right;padding:15px">已位选 {{numberOfPositions}} 个位置 </div>
     </group>
-    <div style="position:fixed;bottom:1px;width:100%">
-      <group>
-        <div style="text-align:right;padding:15px">已位选 {{numberOfPositions}} 个位置 </div>
-      </group>
-      <group>
-        <div style="text-align:right;padding:15px">合计:￥{{totalAmount}}</div>
-      </group>
+    <group>
+      <div style="text-align:right;padding:15px">合计:￥{{totalAmount}}</div>
+    </group>
+    <flexbox style="margin-top: 1.17647059em">
+      <flexbox-item>
+        <x-button @click.native="$router.go(-1)" type="warn">取消</x-button>
+      </flexbox-item>
+      <flexbox-item>
+        <x-button @click.native="book" type="primary" :disabled="numberOfPositions==0">选好了</x-button>
+      </flexbox-item>
+    </flexbox>
+    <!--  <div style="width:100%">
       <div style="margin:15px">
         <x-button @click.native="book" type="primary" :disabled="numberOfPositions==0">选好了</x-button>
         <x-button @click.native="$router.go(-1)" type="warn">取消</x-button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
-import { Group, Cell, Swiper, Datetime, XButton, Grid, GridItem, Divider, Toast, XDialog, TransferDomDirective as TransferDom } from 'vux'
+import {
+  Group,
+  Cell,
+  Swiper,
+  Datetime,
+  XButton,
+  Grid,
+  GridItem,
+  Divider,
+  Toast,
+  XDialog,
+  Flexbox,
+  FlexboxItem,
+  TransferDomDirective as TransferDom
+}
+from 'vux'
 import utils from '@/mixins/utils'
 import desk from '@/components/sub/desk.vue'
 
@@ -37,7 +61,9 @@ export default {
     GridItem,
     Divider,
     Toast,
-    XDialog
+    XDialog,
+    Flexbox,
+    FlexboxItem
   },
   directives: {
     TransferDom
@@ -66,7 +92,8 @@ export default {
     },
     loadDesk() {
       this.selectedPositions = [];
-      this.$refs.currentDesk.reset();
+      if (this.$refs.currentDesk)
+        this.$refs.currentDesk.reset();
       var url = this.apiServer + 'zy/DeskPostions';
       var data = {
         deskId: this.deskId,
@@ -95,7 +122,8 @@ export default {
           var r = res.data;
           if (r.Success) {
             vm.doPayment(r)
-          } else {
+          }
+          else {
             vm.$vux.toast.show({
               text: '出错啦~~',
               type: 'cancel'
@@ -110,32 +138,36 @@ export default {
           vm.loadDesk();
         });
     },
-    doPayment(order) {
-      var vm = this;
-      this.$wechat.chooseWXPay({
-        appId: order.appId,
-        timeStamp: order.timeStamp,
-        nonceStr: order.nonceStr,
-        package: order.package,
-        signType: order.signType,
-        paySign: order.paySign,
-        success: function(res) {
-          if (res.errMsg == "chooseWXPay:ok") {
-            vm.$vux.toast.show({
-              text: '支付成功！'
-            })
-          } else {
-            vm.$vux.toast.show({
-              text: '支付失败！',
-              type: 'cancel'
-            })
-          }
-        }
+    // doPayment(order) {
+    //   var vm = this;
+    //   this.$wechat.chooseWXPay({
+    //     appId: order.appId,
+    //     timestamp: order.timeStamp,
+    //     nonceStr: order.nonceStr,
+    //     package: order.package,
+    //     signType: order.signType,
+    //     paySign: order.paySign,
+    //     success: function(res) {
+    //       if (res.errMsg == "chooseWXPay:ok") {
+    //         vm.$vux.toast.show({
+    //           text: '支付成功！'
+    //         })
 
-      });
-    },
+    //       }
+    //       else {
+    //         vm.$vux.toast.show({
+    //           text: '支付失败！',
+    //           type: 'cancel'
+    //         })
+    //       }
+    //     }
+
+    //   });
+    // },
     gotoOrderCompleted(orerId) {
-
+      this.$router.push({
+        name: 'orders'
+      });
     }
   },
   computed: {
