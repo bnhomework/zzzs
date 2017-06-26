@@ -3,22 +3,19 @@
 import Vue from 'vue'
 import FastClick from 'fastclick'
 import App from './App'
+import AlloyFinger from 'alloyfinger'
+import AlloyFingerVue from '@/../node_modules/alloyfinger/vue/alloy_finger.vue.js'
 
 
 import store from './store'
 import router from './router'
-// import AMap from 'vue-amap'
 import { AjaxPlugin, WechatPlugin,ToastPlugin } from 'vux'
 
+window.AlloyFinger=AlloyFinger
 Vue.use(ToastPlugin)
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
-// Vue.use(AMap)
-// AMap.initAMapApiLoader({
-//   key: '9a06cbc0ebd93e4b309bbfe9830c1f16',
-//   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor']
-// });
-
+Vue.use(AlloyFingerVue);
 
 FastClick.attach(document.body)
 Vue.config.productionTip = false

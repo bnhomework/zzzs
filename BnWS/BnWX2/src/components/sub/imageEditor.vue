@@ -10,11 +10,14 @@
     <path :d="borderPath.right" :style="borderStyle2()" @mousedown="down2"></path>
     <path :d="borderPath.bottom" :style="borderStyle2()" @mousedown="down2"></path>
     <path :d="borderPath.left" :style="borderStyle2()" @mousedown="down2"></path>
-    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" @mousedown="down" @mouseup="up" v-bind:xlink:href="logoImg" @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"></image>
+    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" 
+    @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"  @mousedown="down" @mouseup="up"
+v-finger:press-move="pressMove"
+v-finger:pinch="pinch"
+    ></image>
   </svg>
 </template>
 <script>
-import AlloyFinger from 'alloyfinger'
 export default {
   data() {
       return {
@@ -41,6 +44,16 @@ export default {
         window.addEventListener('mousemove', this.move, false);
         window.addEventListener('mouseup', this.up, false);
       },
+      pressMove: function(evt) { 
+            this.logo.x += evt.deltaX;
+          this.logo.y += evt.deltaY;
+            console.log('onPressMove'); 
+        },
+         pinch: function(evt) { 
+            console.log(evt.scale);
+            console.log('onPinch'); 
+        },
+
       borderStyle(cursor){
         return  `stroke:transparent;stroke-width:20;cursor:${cursor}`
       },
@@ -108,9 +121,6 @@ export default {
       },
       logoCursor() {
         var set = 10;
-        // console.log(this.logoPosition.x+set)
-        // console.log(this.logoPosition.x-set)
-        // console.log(this.startPosition.x)
         if (this.logoPosition.x + set > this.startPosition.x && this.logoPosition.x - set < this.startPosition.x && this.logoPosition.y < this.startPosition.y && this.logoPosition.y + this.logoHeight > this.startPosition.y) {
           return "e-resize"
         }
