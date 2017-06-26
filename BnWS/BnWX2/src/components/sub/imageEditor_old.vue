@@ -14,7 +14,6 @@
   </svg>
 </template>
 <script>
-import AlloyFinger from 'alloyfinger'
 export default {
   data() {
       return {
@@ -120,11 +119,7 @@ export default {
         return this.getPosition('bnLogo');
       }
 
-    },
-    mounted(){
-
-    }, 
-    destory() {
+    }, destory() {
       window.removeEventListener('mousemove', this.move)
         window.removeEventListener('mouseup', this.up);
     }
