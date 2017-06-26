@@ -16,7 +16,7 @@ Vue.use(ToastPlugin)
 Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
 Vue.use(AlloyFingerVue);
-
+window.wx=window.wx||Vue.wechat;
 FastClick.attach(document.body)
 Vue.config.productionTip = false
 // require('es6-promise').polyfill()

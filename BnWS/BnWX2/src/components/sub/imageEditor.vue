@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
+  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch">
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
     <path :d="borderPath.top" :style="borderStyle('n-resize')" @mousedown="down2"></path>
     <path :d="borderPath.right" :style="borderStyle('e-resize')" @mousedown="down2"></path>
@@ -13,7 +13,7 @@
     <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" 
     @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"  @mousedown="down" @mouseup="up"
 v-finger:press-move="pressMove"
-v-finger:pinch="pinch"
+
     ></image>
   </svg>
 </template>
@@ -50,8 +50,14 @@ export default {
             console.log('onPressMove'); 
         },
          pinch: function(evt) { 
-            console.log(evt.scale);
-            console.log('onPinch'); 
+          var s=1;
+          if(evt.scale>1){
+            s=1.0+(evt.scale-1)/10.00;
+          }else{
+            s=1.0-(1.0-evt.scale)/10.00;
+          }
+           this.logo.height= this.logo.height*s;
+           this.logo.width= this.logo.width*s;
         },
 
       borderStyle(cursor){
