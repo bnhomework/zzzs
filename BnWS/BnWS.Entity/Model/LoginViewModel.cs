@@ -130,6 +130,7 @@ namespace BnWS.Entity
         public List<string> Positions { get; set; }
         public int Status { get; set; }
         public decimal Amount { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
 
     public class OrderDetail : OrderHistory

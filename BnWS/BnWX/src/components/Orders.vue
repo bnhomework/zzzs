@@ -6,13 +6,19 @@
     </tab>
     <div v-for="item in showOrders">
       <br>
-      <form-preview header-label="金额" :header-value="item.Amount" :body-items="item.list" :footer-buttons="item.actions"></form-preview>
+      <form-preview header-label="金额" :header-value="'￥'+item.Amount" :body-items="item.list" :footer-buttons="item.actions"></form-preview>
       <br>
     </div>
   </div>
 </template>
 <script>
-import { Tab, TabItem, Toast, FormPreview } from 'vux'
+import {
+  Tab,
+  TabItem,
+  Toast,
+  FormPreview
+}
+from 'vux'
 import utils from '@/mixins/utils'
 
 export default {
@@ -27,7 +33,21 @@ export default {
     return {
       orders: [],
       historyOrder: false,
-      allStatus: [{ StatusName: 'All' }, { StatusName: '未付款', Id: '0' }, { StatusName: '已付款', Id: '1' }, { StatusName: '申请退款中', Id: '-1' }, { StatusName: '已退款', Id: '-2' }]
+      allStatus: [{
+        StatusName: 'All'
+      }, {
+        StatusName: '未付款',
+        Id: '0'
+      }, {
+        StatusName: '已付款',
+        Id: '1'
+      }, {
+        StatusName: '申请退款中',
+        Id: '-1'
+      }, {
+        StatusName: '已退款',
+        Id: '-2'
+      }]
 
     }
   },
@@ -41,7 +61,8 @@ export default {
     onItemClick(v) {
       if (v == 0) {
         this.historyOrder = false;
-      } else {
+      }
+      else {
         this.historyOrder = true;
       }
     },
@@ -68,7 +89,8 @@ export default {
             vm.$vux.toast.show({
               text: '申请成功'
             })
-          } else if (res.data && (res.data.message != '' || res.data.message != '')) {
+          }
+          else if (res.data && (res.data.message != '' || res.data.message != '')) {
             vm.$vux.toast.show({
               text: res.data.message,
               type: 'cancel'
@@ -77,9 +99,51 @@ export default {
           vm.loadOrders();
         });
     },
+
+    deleteOrder(orderId) {
+      var url = this.apiServer + 'zy/deleteOrder';
+      var data = {
+        orderId: orderId
+      };
+      var vm = this;
+      this.$http.post(url, data)
+        .then(res => {
+          vm.loadOrders();
+        }).catch(err => {
+          vm.loadOrders();
+        });
+    },
+    payOrder(orderId) {
+      var url = this.apiServer + 'zy/payOrder';
+      var data = {
+        orderId: orderId
+      };
+      var vm = this;
+      this.$http.post(url, data)
+        .then(res => {
+          var r = res.data;
+          if (r.Success) {
+            vm.doPayment(r)
+          }
+          else {
+            vm.$vux.toast.show({
+              text: '出错啦~~',
+              type: 'cancel'
+            })
+          }
+          vm.loadOrders();
+        }).catch(err => {
+          vm.$vux.toast.show({
+            text: '出错啦~~',
+            type: 'cancel'
+          })
+          vm.loadOrders();
+        });
+    },
     displayStatus(s) {
       var l = this.allStatus.filter(function(x) {
-        return x.Id == s; });
+        return x.Id == s;
+      });
       if (l.length > 0) {
         return l[0].StatusName;
       }
@@ -93,7 +157,8 @@ export default {
       var olist = this.orders.filter(function(x) {
         if (vm.historyOrder) {
           return x.OrderDate < currentDate;
-        } else {
+        }
+        else {
           return x.OrderDate >= currentDate;
         }
       });
@@ -103,21 +168,58 @@ export default {
         var vo = {};
         vo.Amount = o.Amount;
         vo.list = [];
-        vo.list.push({ label: '日期', value: o.OrderDate })
-        vo.list.push({ label: '预计到店时间', value: o.PickTime })
-        vo.list.push({ label: '店名', value: o.ShopName })
-        vo.list.push({ label: '桌号', value: o.DeskName })
-        vo.list.push({ label: '座位个数', value: o.Positions == null ? 0 : o.Positions.length })
-        vo.list.push({ label: '订单状态', value: vm.displayStatus(o.Status) })
+        vo.list.push({
+          label: '日期',
+          value: o.OrderDate
+        })
+        vo.list.push({
+          label: '预计到店时间',
+          value: o.PickTime
+        })
+        vo.list.push({
+          label: '店名',
+          value: o.ShopName
+        })
+        vo.list.push({
+          label: '桌号',
+          value: o.DeskName
+        })
+        vo.list.push({
+          label: '座位个数',
+          value: o.Positions == null ? 0 : o.Positions.length
+        })
+        vo.list.push({
+          label: '订单状态',
+          value: vm.displayStatus(o.Status)
+        })
         vo.actions = [];
-        if (!vm.historyOrder && o.Status == 1) {
-          vo.actions.push({
-            style: 'default',
-            text: '申请退款',
-            onButtonClick: () => {
-              vm.requestRefund(o.OrderId);
-            }
-          })
+        if (!vm.historyOrder) {
+          if (o.Status == 1) {
+
+            vo.actions.push({
+              style: 'default',
+              text: '申请退款',
+              onButtonClick: () => {
+                vm.requestRefund(o.OrderId);
+              }
+            });
+          }
+          else if (o.Status == 0) {
+            vo.actions.push({
+              style: 'default',
+              text: '删除',
+              onButtonClick: () => {
+                vm.deleteOrder(o.OrderId);
+              }
+            });
+            vo.actions.push({
+              style: 'primary',
+              text: '立即支付',
+              onButtonClick: () => {
+                vm.payOrder(o.OrderId);
+              }
+            });
+          }
         }
         viewOrders.push(vo);
       }

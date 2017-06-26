@@ -5,7 +5,7 @@
       <h1></h1>
     </div>
     <group title="附近店铺">
-      <cell title="Vux" :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in shops">
+      <cell title="Vux" :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in shops" :key="item.shopId">
         <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
         <span slot="title">{{item.shopName}}</span>
         <span slot="inline-desc">{{item.description}}</span>

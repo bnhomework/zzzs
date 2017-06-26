@@ -74,6 +74,19 @@ namespace BnWS.Views
 //        }
 
         [HttpPost]
+        public ActionResult PayOrder(Guid orderId)
+        {
+            var result = BS.PayOrder(orderId);
+            return new JsonResult() { Data = result }; 
+        }
+        [HttpPost]
+        public ActionResult DeleteOrder(Guid orderId)
+        {
+            var result = BS.DeleteOrder(orderId);
+            return new JsonResult() { Data = result };
+        }
+
+        [HttpPost]
         public ActionResult RequestRefund(Guid orderId)
         {
             var refundResult = BS.RequestRefund(orderId);

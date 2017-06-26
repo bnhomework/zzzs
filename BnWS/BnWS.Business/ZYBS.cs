@@ -124,6 +124,7 @@ namespace BnWS.Business
             o.body = ""; //腾讯充值中心-QQ会员充值
             o.attach = ""; //深圳分店
             o.spbill_create_ip = orderInfo.IP; //APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
+            result.prepay_id = "test";
             //result.prepay_id = WxApiHelper.Instance.GetPaymentId(o);//todo test
             result.appId = WxConfig.Appid;
             result.timeStamp = Utility.GetTimeSpan();
@@ -315,10 +316,11 @@ namespace BnWS.Business
                                      o.Amount,
                                      o.IsInternal,
                                      o.CustomerOpenId,
-                                     o.PickTime
+                                     o.PickTime,
+                                     o.CreatedTime
                                  }).ToList();
                 return positions.GroupBy(
-                     x => new { x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.Amount,x.PickTime })
+                     x => new { x.OrderId, x.OrderDate, x.ShopName, x.DeskName, x.Status, x.Amount, x.PickTime, x.CreatedTime })
                      .Select(x => new OrderHistory()
                      {
                          OrderId = x.Key.OrderId,
@@ -328,9 +330,9 @@ namespace BnWS.Business
                          Status = x.Key.Status,
                          Amount = x.Key.Amount,
                          PickTime = x.Key.PickTime,
-                         Positions = x.Select(p => p.Position).ToList()
-
-                     }).ToList();
+                         Positions = x.Select(p => p.Position).ToList(),
+                         CreatedTime= x.Key.CreatedTime
+                     }).OrderByDescending(x=>x.CreatedTime).ToList();
             }
 //            var id = new System.Data.SqlClient.SqlParameter
 //            {
@@ -375,6 +377,50 @@ namespace BnWS.Business
                     uow.Repository<ZY_Order>().Update(order);
                     uow.Save();
                     result = true;
+                }
+            }
+            return result;
+        }
+
+        public PlaceResult PayOrder(Guid orderId)
+        {
+            var result = new PlaceResult() { Success = false, OrderId = orderId };
+            using (var uow = GetUnitOfWork())
+            {
+                var order = uow.Repository<ZY_Order>().Query().Filter(x => x.OrderId == orderId&&x.Status!=1).Get().FirstOrDefault();
+                if (order != null&&!string.IsNullOrEmpty(order.Prepay_id))
+                {
+                    result.Success = true;
+                    result.appId = WxConfig.Appid;
+                    result.timeStamp = Utility.GetTimeSpan();
+                    result.nonceStr = Utility.GenerateNonceStr();
+                    result.signType = "MD5";
+                    result.prepay_id = order.Prepay_id;
+                    string payRaw = "appId=" + result.appId
+                                    + "&nonceStr=" + result.nonceStr
+                                    + "&package=" + result.package
+                                    + "&signType=" + result.signType
+                                    + "&timeStamp=" + result.timeStamp;
+                    result.paySign = Utility.Signature(payRaw, result.signType);
+                }
+            }
+            return result;
+        }
+        public PlaceResult DeleteOrder(Guid orderId)
+        {
+            var result = new PlaceResult() { Success = true, OrderId = orderId };
+            using (var uow = GetUnitOfWork())
+            {
+                var order = uow.Repository<ZY_Order>().Query().Filter(x => x.OrderId == orderId&&x.Status==0).Get().FirstOrDefault();
+                if (order != null)
+                {
+                   var plist= uow.Repository<ZY_Booked_Position>().Query().Filter(x => x.OrderId == orderId).Get().ToList();
+                    foreach (var p in plist)
+                    {
+                        uow.Repository<ZY_Booked_Position>().Delete(p);
+                    }
+                     uow.Repository<ZY_Order>().Delete(order);
+                    uow.Save();
                 }
             }
             return result;
