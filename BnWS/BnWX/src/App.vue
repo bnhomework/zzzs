@@ -22,20 +22,20 @@
       </transition>
 
       <tabbar class="zy-tabbar" icon-class="vux-center" v-show="route.meta.showTabbar" slot="bottom">
-        <tabbar-item :link="{name:'home'}" :selected="route.path === '/'||route.name === 'home'">
-          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+        <tabbar-item :link="{name:'home'}" :selected="route.name === 'home'">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe7a4;</span>
           <span slot="label">主页</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/'}" :selected="route.path === '/'||route.name === 'home'">
-          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+        <tabbar-item :link="{path:'/'}" :selected="route.name === 'home'">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe64e;</span>
           <span slot="label">订单</span>
         </tabbar-item>
-        <tabbar-item :link="{name:'DesginStep1'}" :selected="route.name.indexOf('DesginStep')>=0">
-          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
-          <span slot="label">创业设计</span>
+        <tabbar-item :link="{name:'DesginStep1'}" :selected="(route.name||'').indexOf('DesginStep')>=0">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe602;</span>
+          <span slot="label">创意设计</span>
         </tabbar-item>
-        <tabbar-item :link="{name:'OF1'}" :selected="route.name.indexOf('OF')>=0">
-          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+        <tabbar-item :link="{name:'OF1'}" :selected="(route.name||'').indexOf('OF')>=0">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe624;</span>
           <span slot="label">我的</span>
         </tabbar-item>
       </tabbar>
@@ -201,12 +201,12 @@ html, body {
 }
 
 @font-face {
-  font-family: 'vux-demo';  /* project id 70323 */
-  src: url('https://at.alicdn.com/t/font_h1fz4ogaj5cm1jor.eot');
-  src: url('https://at.alicdn.com/t/font_h1fz4ogaj5cm1jor.eot?#iefix') format('embedded-opentype'),
-  url('https://at.alicdn.com/t/font_h1fz4ogaj5cm1jor.woff') format('woff'),
-  url('https://at.alicdn.com/t/font_h1fz4ogaj5cm1jor.ttf') format('truetype'),
-  url('https://at.alicdn.com/t/font_h1fz4ogaj5cm1jor.svg#iconfont') format('svg');
+  font-family: 'vux-demo';  /* project id 338215 */
+  src: url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.eot');
+  src: url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.svg#iconfont') format('svg');
 }
 
 .demo-icon {

@@ -4,7 +4,7 @@ const imgServer = config.imgServer
 const utils = {
     created() {
         this.setOpenId();
-    }
+    },
     methods: {
         setOpenId() {
             var openId = this.$route.params.openId;
@@ -13,7 +13,7 @@ const utils = {
                     openId: this.$route.params.openId
                 })
             }
-        }
+        },
         doPayment(order) {
             var vm = this;
             this.$wechat.chooseWXPay({
