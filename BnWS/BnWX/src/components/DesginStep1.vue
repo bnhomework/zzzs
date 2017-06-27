@@ -1,59 +1,41 @@
 <template>
-  <div>
-    <div style="width:100%;">
-      <div @click="switchSide" class="switch" >{{isBackend?'前':'后'}}</div>
-      <image-editor v-show="!isBackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="getImgSrc(logo_f)"></image-editor>
-      <image-editor v-show="isBackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="getImgSrc(logo_b)"></image-editor>
-    </div>
-    <div class="tool">
-      <div v-show="selectedTab==0">
-        <scroller lock-y scrollbar-x>
-          <div class="box">
-            <div class="box-item" @click="openMyImages"><span style="font-size: 70px;font-weight: bold;vertical-align: middle;color: #5d5d5d">+</span></div>
-            <div class="box-item" :class="{selected:logo==currentSelectedLogo}" v-for="logo in mylogos" @click="setLogo(logo)">
-              <img :src="getImgSrc(logo)">
-            </div>
-          </div>
-        </scroller>
-      </div>
-      <div v-show="selectedTab==1">
-        <scroller lock-y scrollbar-x>
-          <div class="box">
-            <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
-            <!-- <span>{{' ' + s + ' '}}</span> -->
-              <img :src="getImgSrc(s.front)">
-            </div>
-          </div>
-        </scroller>
-      </div>
-      <tab>
-        <tab-item :selected="selectedTab==0" @on-item-click="onItemClick(0)">素材</tab-item>
-        <tab-item :selected="selectedTab==1" @on-item-click="onItemClick(1)">款式</tab-item>
-        <!-- <tab-item @on-item-click="onItemClick">xxx</tab-item> -->
-      </tab>
-    </div>
+  <box gap="10px 10px">
+  
+  <checker
+    v-model="sex"
+    default-item-class="demo5-item"
+    selected-item-class="demo5-item-selected"
+    >
+      <checker-item  :key="1" :value="1">男士</checker-item>
+      <checker-item  :key="2" :value="2">女士</checker-item>
+    </checker>
+    <div>
+   
+  
+    <group title="颜色">
+      <cell primary="content">
+        <color-picker slot="value" :colors="colors" v-model="selectedColor" size="middle"></color-picker>
+      </cell>
+    </group>
   </div>
+    <div class='tool'>
+      <x-button plain >开始设计</x-button>
+    </div>
+  </box>
 </template>
 <script>
-import { Scroller, Divider, Spinner, XButton, Group, Cell, LoadMore, Tab, TabItem } from 'vux'
+import { Scroller, XButton,Box ,ColorPicker, Group, Cell,Checker, CheckerItem } from 'vux'
 import utils from '@/mixins/utils'
-import imageEditor from '@/components/sub/imageEditor.vue'
 export default {
   mixins: [utils],
   components: {
-    imageEditor,
-    Scroller,
-    Divider,
-    Spinner,
-    XButton,
-    Group,
-    Cell,
-    LoadMore,
-    Tab,
-    TabItem
+    Scroller,XButton,Box,ColorPicker, Group, Cell,Checker , CheckerItem
   },
   data() {
     return {
+      sex:1,
+      selectedColor:'#fff',
+      colors: ['#fff', '#FF3B3B', '#FFEF7D', '#8AEEB1', '#8B8AEE', '#CC68F8'],
       mylogos: [],
       styleList:[],
       desgin:{front:'',backend:'',style:''},
@@ -161,49 +143,21 @@ export default {
 <style scoped>
 .tool {
   position: fixed;
-  width: 100%;
-  bottom: 43px
+  width: 95%;
+  margin:0 auto;
+  bottom: 52px;
 }
-
-.box {
-  height: 100px;
-  position: relative;
-  width: 1490px;
-}
-
-.box-item {
+.demo5-item {
   width: 100px;
-  height: 100px;
-  background-color: #f1f1f1;
-  display: inline-block;
-  margin-left: 5px;
-  float: left;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
-  line-height: 100px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  margin-right: 6px;
 }
-.box-item.selected{
-  background-color: #e6e6e6;
-  border: solid 1px #5d5d5d;
-}
-.box-item img{
-
-  width: 100px;
-  height: 100px;
-}
-.box-item:first-child {
-  margin-left: 0;
-}
-.switch{
-position: fixed;
-right: 0px;
-margin:10px;
-padding: 10px; 
-font-size: 20px;
-line-height: 20px;
-border-radius: 30px;
-border: solid 1px #5d5d5d
-}
-.switch:hover{
-border: solid 1px #1d1d1d
+.demo5-item-selected {
+  border-color: #ff4a00;
 }
 </style>

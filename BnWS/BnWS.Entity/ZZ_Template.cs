@@ -27,5 +27,6 @@ namespace BnWS.Entity
         public System.DateTime CreatedTime { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
+        public string ColorCode { get; set; }
     }
 }

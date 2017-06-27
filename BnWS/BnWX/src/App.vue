@@ -166,9 +166,12 @@ html, body {
   width: 100%;
   overflow-x: hidden;
 }
+.bn-icon{
+   font-family: 'bn-icon';
+}
 
 .zy-icon-22 {
-  font-family: 'vux-demo';
+  font-family: 'bn-icon';
   font-size: 22px;
   color: #888;
 }
@@ -201,7 +204,7 @@ html, body {
 }
 
 @font-face {
-  font-family: 'vux-demo';  /* project id 338215 */
+  font-family: 'bn-icon';  /* project id 338215 */
   src: url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.eot');
   src: url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.eot?#iefix') format('embedded-opentype'),
   url('//at.alicdn.com/t/font_yx71p6gybbbakyb9.woff') format('woff'),

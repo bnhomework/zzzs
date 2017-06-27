@@ -288,6 +288,7 @@ warning 6002: The table/view 'zzzs.dbo.Pay' does not have a primary key defined.
           <Property Name="Category" Type="int" Nullable="false" />
           <Property Name="Sex" Type="int" />
           <Property Name="Color" Type="nvarchar" MaxLength="256" />
+          <Property Name="ColorCode" Type="nvarchar" MaxLength="256" />
           <Property Name="FrontImg" Type="nvarchar" MaxLength="256" />
           <Property Name="BackImg" Type="nvarchar" MaxLength="256" />
           <Property Name="VersionNo" Type="int" Nullable="false" />
@@ -1099,6 +1100,7 @@ warning 6002: The table/view 'zzzs.dbo.Pay' does not have a primary key defined.
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ColorCode" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1412,6 +1414,7 @@ warning 6002: The table/view 'zzzs.dbo.Pay' does not have a primary key defined.
           <EntitySetMapping Name="ZZ_Template">
             <EntityTypeMapping TypeName="BnAppModel.ZZ_Template">
               <MappingFragment StoreEntitySet="ZZ_Template">
+                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />

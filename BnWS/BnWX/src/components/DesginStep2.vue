@@ -16,7 +16,27 @@
           </div>
         </scroller>
       </div>
-      <div v-show="selectedTab==1">
+      <div v-show="selectedTab==10">
+        <scroller lock-y scrollbar-x>
+          <div class="box">
+            <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
+            <!-- <span>{{' ' + s + ' '}}</span> -->
+              <img :src="getImgSrc(s.front)">
+            </div>
+          </div>
+        </scroller>
+      </div>
+      <div v-show="selectedTab==20">
+        <scroller lock-y scrollbar-x>
+          <div class="box">
+            <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
+            <!-- <span>{{' ' + s + ' '}}</span> -->
+              <img :src="getImgSrc(s.front)">
+            </div>
+          </div>
+        </scroller>
+      </div>
+      <div v-show="selectedTab==30">
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
@@ -27,8 +47,10 @@
         </scroller>
       </div>
       <tab>
-        <tab-item :selected="selectedTab==0" @on-item-click="onItemClick(0)">素材</tab-item>
-        <tab-item :selected="selectedTab==1" @on-item-click="onItemClick(1)">款式</tab-item>
+        <tab-item :selected="selectedTab==0" @on-item-click="onItemClick(0)"><span class="bn-icon">&#xe73f;</span> 图片</tab-item>
+        <tab-item :selected="selectedTab==10" @on-item-click="onItemClick(10)"><span class="bn-icon">&#xe627;</span> 文字</tab-item>
+        <tab-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span class="bn-icon">&#xe608;</span> 模板</tab-item>
+        <!-- <tab-item :selected="selectedTab==30" @on-item-click="onItemClick(30)"><span class="bn-icon">&#xe664;</span> 款式</tab-item> -->
         <!-- <tab-item @on-item-click="onItemClick">xxx</tab-item> -->
       </tab>
     </div>
@@ -162,7 +184,7 @@ export default {
 .tool {
   position: fixed;
   width: 100%;
-  bottom: 43px
+  bottom: 50px
 }
 
 .box {
