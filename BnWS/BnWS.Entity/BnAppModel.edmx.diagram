@@ -31,6 +31,8 @@
         <EntityTypeShape EntityType="BnAppModel.ZY_Order" Width="1.5" PointX="7.5" PointY="19.5" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Booked_Position_ZY_Order" />
         <AssociationConnector Association="BnAppModel.FK_ZY_Order_ZY_Customer" />
+        <EntityTypeShape EntityType="BnAppModel.ZZ_Desgin" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BnAppModel.ZZ_Template" Width="1.5" PointX="10.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -59,11 +59,13 @@
     <Compile Include="AccountBS.cs" />
     <Compile Include="BaseBS.cs" />
     <Compile Include="PermissionBS.cs" />
-    <Compile Include="PlateFormBS.cs" />
+    <Compile Include="ZY\PlateFormBS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ShopBS.cs" />
+    <Compile Include="ZY\ShopBS.cs" />
     <Compile Include="WXBS.cs" />
-    <Compile Include="ZYBS.cs" />
+    <Compile Include="ZY\ZYBS.cs" />
+    <Compile Include="ZZ\ZzBS.cs" />
+    <Compile Include="ZZ\ZZManagementBS.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bn.WeiXin\Bn.WeiXin.csproj">

@@ -1,5 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox">
+  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch">
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
     <path :d="borderPath.top" :style="borderStyle('n-resize')" @mousedown="down2"></path>
     <path :d="borderPath.right" :style="borderStyle('e-resize')" @mousedown="down2"></path>
@@ -10,7 +10,11 @@
     <path :d="borderPath.right" :style="borderStyle2()" @mousedown="down2"></path>
     <path :d="borderPath.bottom" :style="borderStyle2()" @mousedown="down2"></path>
     <path :d="borderPath.left" :style="borderStyle2()" @mousedown="down2"></path>
-    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" @mousedown="down" @mouseup="up" v-bind:xlink:href="logoImg" @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"></image>
+    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" 
+    @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"  @mousedown="down" @mouseup="up"
+v-finger:press-move="pressMove"
+
+    ></image>
   </svg>
 </template>
 <script>
@@ -40,6 +44,22 @@ export default {
         window.addEventListener('mousemove', this.move, false);
         window.addEventListener('mouseup', this.up, false);
       },
+      pressMove: function(evt) { 
+            this.logo.x += evt.deltaX;
+          this.logo.y += evt.deltaY;
+            console.log('onPressMove'); 
+        },
+         pinch: function(evt) { 
+          var s=1;
+          if(evt.scale>1){
+            s=1.0+(evt.scale-1)/10.00;
+          }else{
+            s=1.0-(1.0-evt.scale)/10.00;
+          }
+           this.logo.height= this.logo.height*s;
+           this.logo.width= this.logo.width*s;
+        },
+
       borderStyle(cursor){
         return  `stroke:transparent;stroke-width:20;cursor:${cursor}`
       },
@@ -107,9 +127,6 @@ export default {
       },
       logoCursor() {
         var set = 10;
-        // console.log(this.logoPosition.x+set)
-        // console.log(this.logoPosition.x-set)
-        // console.log(this.startPosition.x)
         if (this.logoPosition.x + set > this.startPosition.x && this.logoPosition.x - set < this.startPosition.x && this.logoPosition.y < this.startPosition.y && this.logoPosition.y + this.logoHeight > this.startPosition.y) {
           return "e-resize"
         }
@@ -119,7 +136,11 @@ export default {
         return this.getPosition('bnLogo');
       }
 
-    }, destory() {
+    },
+    mounted(){
+
+    }, 
+    destory() {
       window.removeEventListener('mousemove', this.move)
         window.removeEventListener('mouseup', this.up);
     }

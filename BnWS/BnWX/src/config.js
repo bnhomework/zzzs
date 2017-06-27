@@ -1,5 +1,7 @@
 export default{
-	apiServer:'http://sjweb.nat123.net/',
-	// apiServer:'http://localhost:6565/',
-	jsApiList:['chooseWXPay','getLocation','openLocation']
+	// apiServer:'http://sjweb.nat123.net/',
+	// imgServer:'http://sjweb.nat123.net/upload/',
+	apiServer:'http://localhost:7565/',
+	imgServer:'http://localhost:7565/upload/',
+	jsApiList:['chooseWXPay','getLocation','openLocation','chooseImage','getLocalImgData']
 }

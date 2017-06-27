@@ -134,6 +134,8 @@
     <Compile Include="Controllers\PlateformController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
     <Compile Include="Controllers\WXController.cs" />
+    <Compile Include="Controllers\ZzController.cs" />
+    <Compile Include="Controllers\ZzManageController.cs" />
     <Compile Include="Extention\HtmlExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

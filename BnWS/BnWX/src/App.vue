@@ -22,18 +22,22 @@
       </transition>
 
       <tabbar class="zy-tabbar" icon-class="vux-center" v-show="route.meta.showTabbar" slot="bottom">
-        <tabbar-item :link="{path:'/'}" :selected="route.path === '/'||route.name === 'home'">
+        <tabbar-item :link="{name:'home'}" :selected="route.path === '/'||route.name === 'home'">
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
           <span slot="label">主页</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/orders'}" :selected="route.path === '/orders'"> <!-- badge="9"> -->
-          <span class="zy-icon-22" slot="icon">&#xe633;</span>
-          <span slot="label"><span v-if="componentName" class="zy-tabbar-component">{{componentName}}</span><span v-else>我的订单</span></span>
+        <tabbar-item :link="{path:'/'}" :selected="route.path === '/'||route.name === 'home'">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+          <span slot="label">订单</span>
         </tabbar-item>
-       <!--  <tabbar-item :link="{path:'/project/donate'}" :selected="route.path === '/project/donate'" show-dot>
-          <span class="zy-icon-22" slot="icon">&#xe630;</span>
-          <span slot="label">Donate</span>
-        </tabbar-item> -->
+        <tabbar-item :link="{name:'DesginStep1'}" :selected="route.name.indexOf('DesginStep')>=0">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+          <span slot="label">创业设计</span>
+        </tabbar-item>
+        <tabbar-item :link="{name:'OF1'}" :selected="route.name.indexOf('OF')>=0">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+          <span slot="label">我的</span>
+        </tabbar-item>
       </tabbar>
   </view-box>
   </div>
@@ -125,10 +129,7 @@ export default {
       return this.direction === 'forward' ? 'vux-header-fade-in-right' : 'vux-header-fade-in-left'
     },
     componentName () {
-      if (this.route.path) {
-        const parts = this.route.path.split('/')
-        if (/component/.test(this.route.path) && parts[2]) return parts[2]
-      }
+      return this.route.meta.componentName||'';
     },
     isDemo () {
       return /component|demo/.test(this.route.path)
@@ -171,11 +172,7 @@ html, body {
   font-size: 22px;
   color: #888;
 }
-.weui-tabbar.zy-tabbar {
-  /** backdrop-filter: blur(10px);
-  background-color: none;
-  background: rgba(247, 247, 250, 0.5);**/
-}
+
 .zy-tabbar .weui-bar__item_on .zy-icon-22 {
   color: #F70968;
 }

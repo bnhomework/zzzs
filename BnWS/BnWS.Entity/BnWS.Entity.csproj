@@ -46,6 +46,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -77,6 +78,7 @@
     </Compile>
     <Compile Include="BnMenu.cs" />
     <Compile Include="AppContext.cs" />
+    <Compile Include="Model\ZZViewModel.cs" />
     <Compile Include="Model\LoginViewModel.cs" />
     <Compile Include="Pay.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
@@ -126,6 +128,12 @@
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZY_Shop_Img.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZZ_Desgin.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZZ_Template.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
   </ItemGroup>
