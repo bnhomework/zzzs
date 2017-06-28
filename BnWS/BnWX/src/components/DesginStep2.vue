@@ -1,9 +1,9 @@
 <template>
   <div>
     <div style="width:100%;">
-      <div @click="switchSide" class="switch" >{{isBackend?'前':'后'}}</div>
-      <image-editor v-show="!isBackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="getImgSrc(logo_f)"></image-editor>
-      <image-editor v-show="isBackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="getImgSrc(logo_b)"></image-editor>
+      <div @click="switchSide" class="switch" >{{isbackend?'前':'后'}}</div>
+      <image-editor v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
+      <image-editor v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
     </div>
     <div class="tool">
       <div v-show="selectedTab==0">
@@ -17,6 +17,8 @@
         </scroller>
       </div>
       <div v-show="selectedTab==10">
+        <x-input v-model="desgin.frontTxt" v-show="!isbackend" ></x-input>
+        <x-input v-model="desgin.backTxt" v-show="isbackend" ></x-input>
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
@@ -57,7 +59,7 @@
   </div>
 </template>
 <script>
-import { Scroller, Divider, Spinner, XButton, Group, Cell, LoadMore, Tab, TabItem } from 'vux'
+import { Scroller, Divider, Spinner, XButton, Group, Cell, LoadMore, Tab, TabItem ,XInput} from 'vux'
 import utils from '@/mixins/utils'
 import imageEditor from '@/components/sub/imageEditor.vue'
 export default {
@@ -72,17 +74,17 @@ export default {
     Cell,
     LoadMore,
     Tab,
-    TabItem
+    TabItem,XInput
   },
   data() {
     return {
       mylogos: [],
       styleList:[],
-      desgin:{front:'',backend:'',style:''},
-      defaultStyle:{front:'tshirt/male/whitefront.png',backend:'tshirt/male/whiteback.png'},
+      desgin:{front:'',back:'',frontTxt:'',backTxt:'',style:''},
+      defaultStyle:{front:'tshirt/male/whitefront.png',back:'tshirt/male/whiteback.png'},
       defaultlogo:'',//todo create a blank image
       selectedTab: 0,
-      isBackend:false
+      isbackend:false
     }
   },
   created() {
@@ -93,8 +95,8 @@ export default {
       this.loadStyleList();
     },
     loadStyleList(){
-      this.styleList.push({front:'tshirt/male/whitefront.png',backend:'tshirt/male/whiteback.png'});
-      this.styleList.push({front:'tshirt/male/whiteback.png',backend:'tshirt/male/whitefront.png'});
+      this.styleList.push({front:'tshirt/male/whitefront.png',back:'tshirt/male/whiteback.png'});
+      this.styleList.push({front:'tshirt/male/whiteback.png',back:'tshirt/male/whitefront.png'});
     },
     onItemClick(id) {
       this.selectedTab = id;
@@ -131,14 +133,14 @@ export default {
       this.$set(this.desgin,'style',s);
     },
     setLogo(l){
-      if(this.isBackend){
-        this.$set(this.desgin,'backend',l);
+      if(this.isbackend){
+        this.$set(this.desgin,'back',l);
       }else{
         this.$set(this.desgin,'front',l);        
       }
     },
     switchSide(){
-      this.isBackend=!this.isBackend;
+      this.isbackend=!this.isbackend;
     }
   },
   computed:{
@@ -150,9 +152,9 @@ export default {
     },
     bgImg_b(){
       if(this.desgin.style){
-        return this.desgin.style.backend;
+        return this.desgin.style.back;
       }
-      return this.defaultStyle.backend;
+      return this.defaultStyle.back;
     },
     logo_f(){
       if(this.desgin.front){
@@ -161,19 +163,21 @@ export default {
       return this.defaultlogo;
     },
     logo_b(){
-      if(this.desgin.backend){
-        return this.desgin.backend;
+      if(this.desgin.back){
+        return this.desgin.back;
       }
       return this.defaultlogo;
     },
     currentSelectedLogo(){
-      if(this.isBackend)
-        return this.desgin.backend;
+      if(this.isbackend)
+        return this.desgin.back;
       else
         return this.desgin.front;
     },
     currentSelectedStyle(){
       return this.desgin.style;
+    },controlElementId(){
+      return this.selectedTab==10?2:1;
     }
 
 

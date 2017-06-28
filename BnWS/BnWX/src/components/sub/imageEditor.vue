@@ -1,20 +1,10 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch">
+  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch" v-finger:press-move="pressMove" v-finger:rotate="rotate">
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
-    <path :d="borderPath.top" :style="borderStyle('n-resize')" @mousedown="down2"></path>
-    <path :d="borderPath.right" :style="borderStyle('e-resize')" @mousedown="down2"></path>
-    <path :d="borderPath.bottom" :style="borderStyle('n-resize')" @mousedown="down2"></path>
-    <path :d="borderPath.left" :style="borderStyle('e-resize')" @mousedown="down2"></path>
-
-    <path :d="borderPath.top" :style="borderStyle2()" @mousedown="down2"></path>
-    <path :d="borderPath.right" :style="borderStyle2()" @mousedown="down2"></path>
-    <path :d="borderPath.bottom" :style="borderStyle2()" @mousedown="down2"></path>
-    <path :d="borderPath.left" :style="borderStyle2()" @mousedown="down2"></path>
-    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" 
-    @mouseover="isMouseOver=true" @mouseout="isMouseOver=false" :style="{ cursor: logoCursor}"  @mousedown="down" @mouseup="up"
-v-finger:press-move="pressMove"
-
-    ></image>
+    <path :d="areaBoarderPath" :style="borderStyle"></path>
+    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=undefined">
+    </image>
+    <text :x="txtLogo.x" :y="txtLogo.y" :transform="textTransform" :style="textStyle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
   </svg>
 </template>
 <script>
@@ -25,15 +15,19 @@ export default {
         isResize: false,
         isMouseOver: false,
         startPosition: { x: 0, y: 0 },
-        logo:{x:100,y:100,width:200,height:200},
-        logoNaturalSize:{x:1,y:1}
+        logo: { x: 100, y: 100, width: 200, height: 200 },
+        txtLogo: { x: 100, y: 100, angle: 0, color: '#000000' },
+        borderStyle: '`stroke:#000000;stroke-width:0.4;stroke-dasharray:10;stroke-linejoin = round`'
       };
     },
     props: {
       width: { type: Number, default: 400 },
       height: { type: Number, default: 400 },
       bgImg: { type: String },
-      logoImg: { type: String }
+      txtLogoText:{type:String},
+      logoImg: { type: String },
+      controlElementId:{type:Number,default:1},
+      readOnly:{type:Boolean,default:false}
     },
     created() {
       this.init();
@@ -41,109 +35,86 @@ export default {
 
     methods: {
       init() {
-        window.addEventListener('mousemove', this.move, false);
-        window.addEventListener('mouseup', this.up, false);
-      },
-      pressMove: function(evt) { 
-            this.logo.x += evt.deltaX;
-          this.logo.y += evt.deltaY;
-            console.log('onPressMove'); 
-        },
-         pinch: function(evt) { 
-          var s=1;
-          if(evt.scale>1){
-            s=1.0+(evt.scale-1)/10.00;
-          }else{
-            s=1.0-(1.0-evt.scale)/10.00;
-          }
-           this.logo.height= this.logo.height*s;
-           this.logo.width= this.logo.width*s;
-        },
 
-      borderStyle(cursor){
-        return  `stroke:transparent;stroke-width:20;cursor:${cursor}`
       },
-      borderStyle2(){
-        return  `stroke:#000000;stroke-width:0.4;stroke-dasharray:10;stroke-linejoin = round`
+      pressMove: function(evt) {
+        if(this.readOnly)
+          return
+        this.controlElement.x += evt.deltaX;
+        this.controlElement.y += evt.deltaY;
       },
-      up() {
-
-        console.log('-----up-----')
-        this.isMoving = false;
-        this.isResize = false;
-      },
-      down(event) {
-        console.log(event)
-        this.startPosition.x = parseInt(event.clientX);
-        this.startPosition.y = parseInt(event.clientY);
-        this.isMoving = true;
-      },
-      down2(event) {
-        this.startPosition.x = parseInt(event.clientX);
-        this.startPosition.y = parseInt(event.clientY);
-        this.isResize = true;        
-      },
-      move(event) {
-
-        var offSetX = event.clientX - this.startPosition.x;
-        var offSetY = event.clientY - this.startPosition.y;
-        this.startPosition.x = event.clientX;
-        this.startPosition.y = event.clientY;
-        if (this.isMoving && !this.isResize) {
-          this.logo.x += offSetX;
-          this.logo.y += offSetY;
+      pinch: function(evt) {
+        if(this.readOnly)
+          return
+        var el = this.controlElement;
+        var s = 1;
+        var offsetX = 0;
+        var offsetY = 0;
+        var z = 10.00;
+        if (evt.scale > 1) {
+          s = 1.0 + (evt.scale - 1) / z;
+          offsetX = 0 - (this.controlElement.width * (evt.scale - 1) / z) / 2.00;
+          offsetY = 0 - (this.controlElement.height * (evt.scale - 1) / z) / 2.00;
+        } else {
+          s = 1.0 - (1.0 - evt.scale) / z;
+          offsetX = (this.controlElement.width * (1.0 - evt.scale) / z) / 2.00;
+          offsetY = (this.controlElement.height * (1.0 - evt.scale) / z) / 2.00;
         }
-        if (this.isResize && !this.isMoving) {
-          this.logo.height += offSetY;
-          this.logo.width += offSetX
-        }
+        this.controlElement.height = this.controlElement.height * s;
+        this.controlElement.width = this.controlElement.width * s;
+        this.controlElement.x += offsetX;
+        this.controlElement.y += offsetY;
       },
-      getPosition(eid) {
-        var el = document.getElementById(eid);
-        if (!el) {
-          return { x: 0, y: 0 }
-        }
-        var xPos = (el.offsetLeft - el.scrollLeft + el.clientLeft);
-        var yPos = (el.offsetTop - el.scrollTop + el.clientTop);
-        return { x: xPos, y: yPos }
+      rotate:function(evt){
+        if(this.readOnly)
+          return
+          var a=this.controlElement.angle||0;
+          this.controlElement.angle=a+evt.angle;
+          console.log(evt.angle);
+          console.log('onRotate'); 
       }
+
     },
     computed: {
       viewBox() {
         return `0 0 ${this.width} ${this.height}`
       },
-      borderPath(){
-        var A={x:this.logo.x,y:this.logo.y};
-        var B={x:this.logo.x+this.logo.width,y:this.logo.y};
-        var C={x:this.logo.x+this.logo.width,y:this.logo.y+this.logo.height};
-        var D={x:this.logo.x,y:this.logo.y+this.logo.height};
-        var p= {
-          top:`M${A.x} ${A.y} L${B.x} ${B.y}`,
-          right:`M${B.x} ${B.y} L${C.x} ${C.y}`,
-          bottom:`M${C.x} ${C.y} L${D.x} ${D.y}`,
-          left:`M${D.x} ${D.y} L${A.x} ${A.y}`,
+      areaBoarderPath() {
+        var A = { x: this.logo.x, y: this.logo.y };
+        var B = { x: this.logo.x + this.logo.width, y: this.logo.y };
+        var C = { x: this.logo.x + this.logo.width, y: this.logo.y + this.logo.height };
+        var D = { x: this.logo.x, y: this.logo.y + this.logo.height };
+        var p = {
+          top: `M${A.x} ${A.y} L${B.x} ${B.y}`,
+          right: `M${B.x} ${B.y} L${C.x} ${C.y}`,
+          bottom: `M${C.x} ${C.y} L${D.x} ${D.y}`,
+          left: `M${D.x} ${D.y} L${A.x} ${A.y}`,
         }
-        return p
+        return `M${A.x} ${A.y} L${B.x} ${B.y} L${C.x} ${C.y} L${D.x} ${D.y} L${A.x} ${A.y}`
       },
-      logoCursor() {
-        var set = 10;
-        if (this.logoPosition.x + set > this.startPosition.x && this.logoPosition.x - set < this.startPosition.x && this.logoPosition.y < this.startPosition.y && this.logoPosition.y + this.logoHeight > this.startPosition.y) {
-          return "e-resize"
+      textTransform() {
+        var x = this.txtLogo.x || 100;
+        var y = this.txtLogo.y || 100;
+        var ag = this.txtLogo.angle || 0;
+        return `rotate(${ag})`;
+        // return `rotate(${x} ${y},${ag})`;
+      },
+      textStyle() {
+        var color = this.txtLogo.color || "#000000"
+        return `stroke:none; fill:${color};`
+      },
+      controlElement() {
+        if(this.controlElementId==1){
+          return this.logo;
+        }else{
+          return this.txtLogo;
         }
-        return this.isMouseOver ? "move" : "auto"
-      },
-      logoPosition() {
-        return this.getPosition('bnLogo');
       }
+    },
+    mounted() {
 
     },
-    mounted(){
-
-    }, 
-    destory() {
-      window.removeEventListener('mousemove', this.move)
-        window.removeEventListener('mouseup', this.up);
-    }
+    destory() {}
 }
 </script>
 <style scoped>
