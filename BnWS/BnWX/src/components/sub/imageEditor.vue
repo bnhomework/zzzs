@@ -4,7 +4,7 @@
     <path :d="areaBoarderPath" :style="borderStyle"></path>
     <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=undefined">
     </image>
-    <text :x="txtLogo.x" :y="txtLogo.y" :transform="textTransform" :style="textStyle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
+    <text :x="txtLogo.x" :y="txtLogo.y" :transform="textRotate" :style="textStyle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
   </svg>
 </template>
 <script>
@@ -16,7 +16,7 @@ export default {
         isMouseOver: false,
         startPosition: { x: 0, y: 0 },
         logo: { x: 100, y: 100, width: 200, height: 200 },
-        txtLogo: { x: 100, y: 100, angle: 0, color: '#000000' },
+        txtLogo: { x: 100, y: 100, angle: 0, color: '#000000',fontFamily:'Times New Roman' },
         borderStyle: '`stroke:#000000;stroke-width:0.4;stroke-dasharray:10;stroke-linejoin = round`'
       };
     },
@@ -92,16 +92,17 @@ export default {
         }
         return `M${A.x} ${A.y} L${B.x} ${B.y} L${C.x} ${C.y} L${D.x} ${D.y} L${A.x} ${A.y}`
       },
-      textTransform() {
+      textRotate() {
         var x = this.txtLogo.x || 100;
         var y = this.txtLogo.y || 100;
         var ag = this.txtLogo.angle || 0;
-        return `rotate(${ag})`;
+        return `rotate(${ag} ${x},${y})`;
         // return `rotate(${x} ${y},${ag})`;
       },
       textStyle() {
         var color = this.txtLogo.color || "#000000"
-        return `stroke:none; fill:${color};`
+        var fontFamily=this.txtLogo.fontFamily||"Times New Roman";
+        return `font-family: ${fontFamily}; stroke:none; fill:${color};`
       },
       controlElement() {
         if(this.controlElementId==1){
