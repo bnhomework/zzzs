@@ -4,23 +4,23 @@
       <checker-item :key="1" :value="1">男士</checker-item>
       <checker-item :key="2" :value="2">女士</checker-item>
     </checker>
-    <div>
-      <group title="颜色">
-        <cell primary="content">
-          <color-picker slot="value" :colors="colors" v-model="selectedColor" size="middle"></color-picker>
-        </cell>
-      </group>
+    <div style="padding:10px ;background-color:#d5d5d5;margin-top:10px">
+      <scroller lock-y scrollbar-x>
+        <div class="box">
+          <color-picker class="box-item" slot="value" :colors="colors" v-model="selectedColor" size="middle"></color-picker>
+        </div>
+      </scroller>
     </div>
-    <div style="margin-top:10px">
-      
-    <img :src="getImgSrc(template.frontImg)" style="width:100%">
+    <div style="margin-top:10px;margin-bottom:10px">
+      <img :src="getImgSrc(selectedTemplate.FrontImg)" style="width:100%">
     </div>
     <div class='tool'>
-      <x-button plain>开始设计</x-button>
+      <x-button plain @click.native="startDesgin" :disabled="selectedTemplate.FrontImg==null">开始设计</x-button>
     </div>
   </box>
 </template>
 <script>
+import _ from 'underscore'
 import {
   Scroller,
   XButton,
@@ -48,10 +48,9 @@ export default {
   data() {
     return {
       sex: 1,
-      selectedColor: '#fff',
-      colors: ['#fff', '#FF3B3B', '#FFEF7D', '#8AEEB1', '#8B8AEE', '#CC68F8'],
-      template:{tempalteId:'',frontImg:''}
-      
+      selectedColor: '#E2DDDB',
+      templates: []
+
     }
   },
   created() {
@@ -59,66 +58,54 @@ export default {
   },
   methods: {
     initData() {
-      //this.loadStyleList();
+      this.loadTemplates();
     },
-    loadStyleList() {
-      this.styleList.push({
-        front: 'tshirt/male/whitefront.png',
-        backend: 'tshirt/male/whiteback.png'
-      });
-      this.styleList.push({
-        front: 'tshirt/male/whiteback.png',
-        backend: 'tshirt/male/whitefront.png'
-      });
-    },
-    onItemClick(id) {
-      this.selectedTab = id;
-    },
-    openMyImages() {
+    loadTemplates() {
       var vm = this;
-      this.$wechat.chooseImage({
-        // count: 1, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-        success: function(res) {
-          if (res.localIds && res.localIds.length > 0) {
-            for (var i = 0; i < res.localIds.length; i++) {
-              var l = res.localIds[i]
-              vm.loadImageData(l)
-            }
+      var url = this.apiServer + 'zz/GetTemplates';
+      var data = {
+        condition: {
+          Category: 0
+        }
+      }
+      this.$http.post(url, data)
+        .then(res => {
+          vm.templates = res.data;
+          if (vm.colors.length > 0) {
+            vm.selectedColor = vm.colors[0];
           }
+        });
+    },
+    startDesgin() {
+      this.$router.push({
+        name: 'DesginStep2',
+        params: {
+          template: this.selectedTemplate
         }
       });
-    },
-    loadImageData(i) {
-      var vm = this;
-      //if not ios
-      // vm.mylogos.push(i)
-      //if ios
-      this.$wechat.getLocalImgData({
-        localId: i, // 图片的localID
-        success: function(res) {
-          vm.mylogos.push(res.localData); // localData是图片的base64数据，可以用img标签显示
-        }
-      });
-    },
-    setStyle(s) {
-      this.$set(this.desgin, 'style', s);
-    },
-    setLogo(l) {
-      if (this.isBackend) {
-        this.$set(this.desgin, 'backend', l);
-      }
-      else {
-        this.$set(this.desgin, 'front', l);
-      }
-    },
-    switchSide() {
-      this.isBackend = !this.isBackend;
     }
   },
   computed: {
-    
+    selectedTemplate() {
+      var vm = this;
+      var t = this.templates.filter(x => {
+        return x.Sex == vm.sex && x.Color == vm.selectedColor
+      });
+      if (t.length > 0) {
+        return t[0];
+      }
+      else {
+        return {};
+      }
+    },
+    colors() {
+      var vm = this;
+      var t = this.templates.filter(x => {
+        return x.Sex == vm.sex
+      });
+      var clist = _.pluck(t, 'Color').sort();
+      return _.uniq(clist);
+    }
 
   }
 }
@@ -144,5 +131,9 @@ export default {
 
 .demo5-item-selected {
   border-color: #ff4a00;
+}
+
+.vux-color-checked.weui-icon-success-no-circle:before {
+  color: #d5d5d5
 }
 </style>

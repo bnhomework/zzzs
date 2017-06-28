@@ -1,9 +1,10 @@
 <template>
   <div>
+    <div style="min-height:46px"></div>
     <div style="width:100%;">
-      <div @click="switchSide" class="switch" >{{isbackend?'前':'后'}}</div>
-      <image-editor v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
-      <image-editor v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
+      <div @click="switchSide" class="switch">{{isbackend?'前':'后'}}</div>
+      <image-editor ref="front" v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
+      <image-editor ref="back" v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
     </div>
     <div class="tool">
       <div v-show="selectedTab==0">
@@ -17,14 +18,22 @@
         </scroller>
       </div>
       <div v-show="selectedTab==10">
-        <x-input v-model="desgin.frontTxt" v-show="!isbackend" ></x-input>
-        <x-input v-model="desgin.backTxt" v-show="isbackend" ></x-input>
+        <group title="">
+          <x-input title="输入文本" v-model="desgin.frontTxt" v-show="!isbackend"></x-input>
+          <x-input title="输入文本" v-model="desgin.backTxt" v-show="isbackend"></x-input>
+        </group>
         <scroller lock-y scrollbar-x>
           <div class="box">
-            <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
-            <!-- <span>{{' ' + s + ' '}}</span> -->
-              <img :src="getImgSrc(s.front)">
+            <div class="vux-color-picker box-color">
+              <div class="vux-flexbox vux-flex-row">
+                <div class="vux-flexbox-item vux-color-box" style="min-width:10px" v-for="c in colors" ><span class="vux-color-item" style=" width: 10px;height:46px" :style="{'background-color':c}" @click="setTextColor(c)"></span></div>
+              </div>
             </div>
+          </div>
+        </scroller>
+        <scroller lock-y scrollbar-x>
+          <div class="box">
+           <div class="box-color" style="min-width:50px;height:46px;width:100px" :style="{'background-color':'#d5d5d5','font-family':f}" v-for="f in fonts" @click="setFonts(f)">创意T恤</div>
           </div>
         </scroller>
       </div>
@@ -32,7 +41,7 @@
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
-            <!-- <span>{{' ' + s + ' '}}</span> -->
+              <!-- <span>{{' ' + s + ' '}}</span> -->
               <img :src="getImgSrc(s.front)">
             </div>
           </div>
@@ -42,7 +51,7 @@
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
-            <!-- <span>{{' ' + s + ' '}}</span> -->
+              <!-- <span>{{' ' + s + ' '}}</span> -->
               <img :src="getImgSrc(s.front)">
             </div>
           </div>
@@ -59,7 +68,20 @@
   </div>
 </template>
 <script>
-import { Scroller, Divider, Spinner, XButton, Group, Cell, LoadMore, Tab, TabItem ,XInput} from 'vux'
+import {
+  Scroller,
+  Divider,
+  Spinner,
+  XButton,
+  Group,
+  Cell,
+  LoadMore,
+  Tab,
+  TabItem,
+  ColorPicker,
+  XInput
+}
+from 'vux'
 import utils from '@/mixins/utils'
 import imageEditor from '@/components/sub/imageEditor.vue'
 export default {
@@ -74,110 +96,153 @@ export default {
     Cell,
     LoadMore,
     Tab,
-    TabItem,XInput
+    TabItem,
+    XInput,
+    ColorPicker,
   },
   data() {
     return {
+      template: {},
+      colors: [],
+      fonts:[],
       mylogos: [],
-      styleList:[],
-      desgin:{front:'',back:'',frontTxt:'',backTxt:'',style:''},
-      defaultStyle:{front:'tshirt/male/whitefront.png',back:'tshirt/male/whiteback.png'},
-      defaultlogo:'',//todo create a blank image
+      styleList: [],
+      desgin: {
+        front: '',
+        back: '',
+        frontTxt: '',
+        backTxt: ''
+      },
+      defaultStyle: {
+        front: 'tshirt/male/whitefront.png',
+        back: 'tshirt/male/whiteback.png'
+      },
+      defaultlogo: '', //require('@/assets/img/blank.png'), //todo create a blank image
       selectedTab: 0,
-      isbackend:false
+      isbackend: false
     }
   },
   created() {
+    this.template = this.$route.params.template;
     this.initData()
   },
   methods: {
-    initData(){
-      this.loadStyleList();
+    initData() {
+      this.initColors();
+      this.initFonts();
     },
-    loadStyleList(){
-      this.styleList.push({front:'tshirt/male/whitefront.png',back:'tshirt/male/whiteback.png'});
-      this.styleList.push({front:'tshirt/male/whiteback.png',back:'tshirt/male/whitefront.png'});
+    initColors() {
+      var n = 0;
+      // var hex = new Array('FF', 'CC', '99', '66', '33', '00');
+      var hex = new Array('00', '33' , '66','99', 'CC','FF');
+      this.colors=[];
+      for (var i = 0; i < 6; i++) {
+          for (var j = 0; j < 6; j++) {
+            for (var k = 0; k < 6; k++) {
+              n++;
+              var color = '#'+hex[j] + hex[k] + hex[i];
+              this.colors.push(color);
+            }
+          }
+        }
+    },
+    setTextColor(c){
+      if(!this.isbackend){
+        this.$refs.front.txtLogo.color=c;
+      }else{
+        this.$refs.back.txtLogo.color=c;
+      }
+    },
+    initFonts(){
+      this.fonts=["Times New Roman","aaa","Times New Roman","Times New Roman","Times New Roman","Times New Roman","Times New Roman"];
+
+    },
+    setFonts(f){
+      if(!this.isbackend){
+        this.$refs.front.txtLogo.fontFamily=f;
+      }else{
+        this.$refs.back.txtLogo.fontFamily=f;
+      }
     },
     onItemClick(id) {
       this.selectedTab = id;
     },
     openMyImages() {
-      var vm=this;
+      var vm = this;
       this.$wechat.chooseImage({
         // count: 1, // 默认9
         sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function(res) {
-          if(res.localIds&&res.localIds.length>0){
+          if (res.localIds && res.localIds.length > 0) {
             for (var i = 0; i < res.localIds.length; i++) {
-              var l=res.localIds[i]
+              var l = res.localIds[i]
               vm.loadImageData(l)
             }
           }
         }
       });
     },
-    loadImageData(i){
-      var vm=this;
+    loadImageData(i) {
+      var vm = this;
       //if not ios
       // vm.mylogos.push(i)
       //if ios
       this.$wechat.getLocalImgData({
-             localId: i, // 图片的localID
-             success: function (res) {
-                vm.mylogos.push(res.localData); // localData是图片的base64数据，可以用img标签显示
-             }
-         });
+        localId: i, // 图片的localID
+        success: function(res) {
+          vm.mylogos.push(res.localData); // localData是图片的base64数据，可以用img标签显示
+        }
+      });
     },
-    setStyle(s){
-      this.$set(this.desgin,'style',s);
-    },
-    setLogo(l){
-      if(this.isbackend){
-        this.$set(this.desgin,'back',l);
-      }else{
-        this.$set(this.desgin,'front',l);        
+    setLogo(l) {
+      if (this.isbackend) {
+        this.$set(this.desgin, 'back', l);
+      }
+      else {
+        this.$set(this.desgin, 'front', l);
       }
     },
-    switchSide(){
-      this.isbackend=!this.isbackend;
+    switchSide() {
+      this.isbackend = !this.isbackend;
     }
   },
-  computed:{
-    bgImg_f(){
-      if(this.desgin.style){
-        return this.desgin.style.front;
+  computed: {
+    bgImg_f() {
+      if (this.template) {
+        return this.template.FrontImg;
       }
-      return this.defaultStyle.front;
+      return this.template.FrontImg;
     },
-    bgImg_b(){
-      if(this.desgin.style){
-        return this.desgin.style.back;
+    bgImg_b() {
+      if (this.template) {
+        return this.template.BackImg;
       }
-      return this.defaultStyle.back;
+      return this.template.BackImg;
     },
-    logo_f(){
-      if(this.desgin.front){
+    logo_f() {
+      if (this.desgin.front) {
         return this.desgin.front;
       }
       return this.defaultlogo;
     },
-    logo_b(){
-      if(this.desgin.back){
+    logo_b() {
+      if (this.desgin.back) {
         return this.desgin.back;
       }
       return this.defaultlogo;
     },
-    currentSelectedLogo(){
-      if(this.isbackend)
+    currentSelectedLogo() {
+      if (this.isbackend)
         return this.desgin.back;
       else
         return this.desgin.front;
     },
-    currentSelectedStyle(){
+    currentSelectedStyle() {
       return this.desgin.style;
-    },controlElementId(){
-      return this.selectedTab==10?2:1;
+    },
+    controlElementId() {
+      return this.selectedTab == 10 ? 2 : 1;
     }
 
 
@@ -188,11 +253,10 @@ export default {
 .tool {
   position: fixed;
   width: 100%;
-  bottom: 50px
+  bottom: 0px
 }
 
 .box {
-  height: 100px;
   position: relative;
   width: 1490px;
 }
@@ -207,29 +271,42 @@ export default {
   text-align: center;
   line-height: 100px;
 }
-.box-item.selected{
+
+.box-color {
+  height: 46px;
+  display: inline-block;
+  margin-left: 1px;
+  float: left;
+  text-align: center;
+  line-height: 46px;
+}
+
+.box-item.selected {
   background-color: #e6e6e6;
   border: solid 1px #5d5d5d;
 }
-.box-item img{
 
+.box-item img {
   width: 100px;
   height: 100px;
 }
-.box-item:first-child {
+
+.box-item:first-child ,.box-color:first-child {
   margin-left: 0;
 }
-.switch{
-position: fixed;
-right: 0px;
-margin:10px;
-padding: 10px; 
-font-size: 20px;
-line-height: 20px;
-border-radius: 30px;
-border: solid 1px #5d5d5d
+
+.switch {
+  position: fixed;
+  right: 0px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  border-radius: 30px;
+  border: solid 1px #5d5d5d
 }
-.switch:hover{
-border: solid 1px #1d1d1d
+
+.switch:hover {
+  border: solid 1px #1d1d1d
 }
 </style>
