@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div style="min-height:46px"></div>
+    <div style="min-height:26px"></div>
     <div style="width:100%;">
       <div @click="switchSide" class="switch">{{isbackend?'前':'后'}}</div>
-      <image-editor ref="front" v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
-      <image-editor ref="back" v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
+      <image-editor ref="front" v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="logo_f==undefined||logo_f==''?'':getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
+      <image-editor ref="back" v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="logo_b==undefined||logo_f==''?'':getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
     </div>
     <div class="tool">
       <div v-show="selectedTab==0">
         <scroller lock-y scrollbar-x>
           <div class="box">
-            <div class="box-item" @click="openMyImages"><span style="font-size: 70px;font-weight: bold;vertical-align: middle;color: #5d5d5d">+</span></div>
+            <div class="box-item" @click="openMyImages"><span style="font-size: 70px;font-weight: bold;vertical-align: middle;color: #5d5d5d;font-family:bn-icon">&#xe622;</span></div>
             <div class="box-item" :class="{selected:logo==currentSelectedLogo}" v-for="logo in mylogos" @click="setLogo(logo)">
               <img :src="getImgSrc(logo)">
             </div>
@@ -18,30 +18,29 @@
         </scroller>
       </div>
       <div v-show="selectedTab==10">
-        <group title="">
-          <x-input title="输入文本" v-model="desgin.frontTxt" v-show="!isbackend"></x-input>
-          <x-input title="输入文本" v-model="desgin.backTxt" v-show="isbackend"></x-input>
+        <group>
+          <x-input placeholder="正面写点什么呢..." v-model="desgin.frontTxt" v-show="!isbackend"></x-input>
+          <x-input placeholder="背面写点什么呢..."  v-model="desgin.backTxt" v-show="isbackend"></x-input>
         </group>
         <scroller lock-y scrollbar-x>
-          <div class="box">
-            <div class="vux-color-picker box-color">
-              <div class="vux-flexbox vux-flex-row">
-                <div class="vux-flexbox-item vux-color-box" style="min-width:10px" v-for="c in colors" ><span class="vux-color-item" style=" width: 10px;height:46px" :style="{'background-color':c}" @click="setTextColor(c)"></span></div>
-              </div>
+          <div class="box" style="width:2500px">
+            <div class="box-item box-item-color" v-for="c in colors">
+              <div style="width:10px;height:50px" :style="{'background-color':c}" @click="setTextColor(c)"></div>
             </div>
           </div>
         </scroller>
         <scroller lock-y scrollbar-x>
           <div class="box">
-           <div class="box-color" style="min-width:50px;height:46px;width:100px" :style="{'background-color':'#d5d5d5','font-family':f}" v-for="f in fonts" @click="setFonts(f)">创意T恤</div>
+            <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5','font-family':f}" v-for="f in fonts" @click="setFonts(f)">
+              <div style="width:100px;height:46px">创意T恤</div>
+            </div>
           </div>
         </scroller>
       </div>
       <div v-show="selectedTab==20">
-        <scroller lock-y scrollbar-x>
+        <scroller lock-y scrollbar-x >
           <div class="box">
-            <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
-              <!-- <span>{{' ' + s + ' '}}</span> -->
+            <div class="box-item"  v-for="s in styleList" @click="setStyle(s)">
               <img :src="getImgSrc(s.front)">
             </div>
           </div>
@@ -50,8 +49,7 @@
       <div v-show="selectedTab==30">
         <scroller lock-y scrollbar-x>
           <div class="box">
-            <div class="box-item" :class="{selected:s==currentSelectedStyle}" v-for="s in styleList" @click="setStyle(s)">
-              <!-- <span>{{' ' + s + ' '}}</span> -->
+            <div class="box-item"  v-for="s in styleList" @click="setStyle(s)">
               <img :src="getImgSrc(s.front)">
             </div>
           </div>
@@ -61,8 +59,6 @@
         <tab-item :selected="selectedTab==0" @on-item-click="onItemClick(0)"><span class="bn-icon">&#xe73f;</span> 图片</tab-item>
         <tab-item :selected="selectedTab==10" @on-item-click="onItemClick(10)"><span class="bn-icon">&#xe627;</span> 文字</tab-item>
         <tab-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span class="bn-icon">&#xe608;</span> 模板</tab-item>
-        <!-- <tab-item :selected="selectedTab==30" @on-item-click="onItemClick(30)"><span class="bn-icon">&#xe664;</span> 款式</tab-item> -->
-        <!-- <tab-item @on-item-click="onItemClick">xxx</tab-item> -->
       </tab>
     </div>
   </div>
@@ -104,7 +100,7 @@ export default {
     return {
       template: {},
       colors: [],
-      fonts:[],
+      fonts: [],
       mylogos: [],
       styleList: [],
       desgin: {
@@ -117,7 +113,7 @@ export default {
         front: 'tshirt/male/whitefront.png',
         back: 'tshirt/male/whiteback.png'
       },
-      defaultlogo: '', //require('@/assets/img/blank.png'), //todo create a blank image
+      defaultlogo: '',//require('@/assets/img/blank.svg'), //todo create a blank image
       selectedTab: 0,
       isbackend: false
     }
@@ -134,34 +130,36 @@ export default {
     initColors() {
       var n = 0;
       // var hex = new Array('FF', 'CC', '99', '66', '33', '00');
-      var hex = new Array('00', '33' , '66','99', 'CC','FF');
-      this.colors=[];
+      var hex = new Array('00', '33', '66', '99', 'CC', 'FF');
+      this.colors = [];
       for (var i = 0; i < 6; i++) {
-          for (var j = 0; j < 6; j++) {
-            for (var k = 0; k < 6; k++) {
-              n++;
-              var color = '#'+hex[j] + hex[k] + hex[i];
-              this.colors.push(color);
-            }
+        for (var j = 0; j < 6; j++) {
+          for (var k = 0; k < 6; k++) {
+            n++;
+            var color = '#' + hex[j] + hex[k] + hex[i];
+            this.colors.push(color);
           }
         }
-    },
-    setTextColor(c){
-      if(!this.isbackend){
-        this.$refs.front.txtLogo.color=c;
-      }else{
-        this.$refs.back.txtLogo.color=c;
       }
     },
-    initFonts(){
-      this.fonts=["Times New Roman","aaa","Times New Roman","Times New Roman","Times New Roman","Times New Roman","Times New Roman"];
+    setTextColor(c) {
+      if (!this.isbackend) {
+        this.$refs.front.txtLogo.color = c;
+      }
+      else {
+        this.$refs.back.txtLogo.color = c;
+      }
+    },
+    initFonts() {
+      this.fonts = ["Times New Roman", "aaa", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman"];
 
     },
-    setFonts(f){
-      if(!this.isbackend){
-        this.$refs.front.txtLogo.fontFamily=f;
-      }else{
-        this.$refs.back.txtLogo.fontFamily=f;
+    setFonts(f) {
+      if (!this.isbackend) {
+        this.$refs.front.txtLogo.fontFamily = f;
+      }
+      else {
+        this.$refs.back.txtLogo.fontFamily = f;
       }
     },
     onItemClick(id) {
@@ -209,37 +207,26 @@ export default {
   },
   computed: {
     bgImg_f() {
-      if (this.template) {
-        return this.template.FrontImg;
-      }
+      
       return this.template.FrontImg;
     },
     bgImg_b() {
-      if (this.template) {
-        return this.template.BackImg;
-      }
+      
       return this.template.BackImg;
     },
     logo_f() {
-      if (this.desgin.front) {
+      
         return this.desgin.front;
-      }
-      return this.defaultlogo;
     },
     logo_b() {
-      if (this.desgin.back) {
+      
         return this.desgin.back;
-      }
-      return this.defaultlogo;
     },
     currentSelectedLogo() {
       if (this.isbackend)
         return this.desgin.back;
       else
         return this.desgin.front;
-    },
-    currentSelectedStyle() {
-      return this.desgin.style;
     },
     controlElementId() {
       return this.selectedTab == 10 ? 2 : 1;
@@ -272,15 +259,6 @@ export default {
   line-height: 100px;
 }
 
-.box-color {
-  height: 46px;
-  display: inline-block;
-  margin-left: 1px;
-  float: left;
-  text-align: center;
-  line-height: 46px;
-}
-
 .box-item.selected {
   background-color: #e6e6e6;
   border: solid 1px #5d5d5d;
@@ -291,8 +269,23 @@ export default {
   height: 100px;
 }
 
-.box-item:first-child ,.box-color:first-child {
+.box-item:first-child {
   margin-left: 0;
+}
+
+.box-item-color {
+  min-width: 10px;
+  width: 10px;
+  height: 50px;
+  margin-left: 0px;
+  line-height: 50px;
+}
+.box-item-font {
+  min-width: 10px;
+  width: 10px;
+  height: 46px;
+  margin-left: 2px;
+  line-height: 46px;
 }
 
 .switch {

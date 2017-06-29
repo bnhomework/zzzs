@@ -442,6 +442,7 @@
     <Content Include="Views\Shop\Refund.cshtml" />
     <None Include="Properties\PublishProfiles\prod.pubxml" />
     <Content Include="Views\Plateform\Index.cshtml" />
+    <None Include="Properties\PublishProfiles\test.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bn.WeiXin.Handlers\Bn.WeiXin.Handlers.csproj">
