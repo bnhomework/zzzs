@@ -1,10 +1,10 @@
 <template>
   <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch" v-finger:press-move="pressMove" v-finger:rotate="rotate">
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
-    <path :d="areaBoarderPath" :style="borderStyle" v-show="logoImg!=''"></path>
-    <image id='bnLogo' :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
+    <!-- <path :d="areaBoarderPath" :style="borderStyle" v-show="logoImg!=''"></path> -->
+    <image id='bnLogo' @click="onlogoclick" :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
     </image>
-    <text :x="txtLogo.x" :y="txtLogo.y" :transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
+    <text :x="txtLogo.x" @click="onlogotextclick" :font-size="txtLogo.fontSize"  :y="txtLogo.y" :transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
   </svg>
 </template>
 <script>
@@ -15,7 +15,7 @@ export default {
         isResize: false,
         isMouseOver: false,
         startPosition: {
-          x: 0,
+          x: 0, 
           y: 0
         },
         logo: {
@@ -29,7 +29,8 @@ export default {
           y: 200,
           angle: 0,
           color: '#000000',
-          fontFamily: 'Times New Roman'
+          fontFamily: 'Times New Roman',
+          fontSize:20
         },
         borderStyle: 'stroke:#000000;stroke-width:0.4;stroke-dasharray:10;stroke-linejoin = round;fill:none'
       };
@@ -112,7 +113,20 @@ export default {
 
         }
         else {
-
+          var z = 10.00;
+          var s = 1;
+          if (evt.scale > 1) {
+            s = 1.0 + (evt.scale - 1) / z;
+          }else{
+            s = 1.0 - (1.0 - evt.scale) / z;
+          }
+          if(s<1.005&&s>0.995){
+            return
+          }
+          var tmp=this.txtLogo.fontSize*s;
+          if(tmp>200||tmp<5)
+            return
+          this.txtLogo.fontSize=tmp;
         }
       },
       rotate: function(evt) {
@@ -120,9 +134,20 @@ export default {
           return
         if (this.controlElement == this.logo) {}
         else {
+          if(evt.angle<0.2&&evt.angle>-0.2)
+            return
           var a = this.controlElement.angle || 0;
           this.controlElement.angle = a + evt.angle;
         }
+      },
+      onlogotextclick(){
+        this.$emit('onlogotextclick');
+      },
+      onlogoclick(){
+        this.$emit('onlogoclick');
+      },
+      getSettings(){
+        return{logo:this.logoImg,logoText:this.logoText};
       }
 
     },
@@ -159,14 +184,13 @@ export default {
         var x = this.txtLogo.x || 100;
         var y = this.txtLogo.y || 100;
         var ag = this.txtLogo.angle || 0;
-        // return `rotate(${ag})`;
         return `rotate(${ag},${x} ${y})`;
-        // return `rotate(${x} ${y},${ag})`;
       },
       textStyle() {
         var color = this.txtLogo.color || "#000000"
         var fontFamily = this.txtLogo.fontFamily || "Times New Roman";
-        return `font-family: ${fontFamily}; stroke:none; fill:${color};`
+        var fontSize=this.txtLogo.fontSize||20;
+        return `font-family: ${fontFamily};stroke:none; fill:${color};`
       },
       controlElement() {
         if (this.controlElementId == 1) {

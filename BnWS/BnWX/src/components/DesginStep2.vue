@@ -3,11 +3,11 @@
     <div style="min-height:26px"></div>
     <div style="width:100%;">
       <div @click="switchSide" class="switch">{{isbackend?'前':'后'}}</div>
-      <image-editor ref="front" v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="logo_f==undefined||logo_f==''?'':getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
-      <image-editor ref="back" v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="logo_b==undefined||logo_f==''?'':getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
+      <image-editor ref="front" @logoclick="onItemClick(0)" @logotextclick="onItemClick(10)" v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="logo_f==undefined||logo_f==''?'':getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
+      <image-editor ref="back" @logoclick="onItemClick(0)" @logotextclick="onItemClick(10)" v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="logo_b==undefined||logo_b==''?'':getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
     </div>
     <div class="tool">
-      <div v-show="selectedTab==0">
+      <div class="tool-item" v-show="selectedTab==0">
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item" @click="openMyImages"><span style="font-size: 70px;font-weight: bold;vertical-align: middle;color: #5d5d5d;font-family:bn-icon">&#xe622;</span></div>
@@ -17,10 +17,10 @@
           </div>
         </scroller>
       </div>
-      <div v-show="selectedTab==10">
+      <div class="tool-item" v-if="selectedTab==10">
         <group>
           <x-input placeholder="正面写点什么呢..." v-model="desgin.frontTxt" v-show="!isbackend"></x-input>
-          <x-input placeholder="背面写点什么呢..."  v-model="desgin.backTxt" v-show="isbackend"></x-input>
+          <x-input placeholder="背面写点什么呢..." v-model="desgin.backTxt" v-show="isbackend"></x-input>
         </group>
         <scroller lock-y scrollbar-x>
           <div class="box" style="width:2500px">
@@ -37,30 +37,40 @@
           </div>
         </scroller>
       </div>
-      <div v-show="selectedTab==20">
-        <scroller lock-y scrollbar-x >
-          <div class="box">
-            <div class="box-item"  v-for="s in styleList" @click="setStyle(s)">
-              <img :src="getImgSrc(s.front)">
-            </div>
-          </div>
-        </scroller>
-      </div>
-      <div v-show="selectedTab==30">
+      <div class="tool-item" v-show="selectedTab==20">
         <scroller lock-y scrollbar-x>
           <div class="box">
-            <div class="box-item"  v-for="s in styleList" @click="setStyle(s)">
+            <div class="box-item" v-for="s in styleList" @click="setStyle(s)">
               <img :src="getImgSrc(s.front)">
             </div>
           </div>
         </scroller>
       </div>
-      <tab>
+      <div class="tool-item" v-show="selectedTab==30">
+        <scroller lock-y scrollbar-x>
+          <div class="box">
+            <div class="box-item" v-for="s in styleList" @click="setStyle(s)">
+              <img :src="getImgSrc(s.front)">
+            </div>
+          </div>
+        </scroller>
+      </div>
+      <!-- <tab>
         <tab-item :selected="selectedTab==0" @on-item-click="onItemClick(0)"><span class="bn-icon">&#xe73f;</span> 图片</tab-item>
         <tab-item :selected="selectedTab==10" @on-item-click="onItemClick(10)"><span class="bn-icon">&#xe627;</span> 文字</tab-item>
         <tab-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span class="bn-icon">&#xe608;</span> 模板</tab-item>
-      </tab>
+      </tab> -->
     </div>
+    <tabbar class="zy-tabbar" icon-class="vux-center" slot="bottom">
+      <tabbar-item :selected="selectedTab==0" @on-item-click="onItemClick(0)"><span slot="label"> <span  class="bn-icon">&#xe73f;</span> 图片</span>
+      </tabbar-item>
+      <tabbar-item :selected="selectedTab==10" @on-item-click="onItemClick(10)"><span slot="label"> <span  class="bn-icon">&#xe627;</span> 文字</span>
+      </tabbar-item>
+      <tabbar-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span slot="label"> <span  class="bn-icon">&#xe608;</span> 模板</span>
+      </tabbar-item>
+      <tabbar-item :selected="selectedTab==20" @on-item-click="saveDesign"><span slot="label"> <span  class="bn-icon">&#xe601;</span> 完成</span>
+      </tabbar-item>
+    </tabbar>
   </div>
 </template>
 <script>
@@ -72,6 +82,8 @@ import {
   Group,
   Cell,
   LoadMore,
+  Tabbar,
+  TabbarItem,
   Tab,
   TabItem,
   ColorPicker,
@@ -93,6 +105,8 @@ export default {
     LoadMore,
     Tab,
     TabItem,
+    Tabbar,
+    TabbarItem,
     XInput,
     ColorPicker,
   },
@@ -105,15 +119,11 @@ export default {
       styleList: [],
       desgin: {
         front: '',
-        back: '',
         frontTxt: '',
+        back: '',
         backTxt: ''
       },
-      defaultStyle: {
-        front: 'tshirt/male/whitefront.png',
-        back: 'tshirt/male/whiteback.png'
-      },
-      defaultlogo: '',//require('@/assets/img/blank.svg'), //todo create a blank image
+      defaultlogo: '',
       selectedTab: 0,
       isbackend: false
     }
@@ -145,20 +155,24 @@ export default {
     setTextColor(c) {
       if (!this.isbackend) {
         this.$refs.front.txtLogo.color = c;
-      }
-      else {
+      } else {
         this.$refs.back.txtLogo.color = c;
       }
     },
     initFonts() {
       this.fonts = ["Times New Roman", "aaa", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman"];
-
+    },
+    saveDesign(){
+      this.desgin.frontSetting=this.$refs.front.getSettings();
+      this.desgin.backSetting=this.$refs.back.getSettings();
+      this.desgin.template=this.template;
+      //todo save image to server
+      
     },
     setFonts(f) {
       if (!this.isbackend) {
         this.$refs.front.txtLogo.fontFamily = f;
-      }
-      else {
+      } else {
         this.$refs.back.txtLogo.fontFamily = f;
       }
     },
@@ -196,8 +210,7 @@ export default {
     setLogo(l) {
       if (this.isbackend) {
         this.$set(this.desgin, 'back', l);
-      }
-      else {
+      } else {
         this.$set(this.desgin, 'front', l);
       }
     },
@@ -207,20 +220,20 @@ export default {
   },
   computed: {
     bgImg_f() {
-      
+
       return this.template.FrontImg;
     },
     bgImg_b() {
-      
+
       return this.template.BackImg;
     },
     logo_f() {
-      
-        return this.desgin.front;
+
+      return this.desgin.front;
     },
     logo_b() {
-      
-        return this.desgin.back;
+
+      return this.desgin.back;
     },
     currentSelectedLogo() {
       if (this.isbackend)
@@ -240,7 +253,7 @@ export default {
 .tool {
   position: fixed;
   width: 100%;
-  bottom: 0px
+  bottom: 47px
 }
 
 .box {
@@ -280,6 +293,7 @@ export default {
   margin-left: 0px;
   line-height: 50px;
 }
+
 .box-item-font {
   min-width: 10px;
   width: 10px;

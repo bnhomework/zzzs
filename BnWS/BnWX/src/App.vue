@@ -205,11 +205,11 @@ html, body {
 
 @font-face {
   font-family: 'bn-icon';  /* project id 338215 */
-  src: url('//at.alicdn.com/t/font_d9236lcycsvvaemi.eot');
-  src: url('//at.alicdn.com/t/font_d9236lcycsvvaemi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_d9236lcycsvvaemi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_d9236lcycsvvaemi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_d9236lcycsvvaemi.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.eot');
+  src: url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.svg#iconfont') format('svg');
 }
 
 .demo-icon {
