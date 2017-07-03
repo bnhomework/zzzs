@@ -1,10 +1,17 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch" v-finger:press-move="pressMove" v-finger:rotate="rotate">
+  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch" v-finger:press-move="pressMove" v-finger:rotate="rotate"
+  v-finger:touch-start="touchStart" v-finger:touch-end="touchEnd">
+    <defs>
+      <clipPath id="areaPath">
+        <path :d="areaBoarderPath" />
+      </clipPath>
+    </defs>
+
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
-    <!-- <path :d="areaBoarderPath" :style="borderStyle" v-show="logoImg!=''"></path> -->
-    <image id='bnLogo' @click="onlogoclick" :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
+    <image :clip-path="printArea" id='bnLogo' @click="onlogoclick" :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
     </image>
-    <text :x="txtLogo.x" @click="onlogotextclick" :font-size="txtLogo.fontSize"  :y="txtLogo.y" :transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
+    <text :clip-path="printArea" :x="txtLogo.x" @click="onlogotextclick" :font-size="txtLogo.fontSize"  :y="txtLogo.y" :transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
+    <path :d="areaBoarderPath" :style="borderStyle" v-show="showPrintArea&&!readOnly"></path>
   </svg>
 </template>
 <script>
@@ -32,7 +39,8 @@ export default {
           fontFamily: 'Times New Roman',
           fontSize:20
         },
-        borderStyle: 'stroke:#000000;stroke-width:0.4;stroke-dasharray:10;stroke-linejoin = round;fill:none'
+        borderStyle: 'stroke:#d3d3d3;stroke-width:2;stroke-dasharray:10;stroke-linejoin = round;fill:none',
+        showPrintArea:false
       };
     },
     props: {
@@ -43,6 +51,10 @@ export default {
       height: {
         type: Number,
         default: 400
+      },
+      areaBoarderPath:{
+        type:String,
+        default:'M 100 100 L300 100 L300 300 L100 300 Z'
       },
       bgImg: {
         type: String
@@ -69,6 +81,12 @@ export default {
     methods: {
       init() {
 
+      },
+      touchStart(){
+        this.showPrintArea=true;
+      },
+      touchEnd(){
+        this.showPrintArea=false;
       },
       pressMove: function(evt) {
         if (this.readOnly)
@@ -155,31 +173,38 @@ export default {
       viewBox() {
         return `0 0 ${this.width} ${this.height}`
       },
-      areaBoarderPath() {
-        var A = {
-          x: this.logo.x,
-          y: this.logo.y
-        };
-        var B = {
-          x: this.logo.x + this.logo.width,
-          y: this.logo.y
-        };
-        var C = {
-          x: this.logo.x + this.logo.width,
-          y: this.logo.y + this.logo.height
-        };
-        var D = {
-          x: this.logo.x,
-          y: this.logo.y + this.logo.height
-        };
-        var p = {
-          top: `M${A.x} ${A.y} L${B.x} ${B.y}`,
-          right: `M${B.x} ${B.y} L${C.x} ${C.y}`,
-          bottom: `M${C.x} ${C.y} L${D.x} ${D.y}`,
-          left: `M${D.x} ${D.y} L${A.x} ${A.y}`,
+      printArea(){
+        if(this.readOnly||!this.showPrintArea){
+          return "url(#areaPath)"
+        }else{
+          return ""
         }
-        return `M${A.x} ${A.y} L${B.x} ${B.y} L${C.x} ${C.y} L${D.x} ${D.y} L${A.x} ${A.y}`
       },
+      // areaBoarderPath() {
+      //   var A = {
+      //     x: this.logo.x,
+      //     y: this.logo.y
+      //   };
+      //   var B = {
+      //     x: this.logo.x + this.logo.width,
+      //     y: this.logo.y
+      //   };
+      //   var C = {
+      //     x: this.logo.x + this.logo.width,
+      //     y: this.logo.y + this.logo.height
+      //   };
+      //   var D = {
+      //     x: this.logo.x,
+      //     y: this.logo.y + this.logo.height
+      //   };
+      //   var p = {
+      //     top: `M${A.x} ${A.y} L${B.x} ${B.y}`,
+      //     right: `M${B.x} ${B.y} L${C.x} ${C.y}`,
+      //     bottom: `M${C.x} ${C.y} L${D.x} ${D.y}`,
+      //     left: `M${D.x} ${D.y} L${A.x} ${A.y}`,
+      //   }
+      //   return `M${A.x} ${A.y} L${B.x} ${B.y} L${C.x} ${C.y} L${D.x} ${D.y} L${A.x} ${A.y}`
+      // },
       textRotate() {
         var x = this.txtLogo.x || 100;
         var y = this.txtLogo.y || 100;
