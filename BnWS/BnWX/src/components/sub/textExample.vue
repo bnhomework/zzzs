@@ -5,22 +5,17 @@
       <clipPath id="areaPath">
         <path :d="areaBoarderPath" />
       </clipPath>
-      <filter1></filter1>
     </defs>
 
     <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
     <image :clip-path="printArea" id='bnLogo' @click="onlogoclick" :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
     </image>
-    <!-- <g filter="url(#filter1)"> -->
-    <text  :clip-path="printArea" :x="txtLogo.x"  :y="txtLogo.y"  @click="onlogotextclick" :font-size="txtLogo.fontSize":transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
-    <!-- </g> -->
+    <text :clip-path="printArea" :x="txtLogo.x" @click="onlogotextclick" :font-size="txtLogo.fontSize"  :y="txtLogo.y" :transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
     <path :d="areaBoarderPath" :style="borderStyle" v-show="showPrintArea&&!readOnly"></path>
   </svg>
 </template>
 <script>
-import filter1 from "@/components/sub/filters/filter1.vue"
 export default {
-  components:{filter1},
   data() {
       return {
         isMoving: false,

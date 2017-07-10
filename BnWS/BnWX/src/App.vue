@@ -228,7 +228,7 @@ html, body {
 
 .router-view {
   width: 100%;
-  top: 46px;
+  /**top: 46px;**/
 }
 .vux-pop-out-enter-active,
 .vux-pop-out-leave-active,
@@ -237,7 +237,7 @@ html, body {
   will-change: transform;
   transition: all 500ms;
   height: 100%;
-  top: 46px;
+  /**top: 46px;**/
   position: absolute;
   backface-visibility: hidden;
   perspective: 1000;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="router-view">
     <div class="vux-demo">
       <img class="logo" src="../assets/vux_logo.png">
       <h1></h1>

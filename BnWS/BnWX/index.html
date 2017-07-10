@@ -5,6 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
   <title></title>
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/46909/595e3e61f629d80e202e0ba3.css' rel='stylesheet' type='text/css' />
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/28818/595e3eedf629d80e202e0ba4.css' rel='stylesheet' type='text/css' />
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/37509/595e3f14f629d80e202e0ba5.css' rel='stylesheet' type='text/css' />
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/46908/595e3f3df629d80e202e0ba6.css' rel='stylesheet' type='text/css' />
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/46882/595e3f5ef629d80e202e0ba7.css' rel='stylesheet' type='text/css' />
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/47007/595e3f8bf629d80e202e0ba8.css' rel='stylesheet' type='text/css' />
+  <link href='http://cdn.webfont.youziku.com/webfonts/nomal/104806/45817/595e3cfdf629d80e202e0ba1.css' rel='stylesheet' type='text/css' />
+  
+
+  <script type="text/javascript" src="http://cdn.webfont.youziku.com/wwwroot/js/wf/youziku.api.min.js"></script>
+  <script src="//cdn.webfont.youziku.com/wwwroot/js/youziku.util.min.js" ></script>
 </head>
 
 <body>
@@ -18,6 +29,18 @@
     }
   });
   </script>
+<script>
+var url="//cdn.webfont.youziku.com/users/stores/b6eebaa45963906a/store.json";
+      var client = new youziku_JSClient();
+      client.getUserStores(url, JSON.parse, function (stores) {
+       for (var i = 0; i < stores.length; i++) {
+               var item = stores[i];
+               var s='.'+item.EnglishFontFamily
+                $youziku.load(s, item.AccessKey, item.EnglishFontFamily);
+          }
+           $youziku.draw();
+      });
+</script>
 </body>
 <style type="text/css">
   body{

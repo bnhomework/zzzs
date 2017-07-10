@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="router-view">
     <div style="min-height:26px"></div>
     <div style="width:100%;">
       <div @click="switchSide" class="switch">{{isbackend?'前':'后'}}</div>
@@ -32,7 +32,8 @@
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5','font-family':f}" v-for="f in fonts" @click="setFonts(f)">
-              <div style="width:100px;height:46px">创意T恤</div>
+            <!-- <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5'}" v-for="f in fonts" @click="setFonts(f)"> -->
+              <div style="width:100px;height:46px" :class="f">T-Shirt</div>
             </div>
           </div>
         </scroller>
@@ -160,7 +161,11 @@ export default {
       }
     },
     initFonts() {
-      this.fonts = ["Times New Roman", "aaa", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman"];
+      this.fonts = ["Times New Roman",
+      "Edwardianbbd4cf60119966","againstmyselfbbd4f196e19966","Malapropismbbd4fb03019966","GoodVibrationsRbbd50518119966","Helvetica-Neue-bbd50d02619966","Jellyka_-_Love_bbd51821119966","ChannelSlanted2bbd4784e119966"]
+// "sans-serif","serif","monospace","fantasy","cuisive",
+      // "us-LiDeBiao-Xing3","us-hdfxihei","us-Source-Han-Light","us-winmantun23001","us-jin_mei_mxplzx","us-RS_XingKai","us-ruibo","us-TianZhen"]
+      //["Times New Roman", "aaa", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman"];
     },
     saveDesign(){
       this.desgin.frontSetting=this.$refs.front.getSettings();

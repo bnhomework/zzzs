@@ -1,4 +1,5 @@
 <template>
+<div class="router-view">
   <box gap="10px 10px">
     <checker v-model="sex" default-item-class="demo5-item" selected-item-class="demo5-item-selected">
       <checker-item :key="1" :value="1">男士</checker-item>
@@ -17,7 +18,7 @@
     <div class='tool'>
       <x-button plain @click.native="startDesgin" :disabled="selectedTemplate.FrontImg==null">开始设计</x-button>
     </div>
-  </box>
+  </box></div>
 </template>
 <script>
 import _ from 'underscore'

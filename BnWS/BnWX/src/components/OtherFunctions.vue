@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="router-view">
     <div class="topImg">
       <img src="">
     </div>
