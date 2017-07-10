@@ -443,6 +443,7 @@
     <None Include="Properties\PublishProfiles\prod.pubxml" />
     <Content Include="Views\Plateform\Index.cshtml" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bn.WeiXin.Handlers\Bn.WeiXin.Handlers.csproj">

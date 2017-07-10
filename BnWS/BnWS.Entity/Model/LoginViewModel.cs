@@ -15,6 +15,13 @@ namespace BnWS.Entity
         public bool RememberMe { get; set; }
     }
 
+    public class PasswordVM
+    {
+        public Guid UserId { get; set; }
+        public string OldPassword { get; set; }
+        public string NewPassword { get; set; }
+    }
+
     public class DeskViewModel
     {
         public Guid DeskId { get; set; }

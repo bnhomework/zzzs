@@ -61,5 +61,18 @@ namespace BnWS.Controllers
             HttpContext.Response.SetCookie(newtoken);
             return RedirectToAction("Login");
         }
+
+        public ActionResult ChangePassword()
+        {
+            return View();
+        }
+        
+        [HttpPost]
+        public ActionResult DoChangePassword(PasswordVM passwordVm)
+        {
+            passwordVm.UserId = AppContext.UserId;
+            var result = BS.ChangePassword(passwordVm);
+            return new JsonNetResult() { Data = result };
+        }
     }
 }

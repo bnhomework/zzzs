@@ -50,7 +50,7 @@ store.registerModule('bn', {
                 var vm=this;
                 wx.ready(function(){
                     console.log('init initWX_JS success')
-                    
+                    next();
                   });
                   wx.error(function(res){
                     console.log(res)
@@ -64,7 +64,7 @@ store.registerModule('bn', {
                   wx.config(c);
                   context.commit('updateWX_Config', {WX_Config:c});
                   console.log('init initWX_JS config success');
-                  next();
+                  // next();//waiting ready function
                 }).catch(error=>{
                   console.log('init initWX_JS failed')
                   next()

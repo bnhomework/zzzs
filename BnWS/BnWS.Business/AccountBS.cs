@@ -69,5 +69,23 @@ namespace BnWS.Business
                     .FirstOrDefault();
             }
         }
+
+        public bool ChangePassword(PasswordVM vm)
+        {
+            var changed = false;
+            using (var uow = GetUnitOfWork())
+            {
+                var user=uow.Repository<T_S_User>().Query().Filter(x => x.UserId == vm.UserId).Get().FirstOrDefault();
+                if (user != null &&user.Password.Equals(vm.OldPassword))
+                {
+                    user.Password = vm.NewPassword;
+                    uow.Repository<T_S_User>().Update(user);
+                    uow.Save();
+                    changed = true;
+                }
+            }
+            return changed;
+
+        }
     }
 }
