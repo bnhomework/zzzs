@@ -291,9 +291,10 @@ namespace Bn.WeiXin
                       + "&out_trade_no=" + order.out_trade_no
                       + "&spbill_create_ip=" + order.spbill_create_ip
                       + "&total_fee=" + order.total_fee
-                      + "&trade_type=" + order.trade_type;
+                      + "&trade_type=" + order.trade_type
+                      + "&key=" + WxConfig.wxpay_key;
 
-            order.sign = Utility.Signature(raw,"MD5");
+            order.sign = Utility.Signature(raw,"MD5").ToUpper();
             var unifiedorder=PostJosnData<UnifiedOrder>(Utility.Serialize<JSSDKPayOrder>(order), url);
             
             if (unifiedorder.return_code != "SUCCESS")

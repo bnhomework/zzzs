@@ -14,7 +14,7 @@ namespace Bn.WeiXin
         private static string _wxUrl = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
         private static string _mch_id = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
         private static string _NOTIFY_URL = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
-
+        private static string _wxpay_key = string.Empty;
         //baidu api
         private static string _ak = //"6jOLD3YkipUn18bmZOb2rXhz";
         string.Empty;//"hOclb1CUGaCvxmpSGekMjITR";
@@ -50,6 +50,17 @@ namespace Bn.WeiXin
                     _mch_id = ConfigurationManager.AppSettings["mch_id"];
                 }
                 return _mch_id;
+            }
+        }
+        public static string wxpay_key
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_wxpay_key))
+                {
+                    _wxpay_key = ConfigurationManager.AppSettings["wxpay_key"];
+                }
+                return _wxpay_key;
             }
         }
         public static string NOTIFY_URL
