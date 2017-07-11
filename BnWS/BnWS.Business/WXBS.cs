@@ -1,6 +1,7 @@
 using System.Linq;
 using Bn.WeiXin.GZH;
 using BnWS.Entity;
+using Bn.WeiXin;
 
 namespace BnWS.Business
 {
@@ -27,13 +28,26 @@ namespace BnWS.Business
                         .Query()
                         .Filter(x => x.OpenId == response.openid)
                         .Get()
-                        .FirstOrDefault();
+                        .FirstOrDefault(); 
+                var userName = "";
+                if (customer == null || string.IsNullOrEmpty(customer.UserName))
+                {
+                    var wxuser = WxApiHelper.Instance.GetWxUserInfo(response.openid, response.access_token);
+                    if (wxuser != null)
+                    {
+                        userName = wxuser.nickname;
+                    }
+                }
+                else
+                {
+                    userName = customer.UserName;
+                }
                 if (customer == null)
                 {
                     customer = new ZY_Customer
                     {
                         OpenId = response.openid,
-                        UserName = "",
+                        UserName = userName,
                         TokenId = response.access_token
                     };
                     uow.Repository<ZY_Customer>().Insert(customer);
@@ -41,6 +55,7 @@ namespace BnWS.Business
                 else
                 {
                     customer.TokenId = response.access_token;
+                    customer.UserName = userName;
                     uow.Repository<ZY_Customer>().Update(customer);
                 }
                 uow.Save();

@@ -10,6 +10,7 @@ using System.Xml.Serialization;
 using Bn.WeiXin.Messages;
 using Newtonsoft.Json;
 using Bn.WeiXin.GZH;
+using Bn.WeiXin.Entity;
 
 namespace Bn.WeiXin
 {
@@ -301,6 +302,12 @@ namespace Bn.WeiXin
         }
         #endregion
 
+        public WXUserInfo GetWxUserInfo(string openId, string accessToken)
+        {
+            var data = string.Format("access_token={0}&openid={1}&lang=zh_CN", accessToken, openId);
+            var uif = GetJosnData<WXUserInfo>(data, " https://api.weixin.qq.com/sns/userinfo");
+            return uif;
+        }
     }
     
 }
