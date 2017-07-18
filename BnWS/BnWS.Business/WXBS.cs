@@ -59,7 +59,6 @@ namespace BnWS.Business
                     uow.Repository<ZY_Customer>().Update(customer);
                 }
                 uow.Save();
-                //todo load name
             }
         }
     

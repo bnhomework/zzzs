@@ -15,6 +15,8 @@ namespace Bn.WeiXin
         private static string _mch_id = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
         private static string _NOTIFY_URL = string.Empty;// "8ec68e4773e89da15407ff1501658c8a";
         private static string _wxpay_key = string.Empty;
+        private static string _wxpay_body = string.Empty;
+        private static string _wxpay_attach = string.Empty;
         //baidu api
         private static string _ak = //"6jOLD3YkipUn18bmZOb2rXhz";
         string.Empty;//"hOclb1CUGaCvxmpSGekMjITR";
@@ -30,6 +32,7 @@ namespace Bn.WeiXin
             }
         }
 
+        #region 公众号
         public static string Appid
         {
             get
@@ -41,6 +44,31 @@ namespace Bn.WeiXin
                 return _appId;
             }
         }
+        public static string Secret
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_appsecret))
+                {
+                    _appsecret = ConfigurationManager.AppSettings["appsecret"];
+                }
+                return _appsecret;
+            }
+        }
+        public static string Token
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(_token))
+                {
+                    _token = ConfigurationManager.AppSettings["token"];
+                }
+                return _token;
+            }
+        }
+        #endregion
+
+        #region wx payment
         public static string mch_id
         {
             get
@@ -74,28 +102,30 @@ namespace Bn.WeiXin
                 return _NOTIFY_URL;
             }
         }
-        public static string Secret
+        public static string wxpay_body
         {
             get
             {
-                if (string.IsNullOrEmpty(_appsecret))
+                if (string.IsNullOrEmpty(_wxpay_body))
                 {
-                    _appsecret = ConfigurationManager.AppSettings["appsecret"];
+                    _wxpay_body = ConfigurationManager.AppSettings["wxpay_body"];
                 }
-                return _appsecret;
+                return _wxpay_body;
             }
         }
-        public static string Token
+        public static string wxpay_attach
         {
             get
             {
-                if (string.IsNullOrEmpty(_token))
+                if (string.IsNullOrEmpty(_wxpay_attach))
                 {
-                    _token = ConfigurationManager.AppSettings["token"];
+                    _wxpay_attach = ConfigurationManager.AppSettings["wxpay_attach"];
                 }
-                return _token;
+                return _wxpay_attach;
             }
         }
+        #endregion
+
 
         public static string WebServerUrl
         {

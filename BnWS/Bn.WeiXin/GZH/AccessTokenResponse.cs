@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Bn.WeiXin.GZH
 {
@@ -51,6 +52,19 @@ namespace Bn.WeiXin.GZH
         public string sign { get; set; }
     }
 
+    public class JSSDKPrepay
+    {
+        public string prepay_id { get; set; }
+        public string appId { get; set; }
+        public string timeStamp { get; set; }
+        public string nonceStr { get; set; }
+        public string signType { get; set; }
+        public string paySign { get; set; }
+        public string package
+        {
+            get { return string.Format("prepay_id={0}", prepay_id); }
+        }
+    }
     public class UnifiedOrder
     {
         public string return_code { get; set; }

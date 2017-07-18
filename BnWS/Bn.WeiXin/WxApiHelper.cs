@@ -82,6 +82,8 @@ namespace Bn.WeiXin
 
             return returnVal;
         }
+
+        #region cache
         public string GetCache(string itemType, int expires_in = 6000)
         {
             var value = string.Empty;
@@ -106,7 +108,6 @@ namespace Bn.WeiXin
             }
             return value;
         }
-
         public void SaveCache(string itemType, string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -124,7 +125,10 @@ namespace Bn.WeiXin
                 sw.Close();
             }
         }
-        //todo:
+        #endregion
+
+
+        #region AccessToken
         public string GetAccessToken()
         {
             string token = GetCache("Access_Token");
@@ -133,44 +137,22 @@ namespace Bn.WeiXin
                 token = RenewToken();
             }
             return token;
-            //string token;
-            //tokenFileName = string.Format("Access_Token_{0:yyyyMMddHH}", DateTime.Now);
-            //var fileName = string.Format("{0}\\{1}", Environment.CurrentDirectory, tokenFileName);
-            //if (!File.Exists(fileName))
-            //{
-            //    RenewToken();
-            //}
-            //using (var sr = new StreamReader(fileName))
-            //{
-            //    token = sr.ReadLine();
-            //    sr.Close();
-            //}
-            //if (string.IsNullOrEmpty(token))
-            //{
-            //    token = RenewToken();
-            //}
-            //return token;
         }
         private string RenewToken()
         {
             var token = string.Empty;
-            var url = WxConfig.TokenUrl;
             var data = string.Format("grant_type=client_credential&appid={0}&secret={1}", WxConfig.Appid, WxConfig.Secret);
-            var temp = GetData(data, url).Replace("[", "").Replace("]", "").Split(',').FirstOrDefault(p => p.Contains("access_token")).Split(':');
+            var temp = GetData(data, WxConfig.TokenUrl).Replace("[", "").Replace("]", "").Split(',').FirstOrDefault(p => p.Contains("access_token")).Split(':');
             if (temp.Length == 2)
             {
                 token = temp[1].Replace("\"", "");
             }
             SaveCache("Access_Token",token);
-//            var fileName = string.Format("{0}\\{1}", Environment.CurrentDirectory, tokenFileName);
-//            using (var sw = new StreamWriter(fileName, false))
-//            {
-//                sw.WriteLine(token);
-//                sw.Close();
-//            }
             return token;
         }
+        #endregion
 
+        #region menu management
         public string ApplyMenu(string data)
         {
             var accessToken = GetAccessToken();
@@ -196,34 +178,8 @@ namespace Bn.WeiXin
             }
             return menu;
         }
+        #endregion 
 
-        //创建二维码ticket
-
-        /*
-         临时二维码请求说明 
-        http请求方式: POST
-        URL: https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN
-        POST数据格式：json
-        POST数据例子：{"expire_seconds": 1800, "action_name": "QR_SCENE", "action_info": {"scene": {"scene_id": 123}}}
-
-
-        永久二维码请求说明 
-        http请求方式: POST
-        URL: https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=TOKEN
-        POST数据格式：json
-        POST数据例子：{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": 123}}}
-        
-         * 返回说明 
-         * 正确的Json返回结果: 
-         * {"ticket":"gQG28DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL0FuWC1DNmZuVEhvMVp4NDNMRnNRAAIEesLvUQMECAcAAA==","expire_seconds":1800}
-        错误的Json返回示例: 
-        {"errcode":40013,"errmsg":"invalid appid"}
-         */
-
-        public string CreateTicket(bool isTemporarily)
-        {
-            return string.Empty;
-        }
 
         #region js sdk
 
@@ -245,6 +201,7 @@ namespace Bn.WeiXin
             };
             return jssdk;
         }
+
         public string GetJSSDK_Ticket()
         {
             var ticket = GetCache("JSSDK_Ticket");
@@ -270,7 +227,7 @@ namespace Bn.WeiXin
             return ticket;
         }
 
-        public string GetPaymentId(JSSDKPayOrder order)
+        private string GetPaymentId(JSSDKPayOrder order)
         {
             const string url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
@@ -300,6 +257,39 @@ namespace Bn.WeiXin
             if (unifiedorder.return_code != "SUCCESS")
                 throw new Exception(unifiedorder.return_msg);
             return unifiedorder.prepay_id;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="out_trade_no"></param>
+        /// <param name="openid"></param>
+        /// <param name="spbill_create_ip"></param>
+        /// <param name="total_fee">单位分</param>
+        /// <returns></returns>
+        public JSSDKPrepay Prepay(string out_trade_no, string openid, string spbill_create_ip, string total_fee)
+        {
+            var prepay = new JSSDKPrepay();
+            var o = new JSSDKPayOrder();
+            o.body = WxConfig.wxpay_body;
+            o.attach = WxConfig.wxpay_attach; 
+            o.out_trade_no = out_trade_no.Substring(0, 32);
+            o.spbill_create_ip = spbill_create_ip; //APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
+            o.openid = openid;
+            o.total_fee = total_fee;
+            prepay.prepay_id = GetPaymentId(o);
+            prepay.appId = WxConfig.Appid;
+            prepay.timeStamp = Utility.GetTimeSpan();
+            prepay.nonceStr = Utility.GenerateNonceStr();
+            prepay.signType = "MD5";
+            string payRaw = "appId=" + prepay.appId
+                            + "&nonceStr=" + prepay.nonceStr
+                            + "&package=" + prepay.package
+                            + "&signType=" + prepay.signType
+                            + "&timeStamp=" + prepay.timeStamp
+                            + "&key=" + WxConfig.wxpay_key;
+            prepay.paySign = Utility.WXPaySignature(payRaw, prepay.signType);
+            return prepay;
+
         }
         #endregion
 

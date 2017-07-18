@@ -53,6 +53,11 @@ namespace Bn.WeiXin
             }
             return sb.ToString();
         }
+
+        public static string WXPaySignature(string raw, string hashAlgorithm)
+        {
+            return Signature(raw, hashAlgorithm).ToUpper();
+        }
         public static string Serialize<T>(T t)
         {
             using (StringWriter sw = new StringWriter())
