@@ -65,6 +65,7 @@ namespace Bn.WeiXin.GZH
             get { return string.Format("prepay_id={0}", prepay_id); }
         }
     }
+     [XmlRoot("xml")]
     public class UnifiedOrder
     {
         public string return_code { get; set; }
@@ -72,7 +73,7 @@ namespace Bn.WeiXin.GZH
         public string prepay_id { get; set; }
         public string nonce_str { get; set; }
     }
-
+     [XmlRoot("xml")]
     public class PayInfo
     {
         public string return_code { get; set; }

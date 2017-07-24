@@ -68,7 +68,19 @@ namespace Bn.WeiXin
             }
 
         }
+        public static T Deserialize<T>(string xml)
+        {
+            using (StringWriter sw = new StringWriter())
+            {
+                var ser = new XmlSerializer(typeof(T));
 
+                using (var sr = new StringReader(xml))
+                {
+                    return (T)ser.Deserialize(sr);
+                }
+            }
+
+        }
         public static string GetTimeSpan()
         {
             return (DateTime.Now - TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1))).TotalSeconds.ToString();

@@ -42,7 +42,20 @@ namespace BnWS.Views
          {
              var bs =
                  new ZYBS(new AppContext() {UserId = new Guid("0D321367-C97F-46B0-81B7-4EDC5D7A2829"), UserName = "WX"});
-             var result=bs.ConfirmPayment(payInfo);
+             System.IO.Stream s = this.Request.InputStream;
+             int count = 0;
+             byte[] buffer = new byte[1024];
+             StringBuilder builder = new StringBuilder();
+             while ((count = s.Read(buffer, 0, 1024)) > 0)
+             {
+                 builder.Append(Encoding.UTF8.GetString(buffer, 0, count));
+             }
+             s.Flush();
+             s.Close();
+             s.Dispose();
+             var xml = builder.ToString();
+             payInfo = Utility.Deserialize<PayInfo>(xml);
+             var result = bs.ConfirmPayment(payInfo);
              if (result)
              {
                  return Content("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Diagnostics;
 
 namespace BnWS.Controllers
 {
@@ -67,7 +68,11 @@ namespace BnWS.Controllers
                 }
             };
         }
-
+        protected override void OnException(ExceptionContext filterContext)
+        {
+            Debug.WriteLine(filterContext.Exception.ToString(), "ActionException");
+            base.OnException(filterContext);
+        }
         private T_S_User _currentUser;
         protected T_S_User CurrentUser
         {

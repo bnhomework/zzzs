@@ -11,6 +11,7 @@ using Bn.WeiXin.Messages;
 using Newtonsoft.Json;
 using Bn.WeiXin.GZH;
 using Bn.WeiXin.Entity;
+using System.Diagnostics;
 
 namespace Bn.WeiXin
 {
@@ -37,7 +38,13 @@ namespace Bn.WeiXin
             string data = PostData(requestPara, url);
             return JsonConvert.DeserializeObject<T>(data);
         }
-
+        public T PostXmlData<T>(string requestPara, string url)
+        {
+            Debug.WriteLine(requestPara);
+            string data = PostData(requestPara, url);
+            Debug.WriteLine(data);
+            return Utility.Deserialize<T>(data);
+        }
         public static string GetJosnDataList<T>(List<string> list)
         {
             var r=new List<T>();
@@ -252,7 +259,7 @@ namespace Bn.WeiXin
                       + "&key=" + WxConfig.wxpay_key;
 
             order.sign = Utility.Signature(raw,"MD5").ToUpper();
-            var unifiedorder=PostJosnData<UnifiedOrder>(Utility.Serialize<JSSDKPayOrder>(order), url);
+            var unifiedorder = PostXmlData<UnifiedOrder>(Utility.Serialize<JSSDKPayOrder>(order), url);
             
             if (unifiedorder.return_code != "SUCCESS")
                 throw new Exception(unifiedorder.return_msg);
