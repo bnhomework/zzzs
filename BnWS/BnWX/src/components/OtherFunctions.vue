@@ -4,16 +4,15 @@
       <img src="">
     </div>
     <div class="functions">
-      <grid row="4">
+      <grid :row="4">
         <grid-item link="/component/cell" label="我的设计">
           <span slot="icon" class="bn-icon">&#xe60b;</span>
         </grid-item>
         <grid-item :link="{ path: '/component/cell'}" label="我的收藏">
           <span slot="icon" class="bn-icon">&#xe623;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick">
+        <grid-item link="/component/cell" @on-item-click="onItemClick" label="购物车">
           <span slot="icon" class="bn-icon">&#xe665;</span>
-          <span slot="label">{{ 购物车 }}</span>
         </grid-item>
         <grid-item link="/component/cell" label="订单">
           <span slot="icon" class="bn-icon">&#xe637;</span>

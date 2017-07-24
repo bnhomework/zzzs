@@ -168,6 +168,8 @@ html, body {
 }
 .bn-icon{
    font-family: 'bn-icon';
+  font-size: 25px;
+  color: #888;
 }
 
 .zy-icon-22 {
