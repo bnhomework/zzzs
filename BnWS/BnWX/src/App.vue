@@ -204,7 +204,7 @@ html, body {
 }
 
 @font-face {
-  font-family: 'iconfont';  /* project id 338215 */
+  font-family: 'bn-icon';  /* project id 338215 */
   src: url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.eot');
   src: url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.eot?#iefix') format('embedded-opentype'),
   url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.woff') format('woff'),

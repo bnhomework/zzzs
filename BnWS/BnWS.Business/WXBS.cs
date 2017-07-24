@@ -61,6 +61,14 @@ namespace BnWS.Business
                 uow.Save();
             }
         }
-    
+
+        public ZY_Customer GetWXUserInfo(string openId)
+        {
+            using (var db = GetDbContext())
+            {
+               var u= db.ZY_Customer.Find(openId) ?? new ZY_Customer();
+               return u;
+            }
+        }
     }
 }

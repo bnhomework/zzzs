@@ -109,5 +109,13 @@ namespace BnWS.Views
         {
             return Content("微信授权失败,请刷新页面");
         }
+
+
+        public ActionResult GetUserInfo(string openId)
+        {
+            var user = new WXBS().GetWXUserInfo(openId);
+
+            return new JsonResult() { Data = new{user.UserName,user.Avatar,user.OpenId}, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
     }
 }
