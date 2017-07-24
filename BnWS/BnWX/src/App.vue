@@ -204,12 +204,12 @@ html, body {
 }
 
 @font-face {
-  font-family: 'bn-icon';  /* project id 338215 */
-  src: url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.eot');
-  src: url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_ctsiufnmya9ejyvi.svg#iconfont') format('svg');
+  font-family: 'iconfont';  /* project id 338215 */
+  src: url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.eot');
+  src: url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.svg#iconfont') format('svg');
 }
 
 .demo-icon {

@@ -4,39 +4,43 @@
       <img src="">
     </div>
     <div class="functions">
-      <grid :row="3">
-        <grid-item link="/component/cell" :label="xxxx">
-          <span slot="icon" class="xx">&#xe664;</span>
+      <grid :row="4">
+        <grid-item link="/component/cell" label="我的设计">
+          <span slot="icon" class="xx">&#xe60b;</span>
         </grid-item>
-        <grid-item :link="{ path: '/component/cell'}" :label="xxxx">
-          <span slot="icon" class="xx">&#xe664;</span>
-        </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick">
-          <span slot="icon" class="xx">&#xe664;</span>
-          <span slot="label">{{ xxxx }}</span>
-        </grid-item>
-        <grid-item link="/component/cell" :label="xxxx">
-          <span slot="icon" class="xx">&#xe664;</span>
-        </grid-item>
-        <grid-item :link="{ path: '/component/cell'}" :label="xxxx">
-          <span slot="icon" class="xx">&#xe664;</span>
+        <grid-item :link="{ path: '/component/cell'}" label="我的收藏">
+          <span slot="icon" class="xx">&#xe623;</span>
         </grid-item>
         <grid-item link="/component/cell" @on-item-click="onItemClick">
-          <span slot="icon" class="xx">&#xe664;</span>
-          <span slot="label">{{ xxxx }}</span>
+          <span slot="icon" class="xx">&#xe665;</span>
+          <span slot="label">{{ 购物车 }}</span>
+        </grid-item>
+        <grid-item link="/component/cell" label="订单">
+          <span slot="icon" class="xx">&#xe637;</span>
+        </grid-item>
+        <grid-item :link="{ path: '/component/cell'}" label="地址">
+          <span slot="icon" class="xx">&#xe621;</span>
+        </grid-item>
+        <grid-item link="/component/cell" @on-item-click="onItemClick" label="消息">
+          <span slot="icon" class="xx">&#xe895;</span>
+        </grid-item>
+        <grid-item link="/component/cell" @on-item-click="onItemClick" label="分享">
+          <span slot="icon" class="xx">&#xe6a0;</span>
+        </grid-item>
+        <grid-item link="/component/cell" @on-item-click="onItemClick" label="联系客服">
+          <span slot="icon" class="xx">&#xe619;</span>
         </grid-item>
       </grid>
       <br>
       <grid>
-        <grid-item link="/component/cell" :label="xxxx">
+        <grid-item link="/component/cell" label="xxxx">
           <span slot="icon" class="xx">&#xe664;</span>
         </grid-item>
-        <grid-item :link="{ path: '/component/cell'}" :label="xxxx">
-          <span slot="icon" class="xx">&#xe664;</span>
+        <grid-item :link="{ path: '/component/cell'}" label="意见反馈">
+          <span slot="icon" class="xx">&#xe676;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick">
-          <span slot="icon" class="xx">&#xe664;</span>
-          <span slot="label">{{ xxxx }}</span>
+        <grid-item link="/component/cell" @on-item-click="onItemClick" label="关于我们">
+          <span slot="icon" class="xx">&#xe618;</span>
         </grid-item>
       </grid>
     </div>

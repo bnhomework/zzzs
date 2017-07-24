@@ -34,8 +34,15 @@ export default {
   },
   methods: {
     init() {
-      
       var vm = this;
+      var openId = vm.$route.params.openId;
+      if (openId != undefined && openId != '') {
+        vm.$store.commit("updateOpenId", {
+          openId: openId
+        });
+        store.dispatch('loadCustomerInfo', openId);
+      }
+
       this.$wechat.getLocation({
         type: 'wgs84',
         success: function(res) {
@@ -65,6 +72,7 @@ export default {
     }
   }
 }
+
 </script>
 <style scoped>
 .vux-demo {
@@ -75,4 +83,5 @@ export default {
   width: 100%;
   height: 187px;
 }
+
 </style>
