@@ -69,14 +69,14 @@ store.registerModule('bn', {
             wx.config(c);
             context.commit('updateWX_Config', { WX_Config: c });
             console.log('init initWX_JS config success');
-            // next();//waiting ready function
+             //next();//uncomment test///waiting ready function
           }).catch(error => {
             console.log('init initWX_JS failed')
             next()
           })
       }
     },
-    loadCustomerInfo(openId) {
+    loadCustomerInfo(context,openId) {
       var url = config.apiServer + 'wx/GetUserInfo'
       Vue.http.get(url, { params: { openId: openId } })
         .then(res => {
