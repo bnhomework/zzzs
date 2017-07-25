@@ -116,7 +116,7 @@ export default {
   position: fixed;
   width: 95%;
   margin: 0 auto;
-  bottom: 52px;
+  bottom: 54px;
 }
 
 .demo5-item {
