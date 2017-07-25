@@ -40,7 +40,7 @@ export default {
         vm.$store.commit("updateOpenId", {
           openId: openId
         });
-        store.dispatch('loadCustomerInfo', openId);
+        vm.$store.dispatch('loadCustomerInfo', openId);
       }
 
       this.$wechat.getLocation({
