@@ -3,7 +3,7 @@
   <div id="otherfunctions">
     <div class="top-warp">
       <img :src="getImgSrc(this.$store.state.bn.userInfo.Avatar)">
-      <div>{{this.$store.state.bn.userInfo.UserName}}</div>
+      <div class="uname">{{this.$store.state.bn.userInfo.UserName}}</div>
     </div>
     <div class="functions">
       <grid :rows="4">
@@ -36,17 +36,17 @@
       <grid :rows="4">
         <grid-item label="">
           <span slot="icon" class="bn-icon"></span>
+          <span slot="label">&nbsp;</span>
         </grid-item>
         <grid-item :link="{ path: '/component/cell'}" label="意见反馈">
           <span slot="icon" class="bn-icon">&#xe676;</span>
-          <span slot="label"></span>
         </grid-item>
         <grid-item link="/component/cell" @on-item-click="onItemClick" label="关于我们">
           <span slot="icon" class="bn-icon">&#xe618;</span>
         </grid-item>
          <grid-item label="">
           <span slot="icon" class="bn-icon"></span>
-          <span slot="label"></span>
+          <span slot="label">&nbsp;</span>
         </grid-item>
       </grid>
     </div>
@@ -86,21 +86,26 @@ export default {
 </script>
 <style scoped>
 #otherfunctions{
-  background-color: #33CCCC;
 }
 .top-warp{
+  background-color: #33CCCC;
   text-align: center;
-  padding-bottom: 10px;
+  padding-bottom: 40px;
 }
 .top-warp img {
   padding: 10px;
   width: 40%;
   border-radius: 400px
 }
+.top-warp .uname{
+  font-size: 20px;
+  font-weight: bold;
+  color: #555555;
+}
 .functions{
-  background-color: #ffffff;
-	position: fixed;
+  /*background-color: #ffffff;*/
+	/*position: fixed;*/
 	width: 100%;
-	bottom: 56px;
+	/*bottom: 56px;*/
 }
 </style>
