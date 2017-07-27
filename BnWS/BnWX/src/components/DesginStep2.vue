@@ -213,7 +213,7 @@ export default {
       var data = {
         zzDesign: {
           CustomerId: this.$store.state.bn.openId,
-          TemplateId:this.template.TemplateId
+          TemplateId:this.template.TemplateId,
           Name: this.desginName,
           Tags: this.desginTags,
           DesginSettings: JSON.stringify(this.desgin),
