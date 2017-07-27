@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -90,5 +91,27 @@ namespace Bn.WeiXin
         {
             return Guid.NewGuid().ToString().Replace("-", "");
         }
+
+        public static void DownloadFile(string url, string fileName)
+        {
+            WebRequest request = WebRequest.Create(url);
+            WebResponse response = request.GetResponse();
+            using (var reader = response.GetResponseStream())
+            {
+                var writer = new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write);
+                var buff = new byte[512];
+                int c; //实际读取的字节数
+                while ((c = reader.Read(buff, 0, buff.Length)) > 0)
+                {
+                    writer.Write(buff, 0, c);
+                }
+                writer.Close();
+                writer.Dispose();
+                reader.Close();
+                reader.Dispose();
+            }
+            response.Close();
+        }
+
     }
 }

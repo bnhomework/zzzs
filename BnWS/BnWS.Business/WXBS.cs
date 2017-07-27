@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using Bn.WeiXin.GZH;
 using BnWS.Entity;
@@ -30,12 +31,18 @@ namespace BnWS.Business
                         .Get()
                         .FirstOrDefault(); 
                 var userName = "";
+                var fname = string.Format("{0}.jpg", Utility.Signature(response.openid));
+                var headimg = Path.Combine("upload","wxhead", fname);
+                var localheadimg = Path.Combine("upload","wxhead" ,fname);
+
                 if (customer == null || string.IsNullOrEmpty(customer.UserName))
                 {
                     var wxuser = WxApiHelper.Instance.GetWxUserInfo(response.openid, response.access_token);
                     if (wxuser != null)
                     {
                         userName = wxuser.nickname;
+
+                        Utility.DownloadFile(wxuser.headimgurl, localheadimg);
                     }
                 }
                 else
@@ -48,7 +55,8 @@ namespace BnWS.Business
                     {
                         OpenId = response.openid,
                         UserName = userName,
-                        TokenId = response.access_token
+                        TokenId = response.access_token,
+                        Avatar = headimg
                     };
                     uow.Repository<ZY_Customer>().Insert(customer);
                 }
@@ -56,6 +64,7 @@ namespace BnWS.Business
                 {
                     customer.TokenId = response.access_token;
                     customer.UserName = userName;
+                    customer.Avatar = headimg;
                     uow.Repository<ZY_Customer>().Update(customer);
                 }
                 uow.Save();
