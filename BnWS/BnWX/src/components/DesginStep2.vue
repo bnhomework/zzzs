@@ -203,7 +203,7 @@ export default {
       saveSVGasPNG.svgAsDataUri(this.$refs.back.$el, {}, function(uri) {
         vm.Preview2 = uri;
       })
-    }
+    },
     saveDesign() {
       var vm = this;
       this.desgin.frontSetting = this.$refs.front.getSettings();
