@@ -6,6 +6,24 @@
       <image-editor ref="front" @logoclick="onItemClick(0)" @logotextclick="onItemClick(10)" v-show="!isbackend" :bgImg="getImgSrc(bgImg_f)" :logoImg="logo_f==undefined||logo_f==''?'':getImgSrc(logo_f)" :txtLogoText="desgin.frontTxt" :controlElementId="controlElementId"></image-editor>
       <image-editor ref="back" @logoclick="onItemClick(0)" @logotextclick="onItemClick(10)" v-show="isbackend" :bgImg="getImgSrc(bgImg_b)" :logoImg="logo_b==undefined||logo_b==''?'':getImgSrc(logo_b)" :txtLogoText="desgin.backTxt" :controlElementId="controlElementId"></image-editor>
     </div>
+    <!-- <div>
+      <img :src="getImgSrc(result1)">
+      <img :src="getImgSrc(result2)">
+    </div> -->
+    <div v-transfer-dom>
+      <popup v-model="saveDialogVisible" height="270px" is-transparent>
+        <div style="width: 95%;background-color:#fff;height:250px;margin:0 auto;border-radius:5px;padding-top:10px;">
+          <group>
+            <x-input title="名字:" v-model="desginName"></x-input>
+            <x-input title="标签:" v-model="desginTags"></x-input>
+          </group>
+          <div style="padding:20px 15px;">
+            <x-button type="primary" :disabled="Preview1==''||Preview2==''" @click.native="saveDesign">保存</x-button>
+            <x-button @click.native="saveDialogVisible = false">取消</x-button>
+          </div>
+        </div>
+      </popup>
+    </div>
     <div class="tool">
       <div class="tool-item" v-show="selectedTab==0">
         <scroller lock-y scrollbar-x>
@@ -32,7 +50,7 @@
         <scroller lock-y scrollbar-x>
           <div class="box">
             <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5','font-family':f}" v-for="f in fonts" @click="setFonts(f)">
-            <!-- <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5'}" v-for="f in fonts" @click="setFonts(f)"> -->
+              <!-- <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5'}" v-for="f in fonts" @click="setFonts(f)"> -->
               <div style="width:100px;height:46px" :class="f">T-Shirt</div>
             </div>
           </div>
@@ -69,7 +87,7 @@
       </tabbar-item>
       <tabbar-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span slot="label"> <span  class="bn-icon">&#xe608;</span> 模板</span>
       </tabbar-item>
-      <tabbar-item :selected="selectedTab==20" @on-item-click="saveDesign"><span slot="label"> <span  class="bn-icon">&#xe601;</span> 完成</span>
+      <tabbar-item :selected="selectedTab==20" @on-item-click="showSaveDialog"><span slot="label"> <span  class="bn-icon">&#xe601;</span> 完成</span>
       </tabbar-item>
     </tabbar>
   </div>
@@ -88,11 +106,13 @@ import {
   Tab,
   TabItem,
   ColorPicker,
-  XInput
+  XInput,
+  Popup
 }
 from 'vux'
 import utils from '@/mixins/utils'
 import imageEditor from '@/components/sub/imageEditor.vue'
+import saveSVGasPNG from 'save-svg-as-png'
 export default {
   mixins: [utils],
   components: {
@@ -110,6 +130,7 @@ export default {
     TabbarItem,
     XInput,
     ColorPicker,
+    Popup
   },
   data() {
     return {
@@ -124,6 +145,11 @@ export default {
         back: '',
         backTxt: ''
       },
+      Preview1: '',
+      Preview2: '',
+      desginName: '',
+      desginTags: '',
+      saveDialogVisible: false,
       defaultlogo: '',
       selectedTab: 0,
       isbackend: false
@@ -162,17 +188,55 @@ export default {
     },
     initFonts() {
       this.fonts = ["Times New Roman",
-      "Edwardianbbd4cf60119966","againstmyselfbbd4f196e19966","Malapropismbbd4fb03019966","GoodVibrationsRbbd50518119966","Helvetica-Neue-bbd50d02619966","Jellyka_-_Love_bbd51821119966","ChannelSlanted2bbd4784e119966"]
-// "sans-serif","serif","monospace","fantasy","cuisive",
-      // "us-LiDeBiao-Xing3","us-hdfxihei","us-Source-Han-Light","us-winmantun23001","us-jin_mei_mxplzx","us-RS_XingKai","us-ruibo","us-TianZhen"]
-      //["Times New Roman", "aaa", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman", "Times New Roman"];
+        "Edwardianbbd4cf60119966", "againstmyselfbbd4f196e19966", "Malapropismbbd4fb03019966", "GoodVibrationsRbbd50518119966", "Helvetica-Neue-bbd50d02619966", "Jellyka_-_Love_bbd51821119966", "ChannelSlanted2bbd4784e119966"
+      ]
     },
-    saveDesign(){
-      this.desgin.frontSetting=this.$refs.front.getSettings();
-      this.desgin.backSetting=this.$refs.back.getSettings();
-      this.desgin.template=this.template;
+    showSaveDialog() {
+      var vm = this;
+      vm.Preview1 = '';
+      vm.Preview2 = '';
+      vm.saveDialogVisible = true;
       //todo save image to server
-      
+      saveSVGasPNG.svgAsDataUri(this.$refs.front.$el, {}, function(uri) {
+        vm.Preview1 = uri;
+      })
+      saveSVGasPNG.svgAsDataUri(this.$refs.back.$el, {}, function(uri) {
+        vm.Preview2 = uri;
+      })
+    }
+    saveDesign() {
+      var vm = this;
+      this.desgin.frontSetting = this.$refs.front.getSettings();
+      this.desgin.backSetting = this.$refs.back.getSettings();
+      this.desgin.template = this.template;
+      var url = this.apiServer + 'zz/SaveDesgin';
+      var data = {
+        zzDesign: {
+          CustomerId: this.$store.state.bn.openId,
+          TemplateId:this.template.TemplateId
+          Name: this.desginName,
+          Tags: this.desginTags,
+          DesginSettings: JSON.stringify(this.desgin),
+          Preview1: this.Preview1,
+          Preview2: this.Preview2,
+        }
+      };
+      var vm = this;
+      this.$http.post(url, data)
+        .then(res => {
+          vm.$vux.toast.show({
+            text: '保存成功',
+            type: 'cancel'
+          });
+          vm.$router.push({
+            name: 'DesginList'
+          })
+        }).catch(err => {
+          vm.$vux.toast.show({
+            text: '出错啦~~',
+            type: 'cancel'
+          })
+        });
     },
     setFonts(f) {
       if (!this.isbackend) {
@@ -253,6 +317,7 @@ export default {
 
   }
 }
+
 </script>
 <style scoped>
 .tool {
@@ -321,4 +386,5 @@ export default {
 .switch:hover {
   border: solid 1px #1d1d1d
 }
+
 </style>

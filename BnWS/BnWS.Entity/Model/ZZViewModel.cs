@@ -13,6 +13,17 @@ namespace BnWS.Entity
         public string Color { get; set; }
     }
 
+    public class ZZDesign
+    {
+        public Guid Id { get; set; }
+        public Guid TemplateId { get; set; }
+        public string CustomerId { get; set; }
+        public string Name { get; set; }
+        public string Tags { get; set; }
+        public string DesginSettings { get; set; }
+        public string Preview1 { get; set; }
+        public string Preview2 { get; set; }
+    }
     public static class TempalteEx
     {
         public static string GetDefaultImg(this ZZ_Template t,int imageType=0,string ext="png")

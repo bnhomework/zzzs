@@ -17,15 +17,18 @@ namespace BnWS.Entity
     {
         public System.Guid DesginId { get; set; }
         public string CustomerId { get; set; }
-        public System.Guid TemplateId { get; set; }
-        public string Desgin { get; set; }
-        public string DesginName { get; set; }
-        public string DesginPreview { get; set; }
+        public string DesginSettings { get; set; }
+        public string Name { get; set; }
+        public string Tags { get; set; }
+        public string Preview1 { get; set; }
+        public string Preview2 { get; set; }
         public int VersionNo { get; set; }
         public System.Guid TransactionId { get; set; }
         public string CreatedBy { get; set; }
         public System.DateTime CreatedTime { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
+        public System.Guid TemplateId { get; set; }
+        public bool IsPublic { get; set; }
     }
 }

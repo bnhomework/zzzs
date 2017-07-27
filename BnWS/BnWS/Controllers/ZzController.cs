@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using BnWS.Business;
 using BnWS.Controllers;
@@ -23,5 +24,27 @@ namespace BnWS.Views
                 })};
         }
 
+        [HttpPost]
+        public ActionResult SaveDesgin(ZZDesign zzDesign)
+        {
+            if (zzDesign.Id == Guid.Empty)
+            {
+                zzDesign.Id = Guid.NewGuid();
+            }
+            BS.SaveDesgin(zzDesign);
+            return  new JsonResult(){Data = new {desginId=zzDesign.Id}};
+        }
+        [HttpPost]
+        public ActionResult GetDesginList(string openId)
+        {
+            var designs=BS.GetDesginList(openId);
+            return  new JsonResult(){Data = designs};
+        }
+        [HttpPost]
+        public ActionResult SetIsPublic(Guid desginId,bool ispublic)
+        {
+           BS.SetIsPublic(desginId,ispublic);
+            return  new JsonResult(){Data = "OK"};
+        }
     }
 }

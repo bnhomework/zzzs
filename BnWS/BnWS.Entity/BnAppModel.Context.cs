@@ -37,12 +37,12 @@ namespace BnWS.Entity
         public virtual DbSet<ZY_Session> ZY_Session { get; set; }
         public virtual DbSet<ZY_Shop_Desk> ZY_Shop_Desk { get; set; }
         public virtual DbSet<ZY_Shop_Img> ZY_Shop_Img { get; set; }
-        public virtual DbSet<Pay> Pay { get; set; }
         public virtual DbSet<ZY_Booked_Position> ZY_Booked_Position { get; set; }
         public virtual DbSet<ZY_Shop> ZY_Shop { get; set; }
         public virtual DbSet<ZY_Order> ZY_Order { get; set; }
-        public virtual DbSet<ZZ_Desgin> ZZ_Desgin { get; set; }
         public virtual DbSet<ZZ_Template> ZZ_Template { get; set; }
+        public virtual DbSet<ZZ_Desgin> ZZ_Desgin { get; set; }
+        public virtual DbSet<Pay> Pay { get; set; }
     
         public virtual ObjectResult<sp_GetDesks_Result> sp_GetDesks(Nullable<System.Guid> shopId, Nullable<System.DateTime> date)
         {

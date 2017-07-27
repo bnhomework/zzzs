@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BnWS.Entity;
 using LinqKit;
+using Repository;
 
 namespace BnWS.Business
 {
@@ -38,5 +40,48 @@ namespace BnWS.Business
             }
         }
 
+
+        public void SaveDesgin(ZZDesign zzDesign)
+        {
+            using (var uow=GetUnitOfWork())
+            {
+                var d = new ZZ_Desgin()
+                {
+                    DesginId = Guid.NewGuid(),
+                    TemplateId = zzDesign.TemplateId,
+                    CustomerId = zzDesign.CustomerId,
+                    Name = zzDesign.Name,
+                    Tags = zzDesign.Tags,
+                    DesginSettings = zzDesign.DesginSettings,
+                    Preview1 = zzDesign.Preview1,
+                    Preview2 = zzDesign.Preview2
+                };
+                uow.Repository<ZZ_Desgin>().Insert(d);
+                uow.Save();
+            }
+        }
+
+        public List<ZZ_Desgin> GetDesginList(string openId)
+        {
+            using (var db = GetDbContext())
+            {
+                return db.ZZ_Desgin.AsExpandable().Where(x => x.CustomerId == openId)
+                    .OrderByDescending(x=>x.CreatedTime).ToList();
+            }
+        }
+
+        public void SetIsPublic(Guid desginId, bool ispublic)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                var desgin = uow.Repository<ZZ_Desgin>().Find(desginId);
+                if (desgin != null)
+                {
+                    desgin.IsPublic = ispublic;
+                    uow.Repository<ZZ_Desgin>().Update(desgin);
+                    uow.Save();
+                }
+            }
+        }
     }
 }
