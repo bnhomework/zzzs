@@ -33,6 +33,7 @@
         <EntityTypeShape EntityType="BnAppModel.ZZ_Template" Width="1.5" PointX="10.375" PointY="0.75" />
         <EntityTypeShape EntityType="BnAppModel.ZZ_Desgin" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="BnAppModel.Pay" Width="1.5" PointX="10.375" PointY="5.75" />
+        <EntityTypeShape EntityType="BnAppModel.ZZ_Category" Width="1.5" PointX="5.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

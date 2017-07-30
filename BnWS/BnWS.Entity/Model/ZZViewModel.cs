@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,11 @@ namespace BnWS.Entity
         public string DesginSettings { get; set; }
         public string Preview1 { get; set; }
         public string Preview2 { get; set; }
+
+        //review
+        public decimal UnitPrice { get; set; }
+        public bool IsPublic { get; set; }
+        public string Designer { get; set; }
     }
     public static class TempalteEx
     {

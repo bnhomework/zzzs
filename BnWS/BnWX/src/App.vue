@@ -171,6 +171,25 @@ html, body {
   font-size: 25px;
   color: #888;
 }
+.content-1{
+  font-size:16px;
+  color:#5e5e5e;
+}
+.content-2{
+  font-size:12px;
+  color:#9a9a9a;
+}
+span.tag{
+  border: 1px solid #e1e1e1;
+  border-radius:5px;
+  color:#9a9a9a;
+  padding:2px;
+}
+span.amount{
+  color:#f85;
+  font-size:20px;
+}
+
 
 .zy-icon-22 {
   font-family: 'bn-icon';

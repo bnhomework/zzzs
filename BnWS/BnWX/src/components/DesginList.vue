@@ -2,41 +2,26 @@
   <div style="width:100%;">
     <div v-for="item in designs">
       <div class="desgin-warp">
-        <div class="desgin-header">
-          <span v-show="!item.IsPublic" @click="setIsPublic(item,1)" class="bn-icon">&#xe6c9;</span>
-          <span v-show="item.IsPublic" @click="setIsPublic(item,0)" class="bn-icon">&#xe6ca;</span>
-        </div>
-        <div class="preview-warp">
+        <div class="preview-warp" @click.stop="goTo({name:'Desgin',params:{designId:item.DesignId}})">
+          <div class="desgin-header">
+            <span v-show="!item.IsPublic" @click.prevent.stop="setIsPublic(item,true)" class="bn-icon">&#xe6c9;</span>
+            <span v-show="item.IsPublic" @click.prevent.stop="setIsPublic(item,false)" class="bn-icon">&#xe6ca;</span>
+          </div>
           <img :src="item.Preview1">
           <div style="display:inline-block;vertical-align:top;">
-            <div style="font-size:14px">{{item.Name}}</div>
-            <div style="font-size:10px;color:#5e5e5e">{{item.Name}}</div>
-            <div style="color:#f85">￥{{item.Name}}</div>
+            <div class="content-1">{{item.Name}}</div>
+            <div style="font-size:10px;color:#5e5e5e">
+              <span v-for="tag in desginTags(item.Tags)" class="tag content-2">{{tag}}</span>
+            </div>
+            <div><span class="amount">￥{{item.UnitPrice}}</span></div>
           </div>
-          <div class="btn-order">开始订购</div>
+          <div class="btn-order" @click.stop="console.log('x')">立即订购</div>
         </div>
       </div>
     </div>
     <div id="shareit" v-show="showShare" @click="showShare=false">
       <img class="arrow" :src="shareIcon">
       <a href="#" id="follow"></a>
-    </div>
-    <div class="bottom-fix">
-      <div class="responsive-wrapper">
-        <div class="mini-btn-2-1">
-          <!-- <a href="javascript:;" class="js-im-icon new-btn service"><i>&#xe665;</i><span>test</span></a> -->
-          <a class="new-btn buy-cart" >
-            <i>&#xe623;</i><span class="desc">收藏</span>
-          </a>
-          <a class="new-btn buy-cart" style="">
-            <i>&#xe665;</i><span class="desc">购物车</span>
-          </a>
-        </div>
-        <div class="big-btn-2-1">
-          <a class="big-btn orange-btn vice-btn">加入购物车</a>
-          <a class="big-btn red-btn main-btn">立即下单</a>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -85,10 +70,17 @@ export default {
           vm.designs = res.data;
         });
     },
+    desginTags(t) {
+      var tags = [];
+      if (t) {
+        tags = t.split(',');
+      }
+      return tags;
+    },
     setIsPublic(desgin, ispublic) {
       var url = this.apiServer + 'zz/SetIsPublic';
       var data = {
-        desginId: desgin.DesginId,
+        designId: desgin.DesignId,
         ispublic: ispublic
       };
       var vm = this;
@@ -142,108 +134,127 @@ export default {
 </script>
 <style>
 /*begin bottom*/
+
 .bottom-fix {
-    display: block;
-    z-index: 100;
-    position: fixed;
-    left: 0;
-    bottom: 47px;
-    width: 100%;
-    text-align: center;
-    background-color: #fff;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 0
+  display: block;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  bottom: 47px;
+  width: 100%;
+  text-align: center;
+  background-color: #fff;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 0
 }
-.responsive-wrapper{
+
+.responsive-wrapper {
   margin: 0 auto;
 }
-.responsive-wrapper a{
+
+.responsive-wrapper a {
   cursor: pointer;
 }
-.mini-btn-2-1{
+
+.mini-btn-2-1 {
   float: left;
   width: 120px;
   font-size: 10px;
   text-align: center;
 }
-.mini-btn-2-1 a{
+
+.mini-btn-2-1 a {
   width: 60px;
   min-width: 60px;
   line-height: 50px;
-  position: relative;;
+  position: relative;
+  ;
   float: left;
 }
-.mini-btn-2-1 a i{
+
+.mini-btn-2-1 a i {
   font-family: 'bn-icon';
-  font-size:15px;
+  font-size: 15px;
 }
-.mini-btn-2-1 a span{
+
+.mini-btn-2-1 a span {
   position: absolute;
-  line-height: normal;;
-  left:0px;
+  line-height: normal;
+  ;
+  left: 0px;
   bottom: 5px;
   width: 100%;
 }
+
 .big-btn-2-1 {
-    font-size: 0;
-    overflow: hidden;
-    text-align: center;
-    line-height: 50px;
+  font-size: 0;
+  overflow: hidden;
+  text-align: center;
+  line-height: 50px;
 }
+
 .big-btn-2-1 .big-btn {
-    width: 50%;
+  width: 50%;
 }
+
 .big-btn {
-    height: 50px;
-    line-height: 50px;
-    font-size: 16px;
-    padding: 0;
-    border: none;
-    display: inline-block;
-    vertical-align: top;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0;
+  border: none;
+  display: inline-block;
+  vertical-align: top;
 }
+
 .orange-btn {
-    background: #f85;
-    color: #fff;
-    position: relative;
+  background: #f85;
+  color: #fff;
+  position: relative;
 }
+
 .red-btn {
-    background: #f44;
-    color: #fff;
-    position: relative;
+  background: #f44;
+  color: #fff;
+  position: relative;
 }
+
 
 /*end bottom*/
 
-.btn-order{
-  position:absolute;
-  bottom:10px;
-  right:5px;
+.btn-order {
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
   background: #f44;
   color: #fff;
-  padding:4px;
-
+  padding: 4px;
 }
+
 .desgin-warp {
   background-color: transparent;
-  padding:2px 5px;
+  padding: 2px 5px;
 }
 
-.desgin-header span {
-  float: right;
-  margin-right: 5px;
-  font-size:14px;
-  color:#5e5e5e
+.desgin-header {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #5e5e5e;
+  padding: 4px;
 }
-
+.desgin-header span{
+  font-size: 14px;
+}
 .preview-warp {
-  padding: 5px;position:relative;
+  padding: 5px;
+  position: relative;
   border-bottom: 1px solid #e5e5e5;
 }
 

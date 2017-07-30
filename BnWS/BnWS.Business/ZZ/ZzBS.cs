@@ -85,12 +85,52 @@ namespace BnWS.Business
             }
         }
 
-        public List<ZZ_Desgin> GetDesginList(string openId)
+        public List<ZZDesign> GetDesginList(string openId)
         {
             using (var db = GetDbContext())
             {
-                return db.ZZ_Desgin.AsExpandable()//.Where(x => x.CustomerId == openId)
-                    .OrderByDescending(x=>x.CreatedTime).ToList();
+                //todo test
+                //return db.ZZ_Desgin.AsExpandable()//.Where(x => x.CustomerId == openId)
+                //    .OrderByDescending(x=>x.CreatedTime).ToList();
+                return (from d in db.ZZ_Desgin.AsExpandable()//.Where(x => x.CustomerId == openId)
+                    join t in db.ZZ_Template on d.TemplateId equals t.TemplateId
+                    join c in db.ZZ_Category on t.Category equals c.CategoryId
+                    join u in db.ZY_Customer on d.CustomerId equals  u.OpenId
+                    select new ZZDesign()
+                    {
+                        Id = d.DesginId,
+                        TemplateId = d.TemplateId,
+                        CustomerId = d.CustomerId,
+                        Name = d.Name,
+                        Tags = d.Tags,
+                        Preview1 = d.Preview1,
+                        Preview2 = d.Preview2,
+                        UnitPrice = c.UnitPrice,
+                        Designer = u.UserName
+                    }).ToList();
+            }
+        }
+        public ZZDesign GetDesign(Guid designId)
+        {
+            using (var db = GetDbContext())
+            {
+                var de= (from d in  db.ZZ_Desgin.AsExpandable().Where(x => x.DesginId == designId)
+                   join t in db.ZZ_Template on d.TemplateId equals  t.TemplateId
+                         join c in db.ZZ_Category on t.Category equals c.CategoryId
+                         join u in db.ZY_Customer on d.CustomerId equals u.OpenId
+                        select new ZZDesign()
+                        {
+                            Id = d.DesginId,
+                            TemplateId = d.TemplateId,
+                            CustomerId = d.CustomerId,
+                            Name = d.Name,
+                            Tags = d.Tags,
+                            Preview1 = d.Preview1,
+                            Preview2 = d.Preview2,
+                            UnitPrice = c.UnitPrice,
+                            Designer = u.UserName
+                        }).FirstOrDefault();
+                return de;
             }
         }
 

@@ -1,20 +1,24 @@
 <template>
-  <div style="width:100%;">
+  <div style="width:100%">
     <div>
       <div></div>
-      <img :src="desgin.Preview1" v-show="isFront">
-      <img :src="desgin.Preview2" v-show="!isFront">
+      <img :src="design.Preview1" v-show="isFront">
+      <img :src="design.Preview2" v-show="!isFront">
     </div>
-    <div>
+    <div style="padding:15px; background-color:#ffffff;">
       <div>
-        
+        <span class="amount">￥{{design.UnitPrice}}</span>
+        <span style="float:right;padding-right:5px" class="content-1">{{design.Name}}</span>
       </div>
       <div>
-        <div class="badge" v-for="t in desginTags">
+        <span class="tag content-2" v-for="t in desginTags">
           {{t}}
-        </div>
+        </span>
+        <span style="float:right;padding-right:5px" class="content-2">设计师：{{design.Designer}}</span>
       </div>
     </div>
+    
+    <br/>
     <div id="shareit" v-show="showShare" @click="showShare=false">
       <img class="arrow" :src="shareIcon">
       <a href="#" id="follow"></a>
@@ -72,7 +76,7 @@ export default {
       this.isFront=!this.isFront;
     },
     loadDesign() {
-      var url = this.apiServer + 'zz/GetDesginList';
+      var url = this.apiServer + 'zz/GetDesign';
       var data = {
         designId: this.designId
       };

@@ -131,6 +131,9 @@
     <Compile Include="ZY_Shop_Img.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ZZ_Category.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZZ_Desgin.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>

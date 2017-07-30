@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web.Mvc;
 using BnWS.Business;
 using BnWS.Controllers;
@@ -41,16 +42,29 @@ namespace BnWS.Views
             return new JsonResult() { Data = designs.Select(x=>new
             {
                 x.Preview1,
-                x.DesginId,
+                DesignId=x.Id,
                 x.Name,
                 x.Tags,
                 x.IsPublic
+                ,x.UnitPrice
             }), MaxJsonLength = int.MaxValue };
         }
+
         [HttpPost]
-        public ActionResult SetIsPublic(Guid desginId,bool ispublic)
+        public ActionResult GetDesign(Guid designId)
         {
-           BS.SetIsPublic(desginId,ispublic);
+            var design = BS.GetDesign(designId);
+            return new JsonResult()
+            {
+                Data = design,
+                MaxJsonLength = int.MaxValue
+            };
+            
+        }
+        [HttpPost]
+        public ActionResult SetIsPublic(Guid designId,bool ispublic)
+        {
+            BS.SetIsPublic(designId, ispublic);
             return  new JsonResult(){Data = "OK"};
         }
     }

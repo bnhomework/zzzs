@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Pay">
           <Key>
             <PropertyRef Name="Id" />
@@ -255,6 +255,30 @@
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ZZ_Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+            <PropertyRef Name="UnitPrice" />
+            <PropertyRef Name="VersionNo" />
+            <PropertyRef Name="TransactionId" />
+            <PropertyRef Name="CreatedBy" />
+            <PropertyRef Name="CreatedTime" />
+            <PropertyRef Name="UpdatedBy" />
+            <PropertyRef Name="UpdatedTime" />
+          </Key>
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="UnitPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="Description" Type="nvarchar" MaxLength="256" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ZZ_Desgin">
           <Key>
             <PropertyRef Name="DesginId" />
@@ -462,6 +486,20 @@
           <EntitySet Name="ZY_Shop_Img" EntityType="Self.ZY_Shop_Img" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Desgin" EntityType="Self.ZZ_Desgin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Template" EntityType="Self.ZZ_Template" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZZ_Category" EntityType="Self.ZZ_Category" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ZZ_Category].[CategoryId] AS [CategoryId], 
+    [ZZ_Category].[UnitPrice] AS [UnitPrice], 
+    [ZZ_Category].[Name] AS [Name], 
+    [ZZ_Category].[Description] AS [Description], 
+    [ZZ_Category].[VersionNo] AS [VersionNo], 
+    [ZZ_Category].[TransactionId] AS [TransactionId], 
+    [ZZ_Category].[CreatedBy] AS [CreatedBy], 
+    [ZZ_Category].[CreatedTime] AS [CreatedTime], 
+    [ZZ_Category].[UpdatedBy] AS [UpdatedBy], 
+    [ZZ_Category].[UpdatedTime] AS [UpdatedTime]
+    FROM [dbo].[ZZ_Category] AS [ZZ_Category]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_T_S_Role_Function_T_S_Function" Association="Self.FK_T_S_Role_Function_T_S_Function">
             <End Role="T_S_Function" EntitySet="T_S_Function" />
             <End Role="T_S_Role_Function" EntitySet="T_S_Role_Function" />
@@ -588,6 +626,7 @@
           <EntitySet Name="ZZ_Template" EntityType="BnAppModel.ZZ_Template" />
           <EntitySet Name="ZZ_Desgin" EntityType="BnAppModel.ZZ_Desgin" />
           <EntitySet Name="Pay" EntityType="BnAppModel.Pay" />
+          <EntitySet Name="ZZ_Category" EntityType="BnAppModel.ZZ_Category" />
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -1058,6 +1097,28 @@
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="ZZ_Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+            <PropertyRef Name="UnitPrice" />
+            <PropertyRef Name="VersionNo" />
+            <PropertyRef Name="TransactionId" />
+            <PropertyRef Name="CreatedBy" />
+            <PropertyRef Name="CreatedTime" />
+            <PropertyRef Name="UpdatedBy" />
+            <PropertyRef Name="UpdatedTime" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1386,6 +1447,22 @@
                 <ScalarProperty Name="return_msg" ColumnName="return_msg" />
                 <ScalarProperty Name="return_code" ColumnName="return_code" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZZ_Category">
+            <EntityTypeMapping TypeName="BnAppModel.ZZ_Category">
+              <MappingFragment StoreEntitySet="ZZ_Category">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
