@@ -7,28 +7,28 @@
     </div>
     <div class="functions">
       <grid :rows="4">
-        <grid-item link="/component/cell" label="我的设计">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="我的设计">
           <span slot="icon" class="bn-icon">&#xe60b;</span>
         </grid-item>
-        <grid-item :link="{ path: '/component/cell'}" label="我的收藏">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="我的收藏">
           <span slot="icon" class="bn-icon">&#xe623;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick" label="购物车">
+        <grid-item @on-item-click="goTo({name:'shoppingCart'})" label="购物车">
           <span slot="icon" class="bn-icon">&#xe665;</span>
         </grid-item>
-        <grid-item link="/component/cell" label="订单">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="订单">
           <span slot="icon" class="bn-icon">&#xe637;</span>
         </grid-item>
-        <grid-item :link="{ path: '/component/cell'}" label="地址">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="地址">
           <span slot="icon" class="bn-icon">&#xe621;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick" label="消息">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="消息">
           <span slot="icon" class="bn-icon">&#xe895;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick" label="分享">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="分享">
           <span slot="icon" class="bn-icon">&#xe6a0;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick" label="联系客服">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="联系客服">
           <span slot="icon" class="bn-icon">&#xe619;</span>
         </grid-item>
       </grid>
@@ -38,10 +38,10 @@
           <span slot="icon" class="bn-icon"></span>
           <span slot="label">&nbsp;</span>
         </grid-item>
-        <grid-item :link="{ path: '/component/cell'}" label="意见反馈">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="意见反馈">
           <span slot="icon" class="bn-icon">&#xe676;</span>
         </grid-item>
-        <grid-item link="/component/cell" @on-item-click="onItemClick" label="关于我们">
+        <grid-item @on-item-click="goTo({name:'DesginList'})" label="关于我们">
           <span slot="icon" class="bn-icon">&#xe618;</span>
         </grid-item>
          <grid-item label="">

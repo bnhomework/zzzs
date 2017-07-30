@@ -1,19 +1,17 @@
 <template>
   <div style="width:100%;">
-    <div v-for="item in designs">
-      <div class="desgin-warp">
-        <div class="desgin-header">
-          <span v-show="!item.IsPublic" @click="setIsPublic(item,1)" class="bn-icon">&#xe6c9;</span>
-          <span v-show="item.IsPublic" @click="setIsPublic(item,0)" class="bn-icon">&#xe6ca;</span>
-        </div>
-        <div class="preview-warp">
-          <img :src="item.Preview1">
-          <div style="display:inline-block;vertical-align:top;">
-            <div style="font-size:14px">{{item.Name}}</div>
-            <div style="font-size:10px;color:#5e5e5e">{{item.Name}}</div>
-            <div style="color:#f85">￥{{item.Name}}</div>
-          </div>
-          <div class="btn-order">开始订购</div>
+    <div>
+      <div></div>
+      <img :src="desgin.Preview1" v-show="isFront">
+      <img :src="desgin.Preview2" v-show="!isFront">
+    </div>
+    <div>
+      <div>
+        
+      </div>
+      <div>
+        <div class="badge" v-for="t in desginTags">
+          {{t}}
         </div>
       </div>
     </div>
@@ -56,47 +54,35 @@ export default {
   data() {
     return {
       showShare: false,
+      isFront:true,
       shareIcon: require('@/assets/img/share.png'),
-      designs: []
+      design: {},
+      designId:undefined
     }
   },
   created() {
+    this.designId = this.$route.params.designId;
     this.init();
   },
   methods: {
     init() {
-      this.loadDesigns();
+      this.loadDesign();
     },
-    onItemClick(v) {
-      if (v == 0) {
-        this.historyOrder = false;
-      } else {
-        this.historyOrder = true;
-      }
+    switchSide(){
+      this.isFront=!this.isFront;
     },
-    loadDesigns() {
+    loadDesign() {
       var url = this.apiServer + 'zz/GetDesginList';
       var data = {
-        openId: this.$store.state.bn.openId
+        designId: this.designId
       };
       var vm = this;
       this.$http.post(url, data)
         .then(res => {
-          vm.designs = res.data;
+          vm.design = res.data;
         });
     },
-    setIsPublic(desgin, ispublic) {
-      var url = this.apiServer + 'zz/SetIsPublic';
-      var data = {
-        desginId: desgin.DesginId,
-        ispublic: ispublic
-      };
-      var vm = this;
-      this.$http.post(url, data)
-        .then(res => {
-          desgin.IsPublic = ispublic;
-        });
-    },
+    
     share(orderId, stype) {
       stype = stype || 1;
       var url = this.apiServer + 'zy/GetShareOrderInfo';
@@ -135,7 +121,13 @@ export default {
     }
   },
   computed: {
-
+    desginTags(){
+      var tags=[];
+      if(this.design.Tags){
+        tags=this.design.Tags.split(',');
+      }
+      return tags;
+    }
   }
 }
 

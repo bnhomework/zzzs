@@ -69,7 +69,7 @@ store.registerModule('bn', {
             wx.config(c);
             context.commit('updateWX_Config', { WX_Config: c });
             console.log('init initWX_JS config success');
-             //next();//uncomment test///waiting ready function
+             next();//uncomment test///waiting ready function
           }).catch(error => {
             console.log('init initWX_JS failed')
             next()

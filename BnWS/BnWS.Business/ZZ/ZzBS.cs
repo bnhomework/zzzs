@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Net.Mime;
+using System.Web;
 using BnWS.Entity;
 using LinqKit;
 using Repository;
@@ -39,7 +43,27 @@ namespace BnWS.Business
                 return db.ZZ_Template.AsExpandable().Where(templatePred).ToList();
             }
         }
+        private string SaveByteArrayAsImage(Guid id, string raw,string name,string ext="svg")
+        {
+            var folder = Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", id.ToString());
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            var fileName = string.Format("{0}.{1}", name, ext);
+            var localFullOutputPath = Path.Combine(folder, fileName);
+            var base64String = raw.Split(',')[1];
+            byte[] bytes = Convert.FromBase64String(base64String);
 
+            Image image;
+            using (var ms = new MemoryStream(bytes))
+            {
+                image = Image.FromStream(ms);
+            }
+
+            image.Save(localFullOutputPath);
+            return string.Format(@"upload/{0}/{1}", id, fileName);
+        }
 
         public void SaveDesgin(ZZDesign zzDesign)
         {
@@ -52,10 +76,10 @@ namespace BnWS.Business
                     CustomerId = zzDesign.CustomerId,
                     Name = zzDesign.Name,
                     Tags = zzDesign.Tags,
-                    DesginSettings = zzDesign.DesginSettings,
-                    Preview1 = zzDesign.Preview1,
-                    Preview2 = zzDesign.Preview2
+                    DesginSettings = zzDesign.DesginSettings
                 };
+                d.Preview1 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1, "1");
+                d.Preview2 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2, "2");
                 uow.Repository<ZZ_Desgin>().Insert(d);
                 uow.Save();
             }
@@ -65,7 +89,7 @@ namespace BnWS.Business
         {
             using (var db = GetDbContext())
             {
-                return db.ZZ_Desgin.AsExpandable().Where(x => x.CustomerId == openId)
+                return db.ZZ_Desgin.AsExpandable()//.Where(x => x.CustomerId == openId)
                     .OrderByDescending(x=>x.CreatedTime).ToList();
             }
         }

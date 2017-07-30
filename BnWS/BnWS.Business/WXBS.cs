@@ -3,6 +3,7 @@ using System.Linq;
 using Bn.WeiXin.GZH;
 using BnWS.Entity;
 using Bn.WeiXin;
+using System.Web;
 
 namespace BnWS.Business
 {
@@ -33,9 +34,9 @@ namespace BnWS.Business
                 var userName = "";
                 var fname = string.Format("{0}.jpg", Utility.Signature(response.openid));
                 var headimg = Path.Combine("upload","wxhead", fname);
-                var localheadimg = Path.Combine("upload","wxhead" ,fname);
+                var localheadimg = Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", "wxhead", fname);
 
-                if (customer == null || string.IsNullOrEmpty(customer.UserName))
+                if (customer == null || string.IsNullOrEmpty(customer.UserName) || string.IsNullOrEmpty(customer.Avatar))
                 {
                     var wxuser = WxApiHelper.Instance.GetWxUserInfo(response.openid, response.access_token);
                     if (wxuser != null)

@@ -226,7 +226,7 @@ export default {
         .then(res => {
           vm.$vux.toast.show({
             text: '保存成功',
-            type: 'cancel'
+            type: 'success'
           });
           vm.$router.push({
             name: 'DesginList'

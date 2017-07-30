@@ -61,6 +61,9 @@ const utils = {
                 mm = '0' + mm;
             }
             return `${yyyy}-${mm}-${dd}`;
+        },
+        goTo(p){
+            this.$router.push(p)
         }
     },
     computed: {

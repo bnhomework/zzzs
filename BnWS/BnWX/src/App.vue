@@ -207,11 +207,11 @@ html, body {
 
 @font-face {
   font-family: 'bn-icon';  /* project id 338215 */
-  src: url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.eot');
-  src: url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.woff') format('woff'),
-  url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_fkm0sopk1hnf80k9.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.eot');
+  src: url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.woff') format('woff'),
+  url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.svg#iconfont') format('svg');
 }
 
 .demo-icon {

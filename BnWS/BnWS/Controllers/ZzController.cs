@@ -38,7 +38,14 @@ namespace BnWS.Views
         public ActionResult GetDesginList(string openId)
         {
             var designs=BS.GetDesginList(openId);
-            return  new JsonResult(){Data = designs};
+            return new JsonResult() { Data = designs.Select(x=>new
+            {
+                x.Preview1,
+                x.DesginId,
+                x.Name,
+                x.Tags,
+                x.IsPublic
+            }), MaxJsonLength = int.MaxValue };
         }
         [HttpPost]
         public ActionResult SetIsPublic(Guid desginId,bool ispublic)
