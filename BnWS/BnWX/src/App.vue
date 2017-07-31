@@ -179,6 +179,14 @@ html, body {
   font-size:12px;
   color:#9a9a9a;
 }
+span.option{
+  border: 1px solid #a5a5a5;
+  border-radius:5px;
+  padding:5px;
+}
+span.option.active{
+  border: 1px solid #f85;
+}
 span.tag{
   border: 1px solid #e1e1e1;
   border-radius:5px;

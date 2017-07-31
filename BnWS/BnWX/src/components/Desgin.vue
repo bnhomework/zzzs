@@ -17,7 +17,6 @@
         <span style="float:right;padding-right:5px" class="content-2">设计师：{{design.Designer}}</span>
       </div>
     </div>
-    
     <br/>
     <div id="shareit" v-show="showShare" @click="showShare=false">
       <img class="arrow" :src="shareIcon">
@@ -27,7 +26,7 @@
       <div class="responsive-wrapper">
         <div class="mini-btn-2-1">
           <!-- <a href="javascript:;" class="js-im-icon new-btn service"><i>&#xe665;</i><span>test</span></a> -->
-          <a class="new-btn buy-cart" >
+          <a class="new-btn buy-cart">
             <i>&#xe623;</i><span class="desc">收藏</span>
           </a>
           <a class="new-btn buy-cart" style="">
@@ -35,33 +34,72 @@
           </a>
         </div>
         <div class="big-btn-2-1">
-          <a class="big-btn orange-btn vice-btn">加入购物车</a>
+          <a class="big-btn orange-btn vice-btn" @click="showCardModel=true">加入购物车</a>
           <a class="big-btn red-btn main-btn">立即下单</a>
         </div>
       </div>
+    </div>
+    <div v-transfer-dom>
+      <popup v-model="showCardModel" height="270px" is-transparent>
+        <div style="width: 100%;background-color:#fff;height:250px;margin:0 auto;">
+          <div style="font-size:12px;padding-left:5px;">
+            <div class="preview" style="padding-top:5px;border-bottom:1px solid #f5f5f5">
+              <img :src="design.Preview1" width="20%" style="border:1px solid #e5e5e5">
+              <div style="float:right;text-align:left;width:77%">{{design.Name}}
+                <div>
+                  <span class="amount" style="font-size:14px">￥{{design.UnitPrice}}</span>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style="margin-bottom:10px">颜色:</div>
+
+              <span v-for="c in colors" class="option" style="margin:5px">{{c}}</span>
+            </div>
+            <div>
+              <div style="margin-bottom:10px">数量:</div>
+
+              <span v-for="c in colors" class="option" style="margin:5px">{{c}}</span>
+            </div>
+          </div>
+          <div style="width: 100%;text-align:center;position:fixed;bottom:0px">
+            <a class="big-btn orange-btn vice-btn" style="width: 100%;">加入购物车</a>
+          </div>
+        </div>
+      </popup>
     </div>
   </div>
 </template>
 <script>
 import {
   Toast,
-  XButton
+  XButton,
+  Popup,
+  Group,
+  TransferDom,
 } from 'vux'
 import utils from '@/mixins/utils'
 
 export default {
   mixins: [utils],
+  directives: {
+    TransferDom
+  },
   components: {
     Toast,
-    XButton
+    XButton,
+    Popup,
+    Group
   },
   data() {
     return {
       showShare: false,
-      isFront:true,
+      isFront: true,
       shareIcon: require('@/assets/img/share.png'),
       design: {},
-      designId:undefined
+      colors: ['a','b','c'],
+      designId: undefined,
+      showCardModel: false
     }
   },
   created() {
@@ -72,8 +110,8 @@ export default {
     init() {
       this.loadDesign();
     },
-    switchSide(){
-      this.isFront=!this.isFront;
+    switchSide() {
+      this.isFront = !this.isFront;
     },
     loadDesign() {
       var url = this.apiServer + 'zz/GetDesign';
@@ -86,7 +124,7 @@ export default {
           vm.design = res.data;
         });
     },
-    
+
     share(orderId, stype) {
       stype = stype || 1;
       var url = this.apiServer + 'zy/GetShareOrderInfo';
@@ -125,10 +163,10 @@ export default {
     }
   },
   computed: {
-    desginTags(){
-      var tags=[];
-      if(this.design.Tags){
-        tags=this.design.Tags.split(',');
+    desginTags() {
+      var tags = [];
+      if (this.design.Tags) {
+        tags = this.design.Tags.split(',');
       }
       return tags;
     }
@@ -138,108 +176,124 @@ export default {
 </script>
 <style>
 /*begin bottom*/
+
 .bottom-fix {
-    display: block;
-    z-index: 100;
-    position: fixed;
-    left: 0;
-    bottom: 47px;
-    width: 100%;
-    text-align: center;
-    background-color: #fff;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: 0
+  display: block;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  bottom: 47px;
+  width: 100%;
+  text-align: center;
+  background-color: #fff;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 0
 }
-.responsive-wrapper{
+
+.responsive-wrapper {
   margin: 0 auto;
 }
-.responsive-wrapper a{
+
+.responsive-wrapper a {
   cursor: pointer;
 }
-.mini-btn-2-1{
+
+.mini-btn-2-1 {
   float: left;
   width: 120px;
   font-size: 10px;
   text-align: center;
 }
-.mini-btn-2-1 a{
+
+.mini-btn-2-1 a {
   width: 60px;
   min-width: 60px;
   line-height: 50px;
-  position: relative;;
+  position: relative;
+  ;
   float: left;
 }
-.mini-btn-2-1 a i{
+
+.mini-btn-2-1 a i {
   font-family: 'bn-icon';
-  font-size:15px;
+  font-size: 15px;
 }
-.mini-btn-2-1 a span{
+
+.mini-btn-2-1 a span {
   position: absolute;
-  line-height: normal;;
-  left:0px;
+  line-height: normal;
+  ;
+  left: 0px;
   bottom: 5px;
   width: 100%;
 }
+
 .big-btn-2-1 {
-    font-size: 0;
-    overflow: hidden;
-    text-align: center;
-    line-height: 50px;
+  font-size: 0;
+  overflow: hidden;
+  text-align: center;
+  line-height: 50px;
 }
+
 .big-btn-2-1 .big-btn {
-    width: 50%;
+  width: 50%;
 }
+
 .big-btn {
-    height: 50px;
-    line-height: 50px;
-    font-size: 16px;
-    padding: 0;
-    border: none;
-    display: inline-block;
-    vertical-align: top;
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0;
+  border: none;
+  display: inline-block;
+  vertical-align: top;
 }
+
 .orange-btn {
-    background: #f85;
-    color: #fff;
-    position: relative;
+  background: #f85;
+  color: #fff;
+  position: relative;
 }
+
 .red-btn {
-    background: #f44;
-    color: #fff;
-    position: relative;
+  background: #f44;
+  color: #fff;
+  position: relative;
 }
+
 
 /*end bottom*/
 
-.btn-order{
-  position:absolute;
-  bottom:10px;
-  right:5px;
+.btn-order {
+  position: absolute;
+  bottom: 10px;
+  right: 5px;
   background: #f44;
   color: #fff;
-  padding:4px;
-
+  padding: 4px;
 }
+
 .desgin-warp {
   background-color: transparent;
-  padding:2px 5px;
+  padding: 2px 5px;
 }
 
 .desgin-header span {
   float: right;
   margin-right: 5px;
-  font-size:14px;
-  color:#5e5e5e
+  font-size: 14px;
+  color: #5e5e5e
 }
 
 .preview-warp {
-  padding: 5px;position:relative;
+  padding: 5px;
+  position: relative;
   border-bottom: 1px solid #e5e5e5;
 }
 

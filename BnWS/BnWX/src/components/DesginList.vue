@@ -15,7 +15,7 @@
             </div>
             <div><span class="amount">￥{{item.UnitPrice}}</span></div>
           </div>
-          <div class="btn-order" @click.stop="console.log('x')">立即订购</div>
+          <div class="btn-order" @click.stop="">立即订购</div>
         </div>
       </div>
     </div>
