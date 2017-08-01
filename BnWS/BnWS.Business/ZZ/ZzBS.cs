@@ -148,5 +148,55 @@ namespace BnWS.Business
                 }
             }
         }
+
+        #region order
+
+        public Guid AddToCart(ZZOrderInfo orderInfo)
+        {
+            orderInfo.OrderId = Guid.NewGuid();
+            orderInfo.OrderStatus = 0;
+            //todo
+            return orderInfo.OrderId;
+        }
+        public List<ZZOrderInfo> GetShoppingCart(string customerId)
+        {
+            return null;
+        }
+
+        public void PlaceOrder(List<ZZOrderInfo> orders, Guid addressId)
+        {
+            var submissionId = Guid.NewGuid().ToString().Replace("-", "");
+            //submission id
+            //calculate price
+            //wx paymentid
+        }
+
+        public List<ZZOrderInfo> GetOrders(string customerId)
+        {
+            return null;
+        }
+        #endregion
+
+        #region address
+
+        public List<ZZAddress> GetAddressList(string openId)
+        {
+            return null;
+        } 
+        public Guid UpdateAddress(ZZAddress address)
+        {
+            if (address.AddressId == Guid.Empty)
+            {
+                address.AddressId = Guid.NewGuid();
+            }
+            return address.AddressId;
+        }
+
+        public bool DeleteAddress(Guid address)
+        {
+            return true;
+        }
+
+        #endregion
     }
 }

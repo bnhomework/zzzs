@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Web.Mvc;
 using BnWS.Business;
@@ -66,6 +68,28 @@ namespace BnWS.Views
         {
             BS.SetIsPublic(designId, ispublic);
             return  new JsonResult(){Data = "OK"};
+        }
+        [HttpPost]
+        public ActionResult AddToCart(ZZOrderInfo orderInfo)
+        {
+          var orderId=  BS.AddToCart(orderInfo);
+          return new JsonResult() { Data = orderId };
+        }
+        [HttpPost]
+        public ActionResult DeleteOrder(Guid orderId)
+        {
+            //var o = BS.de(orderId);
+            return new JsonResult() { Data = "OK" };
+        }
+
+        public ActionResult UpdateOrders(List<Guid> orders)
+        {
+            return new JsonResult() { Data = "OK" };
+        }
+
+        public ActionResult UpdateAddress()
+        {
+            return new JsonResult() { Data = "OK" };
         }
     }
 }

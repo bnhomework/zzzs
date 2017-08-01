@@ -71,4 +71,26 @@ namespace BnWS.Entity
 
         }
     }
+
+    public class ZZOrderInfo
+    {
+        public Guid OrderId { get; set; }
+        public string CustomerId { get; set; }
+        public Guid DesignId { get; set; }
+        public string Color { get; set; }
+        public int Quiantity { get; set; }
+
+        public int OrderStatus { get; set; }
+    }
+
+    public class ZZAddress
+    {
+        public Guid AddressId { get; set; }
+        public string CustomerId { get; set; }
+        public string ContactName { get; set; }
+        public string AddressLine1 { get; set; }
+        public string City { get; set; }
+        public string Province { get; set; }
+
+    }
 }
