@@ -23,7 +23,9 @@ namespace BnWS.Entity
         public string Tags { get; set; }
         public string DesginSettings { get; set; }
         public string Preview1 { get; set; }
-        public string Preview2 { get; set; }
+        public string Preview2 { get; set; }    
+        public string Preview1_120 { get; set; }
+        public string Preview2_120 { get; set; }
 
         //review
         public decimal UnitPrice { get; set; }

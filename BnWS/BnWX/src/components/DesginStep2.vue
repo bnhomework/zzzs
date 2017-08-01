@@ -18,7 +18,7 @@
             <x-input title="标签:" v-model="desginTags"></x-input>
           </group>
           <div style="padding:20px 15px;">
-            <x-button type="primary" :disabled="Preview1==''||Preview2==''" @click.native="saveDesign">保存</x-button>
+            <x-button type="primary" :disabled="Preview1==''||Preview2==''||Preview1_120==''||Preview2_120==''" @click.native="saveDesign">保存</x-button>
             <x-button @click.native="saveDialogVisible = false">取消</x-button>
           </div>
         </div>
@@ -195,13 +195,21 @@ export default {
       var vm = this;
       vm.Preview1 = '';
       vm.Preview2 = '';
+      vm.Preview1_120='';
+      vm.Preview2_120='';
       vm.saveDialogVisible = true;
       //todo save image to server
-      saveSVGasPNG.svgAsDataUri(this.$refs.front.$el, {}, function(uri) {
+      saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {}, function(uri) {
         vm.Preview1 = uri;
       })
-      saveSVGasPNG.svgAsDataUri(this.$refs.back.$el, {}, function(uri) {
+      saveSVGasPNG.svgAsPngUri(this.$refs.back.$el, {}, function(uri) {
         vm.Preview2 = uri;
+      })
+       saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {scale: 0.3}, function(uri) {
+        vm.Preview1_120 = uri;
+      })
+      saveSVGasPNG.svgAsPngUri(this.$refs.back.$el, {scale: 0.3}, function(uri) {
+        vm.Preview2_120 = uri;
       })
     },
     saveDesign() {
@@ -219,6 +227,8 @@ export default {
           DesginSettings: JSON.stringify(this.desgin),
           Preview1: this.Preview1,
           Preview2: this.Preview2,
+          Preview1_120: this.Preview1_120,
+          Preview2_120: this.Preview2_120,
         }
       };
       var vm = this;

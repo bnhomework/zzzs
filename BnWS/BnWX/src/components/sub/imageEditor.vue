@@ -170,7 +170,8 @@ export default {
         this.$emit('onlogoclick');
       },
       getSettings(){
-        return{logo:this.logoImg,logoText:this.logoText};
+        return{logo:this.logo,logoText:this.textLogo};
+        // return{logo:this.logoImg,logoText:this.logoText};
       }
 
     },

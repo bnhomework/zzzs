@@ -43,7 +43,7 @@ namespace BnWS.Business
                 return db.ZZ_Template.AsExpandable().Where(templatePred).ToList();
             }
         }
-        private string SaveByteArrayAsImage(Guid id, string raw,string name,string ext="svg")
+        private string SaveByteArrayAsImage(Guid id, string raw,string name,string ext="png")
         {
             var folder = Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", id.ToString());
             if (!Directory.Exists(folder))
@@ -60,7 +60,6 @@ namespace BnWS.Business
             {
                 image = Image.FromStream(ms);
             }
-
             image.Save(localFullOutputPath);
             return string.Format(@"upload/{0}/{1}", id, fileName);
         }
@@ -78,8 +77,10 @@ namespace BnWS.Business
                     Tags = zzDesign.Tags,
                     DesginSettings = zzDesign.DesginSettings
                 };
-                d.Preview1 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1, "1");
-                d.Preview2 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2, "2");
+                d.Preview1 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1_120, "1_120");
+                d.Preview2 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2_120, "2_120");
+                SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1, "1");
+                SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2, "2");
                 uow.Repository<ZZ_Desgin>().Insert(d);
                 uow.Save();
             }
