@@ -183,6 +183,7 @@ span.option{
   border: 1px solid #a5a5a5;
   border-radius:5px;
   padding:5px;
+  display: inline-block;
 }
 span.option.active{
   border: 1px solid #f85;

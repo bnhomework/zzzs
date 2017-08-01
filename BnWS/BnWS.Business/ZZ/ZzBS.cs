@@ -128,7 +128,8 @@ namespace BnWS.Business
                             Preview1 = d.Preview1,
                             Preview2 = d.Preview2,
                             UnitPrice = c.UnitPrice,
-                            Designer = u.UserName
+                            Designer = u.UserName,
+                            Colors = db.ZZ_Template.Where(x=>x.Category==t.Category).Select(x=>x.Color).Distinct().ToList()
                         }).FirstOrDefault();
                 return de;
             }

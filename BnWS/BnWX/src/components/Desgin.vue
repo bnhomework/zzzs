@@ -39,7 +39,8 @@
         </div>
       </div>
     </div>
-    <div v-transfer-dom>
+    <popup-order-info :showmodel="showCardModel" :design="design" :action="action"></popup-order-info>
+   <!--  <div v-transfer-dom>
       <popup v-model="showCardModel" height="270px" is-transparent>
         <div style="width: 100%;background-color:#fff;height:250px;margin:0 auto;">
           <div style="font-size:12px;padding-left:5px;">
@@ -67,7 +68,7 @@
           </div>
         </div>
       </popup>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -79,6 +80,7 @@ import {
   TransferDom,
 } from 'vux'
 import utils from '@/mixins/utils'
+import popupOrderInfo from '@/components/sub/popupOrderInfo.vue'
 
 export default {
   mixins: [utils],
@@ -89,7 +91,8 @@ export default {
     Toast,
     XButton,
     Popup,
-    Group
+    Group,
+    popupOrderInfo
   },
   data() {
     return {
@@ -99,7 +102,8 @@ export default {
       design: {},
       colors: ['a','b','c'],
       designId: undefined,
-      showCardModel: false
+      showCardModel: false,
+      action:0
     }
   },
   created() {

@@ -1,0 +1,101 @@
+<template>
+  <div v-transfer-dom>
+    <popup v-model="showmodel"  is-transparent>
+      <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">
+        <div style="font-size:12px;padding-left:5px;">
+          <div class="preview" style="padding-top:5px;border-bottom:1px solid #f5f5f5">
+            <img :src="design.Preview1" width="15%" style="border:1px solid #e5e5e5">
+            <div style="float:right;text-align:left;width:77%">{{design.Name}}
+              <div>
+                <span class="amount" style="font-size:14px">￥{{design.UnitPrice}}</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div style="padding-left:15px">颜色:</div>
+            <span v-for="c in design.Colors" class="option" style="margin:5px" @click="color=c" css="{active:c==color}">{{c}}</span>
+            
+          </div>
+          <div>
+            <x-number :min="1" :value="quantity" title="数量:"></x-number>
+          </div>
+        </div>
+        <div style="width: 100%;text-align:center;position:fixed;bottom:0px">
+          <a class="big-btn orange-btn vice-btn" style="width: 100%;" @click="handleAction">{{actionName}}</a>
+        </div>
+      </div>
+    </popup>
+  </div>
+</template>
+<script>
+import {
+  TransferDom,
+  Popup,
+  XNumber
+} from 'vux'
+import utils from '@/mixins/utils'
+export default {
+  mixins: [utils],
+  directives: {
+    TransferDom
+  },
+  components: {
+    Popup,XNumber
+  },
+  props: {
+    // product:{type:String},
+    // unitPrice:{type:Number},
+    // preview:{type:String},
+    design:{type:Object,default:{}},
+    showmodel: {
+      type: Boolean,
+      default: false
+    },
+    action:{type:Number,default:0}
+  },
+  data() {
+    return {
+      color:'',
+      quantity:1,
+      categroyInfo:{}
+    };
+  },
+  created() {
+    this.init();
+  },
+
+  methods: {
+    init() {
+    },
+    handleAction(){
+      if(this.action==0){
+        this.addToCart();        
+      }else{
+        this.placeOrder()
+      }
+    },
+    placeOrder(){
+
+    },
+    addToCart(){
+
+    }
+  },
+  computed: {
+    actionName() {
+      if(this.action==0){
+        return '加入购物车';
+      }else{
+        return '立即下单'
+      }
+    }
+  },
+  mounted() {
+
+  },
+  destory() {}
+}
+
+</script>
+<style scoped>
+</style>

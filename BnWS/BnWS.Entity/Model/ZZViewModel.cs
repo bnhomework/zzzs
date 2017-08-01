@@ -29,6 +29,9 @@ namespace BnWS.Entity
         public decimal UnitPrice { get; set; }
         public bool IsPublic { get; set; }
         public string Designer { get; set; }
+
+        //template info
+        public List<string> Colors { get; set; } 
     }
     public static class TempalteEx
     {
