@@ -10,7 +10,7 @@
     </group>
     <div class="bottom-fix">
     	<div>合计：<span class="amount">￥{{totalAmount}}</span></div>
-    	<a class="big-btn red-btn" @click="checkOut">立即下单</a>
+    	<a class="big-btn red-btn" @click="checkOut">提交</a>
     </div>
   </div>
 </template>
@@ -29,13 +29,14 @@ export default {
   		orders:[],
   		addressList:[]
   	}
-  },
+  }
   created(){
-  	this.loadOrders();
+    var orderIds=this.$route.params.ordersIds;
+  	this.loadOrders(orderIds);
   },
   methods:{
-  	loadOrders(){
-      
+  	loadOrders(orderIds){
+
   	},
   	checkOut(){
       var selectedAddress=this.$ref.pickAddress.selectedAddress;

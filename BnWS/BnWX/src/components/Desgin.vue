@@ -34,8 +34,8 @@
           </a>
         </div>
         <div class="big-btn-2-1">
-          <a class="big-btn orange-btn vice-btn" @click="showCardModel=true">加入购物车</a>
-          <a class="big-btn red-btn main-btn">立即下单</a>
+          <a class="big-btn orange-btn vice-btn" @click="onAddCard">加入购物车</a>
+          <a class="big-btn red-btn main-btn" @click="onPlaceOrder">立即下单</a>
         </div>
       </div>
     </div>
@@ -99,7 +99,15 @@ export default {
           vm.design = res.data;
         });
     },
-
+    onAddCard(){
+      this.showCardModel=true;
+      this.action=0;
+    },
+    onPlaceOrder(){
+      this.showCardModel=true;
+      this.action=1;
+    }
+    ,
     share(orderId, stype) {
       stype = stype || 1;
       var url = this.apiServer + 'zy/GetShareOrderInfo';

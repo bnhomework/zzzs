@@ -67,7 +67,7 @@ export default {
     init() {},
     handleAction() {
       var vm = this;
-      var url = this.apiServer + 'zz/GetDesign';
+      var url = this.apiServer + 'zz/AddToCart';
       var data = {
         orderInfo: {}
       };
@@ -82,10 +82,12 @@ export default {
         });
     },
     ,
-    placeOrder() {
+    placeOrder(orderId) {
+      var orderIds=[];
+      orderIds.push(orderId);
         vm.$router.push({
-          name: 'DesginList'
-        })
+          name: 'submitOrders',params:{orderIds:orderIds}
+        });
     },
     addToCart() {
       this.$vux.toast.show({
