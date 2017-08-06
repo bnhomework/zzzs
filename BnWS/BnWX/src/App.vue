@@ -179,6 +179,27 @@ html, body {
   font-size:12px;
   color:#9a9a9a;
 }
+.big-btn {
+  height: 50px;
+  line-height: 50px;
+  font-size: 16px;
+  padding: 0;
+  border: none;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.orange-btn {
+  background: #f85;
+  color: #fff;
+  position: relative;
+}
+
+.red-btn {
+  background: #f44;
+  color: #fff;
+  position: relative;
+}
 span.option{
   border: 1px solid #a5a5a5;
   border-radius:5px;
@@ -198,7 +219,9 @@ span.amount{
   color:#f85;
   font-size:20px;
 }
-
+.pull-right{
+  float: right;
+}
 
 .zy-icon-22 {
   font-family: 'bn-icon';
@@ -235,11 +258,11 @@ span.amount{
 
 @font-face {
   font-family: 'bn-icon';  /* project id 338215 */
-  src: url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.eot');
-  src: url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.woff') format('woff'),
-  url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_8ix839i4ghpsnhfr.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_xl3x130d804l5wmi.eot');
+  src: url('//at.alicdn.com/t/font_xl3x130d804l5wmi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_xl3x130d804l5wmi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_xl3x130d804l5wmi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_xl3x130d804l5wmi.svg#iconfont') format('svg');
 }
 
 .demo-icon {
