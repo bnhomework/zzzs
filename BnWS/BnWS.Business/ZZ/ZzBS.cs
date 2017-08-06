@@ -154,17 +154,58 @@ namespace BnWS.Business
 
         public Guid AddToCart(ZZOrderInfo orderInfo)
         {
-            orderInfo.OrderId = Guid.NewGuid();
-            orderInfo.OrderStatus = 0;
-            //todo
-            return orderInfo.OrderId;
+            var unitPrice = 0m;
+            using (var db=GetDbContext())
+            {
+                var xx = (from d in db.ZZ_Desgin
+                    join t in db.ZZ_Template on d.TemplateId equals t.TemplateId
+                    join c in db.ZZ_Category on t.Category equals c.CategoryId
+                    where d.DesginId == orderInfo.DesignId
+                    select c).FirstOrDefault();
+                if (xx == null)
+                {
+                    throw new Exception("Invalid Order");
+                }
+                unitPrice = xx.UnitPrice;
+            }
+            var o = new ZZ_Order();
+            o.OrderId = Guid.NewGuid();
+            o.OrderStatus = 0;
+            o.DesignId = orderInfo.DesignId;
+            o.CustomerId = orderInfo.CustomerId;
+            o.Color = orderInfo.Color;
+            o.Quiantity = orderInfo.Quiantity;
+            o.TotalAmount = orderInfo.Quiantity*unitPrice;
+            using (var uow = GetUnitOfWork())
+            {
+                uow.Repository<ZZ_Order>().Insert(o);
+                uow.Save();
+            }
+            return o.OrderId;
         }
-        public List<ZZOrderInfo> GetShoppingCart(string customerId)
+        public List<ZZOrderReview> GetShoppingCart(string customerId)
         {
-            return null;
+            using (var db=GetDbContext())
+            {
+                var orders = (from o in db.ZZ_Order
+                    join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
+                    where o.OrderStatus == 0 && o.CustomerId == customerId
+                              select new ZZOrderReview()
+                    {
+                        OrderId = o.OrderId,
+                        CustomerId = o.CustomerId,
+                        DesignId = o.DesignId,
+                        OrderStatus = o.OrderStatus,
+                        Color = o.Color,
+                        Quiantity = o.Quiantity,
+                        TotalAmount = o.TotalAmount,
+                        Preview = d.Preview1
+                    }).ToList();
+                return orders;
+            }
         }
 
-        public void PlaceOrder(List<ZZOrderInfo> orders, Guid addressId)
+        public void PlaceOrder(List<Guid> orders, Guid addressId)
         {
             var submissionId = Guid.NewGuid().ToString().Replace("-", "");
             //submission id
@@ -172,9 +213,26 @@ namespace BnWS.Business
             //wx paymentid
         }
 
-        public List<ZZOrderInfo> GetOrders(string customerId)
+        public List<ZZOrderReview> GetOrders(string customerId)
         {
-            return null;
+            using (var db = GetDbContext())
+            {
+                var orders = (from o in db.ZZ_Order
+                              join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
+                              where o.OrderStatus >0 && o.CustomerId == customerId
+                              select new ZZOrderReview()
+                              {
+                                  OrderId = o.OrderId,
+                                  CustomerId = o.CustomerId,
+                                  DesignId = o.DesignId,
+                                  OrderStatus = o.OrderStatus,
+                                  Color = o.Color,
+                                  Quiantity = o.Quiantity,
+                                  TotalAmount = o.TotalAmount,
+                                  Preview = d.Preview1
+                              }).ToList();
+                return orders;
+            }
         }
         #endregion
 

@@ -34,6 +34,9 @@
         <EntityTypeShape EntityType="BnAppModel.ZZ_Desgin" Width="1.5" PointX="3.375" PointY="0.75" />
         <EntityTypeShape EntityType="BnAppModel.Pay" Width="1.5" PointX="10.375" PointY="5.75" />
         <EntityTypeShape EntityType="BnAppModel.ZZ_Category" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BnAppModel.ZZ_Address" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="BnAppModel.ZZ_Order" Width="1.5" PointX="12.375" PointY="4.75" />
+        <EntityTypeShape EntityType="BnAppModel.ZZ_OrderAddress" Width="1.5" PointX="7.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

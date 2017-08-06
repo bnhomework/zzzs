@@ -255,6 +255,23 @@
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="ZZ_Address">
+          <Key>
+            <PropertyRef Name="AddressId" />
+          </Key>
+          <Property Name="AddressId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustomerId" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="256" />
+          <Property Name="AddressLine1" Type="nvarchar" MaxLength="256" />
+          <Property Name="City" Type="nvarchar" MaxLength="256" />
+          <Property Name="Province" Type="nvarchar" MaxLength="256" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ZZ_Category">
@@ -298,6 +315,39 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
           <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="IsPublic" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZZ_Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustomerId" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="DesignId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Color" Type="nvarchar" MaxLength="256" />
+          <Property Name="Quiantity" Type="int" Nullable="false" />
+          <Property Name="OrderStatus" Type="int" Nullable="false" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SubmissionId" Type="nvarchar" MaxLength="256" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ZZ_OrderAddress">
+          <Key>
+            <PropertyRef Name="OrderAddressId" />
+          </Key>
+          <Property Name="OrderAddressId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SubmissionId" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="AddressId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="ZZ_Template">
           <Key>
@@ -484,7 +534,10 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
           <EntitySet Name="ZY_Shop" EntityType="Self.ZY_Shop" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop_Desk" EntityType="Self.ZY_Shop_Desk" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZY_Shop_Img" EntityType="Self.ZY_Shop_Img" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZZ_Address" EntityType="Self.ZZ_Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Desgin" EntityType="Self.ZZ_Desgin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZZ_Order" EntityType="Self.ZZ_Order" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZZ_OrderAddress" EntityType="Self.ZZ_OrderAddress" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Template" EntityType="Self.ZZ_Template" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Category" EntityType="Self.ZZ_Category" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -627,6 +680,9 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
           <EntitySet Name="ZZ_Desgin" EntityType="BnAppModel.ZZ_Desgin" />
           <EntitySet Name="Pay" EntityType="BnAppModel.Pay" />
           <EntitySet Name="ZZ_Category" EntityType="BnAppModel.ZZ_Category" />
+          <EntitySet Name="ZZ_Address" EntityType="BnAppModel.ZZ_Address" />
+          <EntitySet Name="ZZ_Order" EntityType="BnAppModel.ZZ_Order" />
+          <EntitySet Name="ZZ_OrderAddress" EntityType="BnAppModel.ZZ_OrderAddress" />
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -1119,6 +1175,56 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="ZZ_Address">
+          <Key>
+            <PropertyRef Name="AddressId" />
+          </Key>
+          <Property Name="AddressId" Type="Guid" Nullable="false" />
+          <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="ContactName" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="AddressLine1" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Province" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ZZ_Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Guid" Nullable="false" />
+          <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="DesignId" Type="Guid" Nullable="false" />
+          <Property Name="Color" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Quiantity" Type="Int32" Nullable="false" />
+          <Property Name="OrderStatus" Type="Int32" Nullable="false" />
+          <Property Name="TotalAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="SubmissionId" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="ZZ_OrderAddress">
+          <Key>
+            <PropertyRef Name="OrderAddressId" />
+          </Key>
+          <Property Name="OrderAddressId" Type="Guid" Nullable="false" />
+          <Property Name="SubmissionId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="AddressId" Type="Guid" Nullable="false" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1463,6 +1569,59 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZZ_Address">
+            <EntityTypeMapping TypeName="BnAppModel.ZZ_Address">
+              <MappingFragment StoreEntitySet="ZZ_Address">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="AddressLine1" ColumnName="AddressLine1" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZZ_Order">
+            <EntityTypeMapping TypeName="BnAppModel.ZZ_Order">
+              <MappingFragment StoreEntitySet="ZZ_Order">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="SubmissionId" ColumnName="SubmissionId" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="Quiantity" ColumnName="Quiantity" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="DesignId" ColumnName="DesignId" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZZ_OrderAddress">
+            <EntityTypeMapping TypeName="BnAppModel.ZZ_OrderAddress">
+              <MappingFragment StoreEntitySet="ZZ_OrderAddress">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="AddressId" ColumnName="AddressId" />
+                <ScalarProperty Name="SubmissionId" ColumnName="SubmissionId" />
+                <ScalarProperty Name="OrderAddressId" ColumnName="OrderAddressId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

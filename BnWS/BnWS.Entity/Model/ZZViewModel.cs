@@ -83,8 +83,14 @@ namespace BnWS.Entity
         public int Quiantity { get; set; }
 
         public int OrderStatus { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 
+    public class ZZOrderReview : ZZOrderInfo
+    {
+        public string Preview { get; set; }
+        
+    }
     public class ZZAddress
     {
         public Guid AddressId { get; set; }

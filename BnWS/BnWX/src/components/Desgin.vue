@@ -40,35 +40,6 @@
       </div>
     </div>
     <popup-order-info :showmodel="showCardModel" :design="design" :action="action"></popup-order-info>
-   <!--  <div v-transfer-dom>
-      <popup v-model="showCardModel" height="270px" is-transparent>
-        <div style="width: 100%;background-color:#fff;height:250px;margin:0 auto;">
-          <div style="font-size:12px;padding-left:5px;">
-            <div class="preview" style="padding-top:5px;border-bottom:1px solid #f5f5f5">
-              <img :src="design.Preview1" width="20%" style="border:1px solid #e5e5e5">
-              <div style="float:right;text-align:left;width:77%">{{design.Name}}
-                <div>
-                  <span class="amount" style="font-size:14px">￥{{design.UnitPrice}}</span>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div style="margin-bottom:10px">颜色:</div>
-
-              <span v-for="c in colors" class="option" style="margin:5px">{{c}}</span>
-            </div>
-            <div>
-              <div style="margin-bottom:10px">数量:</div>
-
-              <span v-for="c in colors" class="option" style="margin:5px">{{c}}</span>
-            </div>
-          </div>
-          <div style="width: 100%;text-align:center;position:fixed;bottom:0px">
-            <a class="big-btn orange-btn vice-btn" style="width: 100%;">加入购物车</a>
-          </div>
-        </div>
-      </popup>
-    </div> -->
   </div>
 </template>
 <script>
