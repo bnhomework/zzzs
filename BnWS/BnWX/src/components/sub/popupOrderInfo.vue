@@ -13,7 +13,7 @@
           </div>
           <div>
             <div style="padding-left:15px">颜色:</div>
-            <span v-for="c in design.Colors" class="option" style="margin:5px" @click="color=c" css="{active:c==color}">{{c}}</span>
+            <div v-for="c in design.Colors" class="option" style="margin:5px" @click="onPickColor(c)" v-bind:class="{active:c==color}">{{c}}</div>
           </div>
           <div>
             <x-number :min="1" :value="quantity" title="数量:"></x-number>
@@ -28,7 +28,7 @@
 </template>
 <script>
 import {
-    Toast,
+  Toast,
   TransferDom,
   Popup,
   XNumber
@@ -57,7 +57,7 @@ export default {
       color: '',
       quantity: 1,
       categroyInfo: {}
-    };
+    }
   },
   created() {
     this.init();
@@ -65,11 +65,35 @@ export default {
 
   methods: {
     init() {},
+    onPickColor(c) {
+      console.log(c)
+      this.color = c;
+    },
     handleAction() {
+
+      if (this.color == '') {
+        this.$vux.toast.show({
+          text: '请选择颜色',
+          type: 'cancel'
+        });
+        return;
+      }
+      if (this.quantity < 1) {
+        this.$vux.toast.show({
+          text: '请填写数量',
+          type: 'cancel'
+        });
+        return;
+      }
       var vm = this;
       var url = this.apiServer + 'zz/AddToCart';
       var data = {
-        orderInfo: {}
+        orderInfo: {
+          Color:vm.color,
+          Quiantity:vm.quantity,
+          CustomerId:vm.$store.state.bn.openId,
+          DesignId:vm.design.Id,
+        }
       };
       var vm = this;
       this.$http.post(url, data)
@@ -81,20 +105,21 @@ export default {
           }
         });
     },
-    ,
     placeOrder(orderId) {
-      var orderIds=[];
+      var vm = this;
+      var orderIds = [];
       orderIds.push(orderId);
-        vm.$router.push({
-          name: 'submitOrders',params:{orderIds:orderIds}
-        });
+      vm.$router.push({
+        name: 'submitOrders',
+        params: { orderIds: orderIds }
+      });
     },
     addToCart() {
       this.$vux.toast.show({
-            text: '已加入购物车',
-            type: 'success'
-          });
-      this.showmodel=false;
+        text: '已加入购物车',
+        type: 'success'
+      });
+      this.$emit("on-showmodel-change",false)
     }
   },
   computed: {

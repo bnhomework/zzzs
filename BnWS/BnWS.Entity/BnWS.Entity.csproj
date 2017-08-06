@@ -131,10 +131,19 @@
     <Compile Include="ZY_Shop_Img.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ZZ_Address.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZZ_Category.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZZ_Desgin.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZZ_Order.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZZ_OrderAddress.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZZ_Template.cs">

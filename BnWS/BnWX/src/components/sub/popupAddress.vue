@@ -1,20 +1,20 @@
 <template>
   <div class="popup-address-container">
-    <div v-if="addressList.length==0" @click="addNewAddress">
-      <span class="bn-icon">&#xe622;</span><span>创建新的收货地址</span>
+    <div v-if="addressList.length==0" @click="addNewAddress" style="line-height:80px">
+      <span class="bn-icon">&#xe622;</span><span>   创建新的收货地址</span>
     </div>
-    <div v-if="addressList.length>0" @click="popupAddressList">
+    <div v-if="addressList.length>0" @click="popupAddressList"  style="line-height:40px">
       <div class="content-1">
         <span class="bn-icon">&#xe621;</span>
         <span>{{selectedAddress.ContactName}}</span>
-        <span style="float: right;">{{selectedAddress.Phone}}</span>
+        <span style="float: right;margin-right:20px">{{selectedAddress.Phone}}</span>
       </div>
       <div class="content-2">{{selectedAddress.Province}} {{selectedAddress.City}} {{selectedAddress.Town}} {{selectedAddress.AddressLine1}}</div>
     </div>
     <div></div>
     <div v-transfer-dom>
       <popup v-model="showAddressList" is-transparent>
-        <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">
+        <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto; padding:5px">
           <checklist title="请选择地址" :options="addressListOptions" v-model="selectedAddressId"  @on-change="changeSelectedAddress"></checklist>
           <div @click="addNewAddress"><span class="bn-icon">&#xe622;</span><span>创建新的收货地址</span></div>
         </div>
@@ -22,16 +22,19 @@
     </div>
     <div v-transfer-dom>
       <popup v-model="showAddressDetail" is-transparent>
-        <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">
-          <div style="text-align: center"><span>新建收件地址</span><span class="bn-icon pull-right" @click="showAddressDetail=false">&#xe633;</span></div>
+        <div style="width: 100%;background-color:#fff;height:250px;margin:0 auto;">
+          <div style="text-align: center"><span>新建收件地址</span><span class="bn-icon pull-right" style="padding-right:15px" @click="showAddressDetail=false">&#xe633;</span></div>
           <group>
-            <cell title="收件人" :value="newAddress.ContactName"></cell>
-            <cell title="联系电话" :value="newAddress.Phone"></cell>
+            <x-input title="收件人" v-model="newAddress.ContactName"></x-input>
+            <x-input title="联系电话" v-model="newAddress.Phone"></x-input>
             <x-address title="选择地区" v-model="newAddress.AddressLine" raw-value :list="addressData"></x-address>
-            <cell title="详细地址" :value="newAddress.AddressLine1"></cell>
-            <cell title="邮编(可选填)" :value="getName(newAddress.ZipCode)"></cell>
+            <!-- <cell title="详细地址" :value="newAddress.AddressLine1"></cell> -->
+            <!-- <cell title="邮编(可选填)" :value="newAddress.ZipCode"></cell> -->
+
+            <x-input title="详细地址" v-model="newAddress.AddressLine1"></x-input>
+            <!-- <x-input title="收件人" v-model="newAddress.ContactName"></x-input> -->
           </group>
-          <div style="padding: 0 15px;">
+          <div style="padding: 0 15px;margin-top:10px">
             <x-button type="primary" @click.native="saveNewAddress">保存地址</x-button>
           </div>
         </div>
@@ -48,7 +51,8 @@ import {
   ChinaAddressV3Data,
   Cell,
   XButton,
-  Checklist
+  Checklist,
+  XInput,
 } from 'vux'
 import _ from 'underscore'
 import utils from '@/mixins/utils'
@@ -63,7 +67,8 @@ export default {
     Cell,
     XAddress,
     XButton,
-    Checklist
+    Checklist,
+  XInput
   },
   data() {
     return {
@@ -92,7 +97,7 @@ export default {
     },
     popupAddressList(){
 	  this.showAddressList = true;
-      this.showAddressDetail = true;
+      this.showAddressDetail = false;
       this.selectedAddressId=[];
       this.selectedAddressId.push(this.selectedAddress.AddressId);
     },
@@ -106,7 +111,7 @@ export default {
       if(tmp.length>0){
       	this.selectedAddress=tmp[0];
       }
-    }
+    },
     addNewAddress() {
       this.newAddress = {};
       this.showAddressList = false;
@@ -158,7 +163,7 @@ export default {
 <style scoped>
 .popup-address-container {
   width: 100%;
-  min-height: 150px;
+  min-height: 100px;
   background-color: #e7e8eb;
   padding: 10px;
 }

@@ -160,6 +160,14 @@ export default {
 
 body {
   background-color: #fbf9fe;
+  color:#999999;
+  font-size:14px
+}
+.weui-cells{
+  font-size:12px!important;
+}
+.weui-btn{
+  font-size:14px!important;
 }
 html, body {
   height: 100%;
@@ -200,14 +208,16 @@ html, body {
   color: #fff;
   position: relative;
 }
-span.option{
+.option{
   border: 1px solid #a5a5a5;
   border-radius:5px;
   padding:5px;
   display: inline-block;
 }
-span.option.active{
+.option.active{
   border: 1px solid #f85;
+  color:#fff;
+  background-color:#f85;
 }
 span.tag{
   border: 1px solid #e1e1e1;

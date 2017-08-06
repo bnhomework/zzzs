@@ -1,6 +1,6 @@
 <template>
   <div style="width:100%">
-  <poppopup-address ref="pickAddress"></poppopup-address>
+  <popup-address ref="pickAddress"></popup-address>
     <group>
       <cell :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in orders" :key="item.shopId">
         <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
@@ -9,8 +9,8 @@
       </cell>
     </group>
     <div class="bottom-fix">
-    	<div>合计：<span class="amount">￥{{totalAmount}}</span></div>
-    	<a class="big-btn red-btn" @click="checkOut">提交</a>
+    	<span class="amount" style="line-height:50px;font-size:16px">合计：  ￥{{totalAmount}}</span>
+    	<a class="big-btn red-btn pull-right" style="width:30%" @click="checkOut">提交</a>
     </div>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
   		orders:[],
   		addressList:[]
   	}
-  }
+  },
   created(){
     var orderIds=this.$route.params.ordersIds;
   	this.loadOrders(orderIds);
@@ -48,7 +48,7 @@ export default {
         return
       }
   	}
-  }
+  },
   computed:{
   	totalAmount(){
   		return 100;

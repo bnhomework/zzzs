@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <popup-order-info :showmodel="showCardModel" :design="design" :action="action"></popup-order-info>
+    <popup-order-info :showmodel="showCardModel" :design="design" :action="action" @on-showmodel-change="(v)=>{showCardModel=v}"></popup-order-info>
   </div>
 </template>
 <script>
