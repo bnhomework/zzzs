@@ -26,7 +26,7 @@
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe7a4;</span>
           <span slot="label">主页</span>
         </tabbar-item>
-        <tabbar-item :link="{path:'/'}" :selected="route.name === 'home'">
+        <tabbar-item :link="{name:'OrderList'}" :selected="(route.name||'').indexOf('OrderList')>=0">
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe64e;</span>
           <span slot="label">订单</span>
         </tabbar-item>
@@ -196,7 +196,24 @@ html, body {
   display: inline-block;
   vertical-align: top;
 }
-
+.bottom-fix {
+  display: block;
+  z-index: 100;
+  position: fixed;
+  left: 0;
+  bottom: 47px;
+  width: 100%;
+  text-align: center;
+  background-color: #fff;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  font-size: 0
+}
 .orange-btn {
   background: #f85;
   color: #fff;
@@ -207,6 +224,9 @@ html, body {
   background: #f44;
   color: #fff;
   position: relative;
+}
+.disable-btn{
+  background: #e7e8eb;
 }
 .option{
   border: 1px solid #a5a5a5;
@@ -268,11 +288,11 @@ span.amount{
 
 @font-face {
   font-family: 'bn-icon';  /* project id 338215 */
-  src: url('//at.alicdn.com/t/font_xl3x130d804l5wmi.eot');
-  src: url('//at.alicdn.com/t/font_xl3x130d804l5wmi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_xl3x130d804l5wmi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_xl3x130d804l5wmi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_xl3x130d804l5wmi.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.eot');
+  src: url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.svg#iconfont') format('svg');
 }
 
 .demo-icon {

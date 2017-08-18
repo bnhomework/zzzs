@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Linq;
 using Bn.WeiXin.GZH;
@@ -79,6 +80,44 @@ namespace BnWS.Business
                var u= db.ZY_Customer.Find(openId) ?? new ZY_Customer();
                return u;
             }
+        }
+        public bool ConfirmPayment(PayInfo payInfo)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                var pay = new Pay();
+                pay.Id = Guid.NewGuid();
+                pay.return_code = payInfo.return_code;
+                pay.return_msg = payInfo.return_msg;
+                pay.appid = payInfo.appid;
+                pay.mch_id = payInfo.mch_id;
+                pay.device_info = payInfo.device_info;
+                pay.nonce_str = payInfo.nonce_str;
+                pay.sign = payInfo.sign;
+                pay.sign_type = payInfo.sign_type;
+                pay.result_code = payInfo.result_code;
+                pay.err_code = payInfo.err_code;
+                pay.err_code_des = payInfo.err_code_des;
+                pay.openid = payInfo.openid;
+                pay.is_subscribe = payInfo.is_subscribe;
+                pay.trade_type = payInfo.trade_type;
+                pay.bank_type = payInfo.bank_type;
+                pay.total_fee = payInfo.total_fee;
+                pay.settlement_total_fee = payInfo.settlement_total_fee;
+                pay.fee_type = payInfo.fee_type;
+                pay.cash_fee = payInfo.cash_fee;
+                pay.cash_fee_type = payInfo.cash_fee_type;
+                pay.coupon_fee = payInfo.coupon_fee;
+                pay.coupon_count = payInfo.coupon_count;
+                pay.transaction_id = payInfo.transaction_id;
+                pay.out_trade_no = payInfo.out_trade_no;
+                pay.attach = payInfo.attach;
+                pay.time_end = payInfo.time_end;
+                uow.Repository<Pay>().Insert(pay);
+               
+                uow.Save();
+            }
+            return true;
         }
     }
 }

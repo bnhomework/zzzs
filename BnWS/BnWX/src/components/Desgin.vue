@@ -2,8 +2,8 @@
   <div style="width:100%">
     <div>
       <div></div>
-      <img :src="design.Preview1" v-show="isFront">
-      <img :src="design.Preview2" v-show="!isFront">
+      <img style="width:100%" :src="design.Preview1" v-show="isFront">
+      <img style="width:100%" :src="design.Preview2" v-show="!isFront">
     </div>
     <div style="padding:15px; background-color:#ffffff;">
       <div>
@@ -26,10 +26,10 @@
       <div class="responsive-wrapper">
         <div class="mini-btn-2-1">
           <!-- <a href="javascript:;" class="js-im-icon new-btn service"><i>&#xe665;</i><span>test</span></a> -->
-          <a class="new-btn buy-cart">
+          <a class="new-btn buy-cart" @click="goTo('favorite')">
             <i>&#xe623;</i><span class="desc">收藏</span>
           </a>
-          <a class="new-btn buy-cart" style="">
+          <a class="new-btn buy-cart" style=""  @click="goTo('shoppingCart')">
             <i>&#xe665;</i><span class="desc">购物车</span>
           </a>
         </div>
@@ -100,10 +100,12 @@ export default {
         });
     },
     onAddCard(){
+      this.showCardModel=false;
       this.showCardModel=true;
       this.action=0;
     },
     onPlaceOrder(){
+      this.showCardModel=false;
       this.showCardModel=true;
       this.action=1;
     }
@@ -160,24 +162,7 @@ export default {
 <style>
 /*begin bottom*/
 
-.bottom-fix {
-  display: block;
-  z-index: 100;
-  position: fixed;
-  left: 0;
-  bottom: 47px;
-  width: 100%;
-  text-align: center;
-  background-color: #fff;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  font-size: 0
-}
+
 
 .responsive-wrapper {
   margin: 0 auto;

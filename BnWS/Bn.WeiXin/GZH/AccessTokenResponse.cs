@@ -65,6 +65,14 @@ namespace Bn.WeiXin.GZH
             get { return string.Format("prepay_id={0}", prepay_id); }
         }
     }
+
+    public class PrepayInfo : JSSDKPrepay
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public string OutTrackingNo { get; set; }
+        public decimal Amount { get; set; }
+    }
      [XmlRoot("xml")]
     public class UnifiedOrder
     {

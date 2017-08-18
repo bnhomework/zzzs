@@ -119,6 +119,9 @@ export default {
         text: '已加入购物车',
         type: 'success'
       });
+      this.hide();
+    },
+    hide(){
       this.$emit("on-showmodel-change",false)
     }
   },

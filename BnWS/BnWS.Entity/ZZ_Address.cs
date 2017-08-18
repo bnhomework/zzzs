@@ -27,5 +27,9 @@ namespace BnWS.Entity
         public System.DateTime CreatedTime { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
+        public bool IsDefault { get; set; }
+        public string Town { get; set; }
+        public bool IsDeleted { get; set; }
+        public string Phone { get; set; }
     }
 }

@@ -15,7 +15,7 @@
             </div>
             <div><span class="amount">￥{{item.UnitPrice}}</span></div>
           </div>
-          <div class="btn-order" @click.stop="">立即订购</div>
+          <div class="btn-order" @click="">开始订购</div>
         </div>
       </div>
     </div>
@@ -260,6 +260,7 @@ export default {
 
 .preview-warp img {
   width: 30%;
+  min-height: 80px;
   /*border: 1px solid #bbbbbb;*/
   background-color: #ffffff;
 }

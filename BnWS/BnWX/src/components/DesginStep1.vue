@@ -131,7 +131,8 @@ export default {
 }
 
 .demo5-item-selected {
-  border-color: #ff4a00;
+  border-color: #f85;
+  color: #f85
 }
 
 .vux-color-checked.weui-icon-success-no-circle:before {

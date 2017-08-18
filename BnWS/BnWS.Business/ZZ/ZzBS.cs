@@ -5,6 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Mime;
 using System.Web;
+using Bn.WeiXin;
+using Bn.WeiXin.GZH;
 using BnWS.Entity;
 using LinqKit;
 using Repository;
@@ -170,7 +172,7 @@ namespace BnWS.Business
             }
             var o = new ZZ_Order();
             o.OrderId = Guid.NewGuid();
-            o.OrderStatus = 0;
+            o.OrderStatus = (int)ZZOrderStatus.Draft;
             o.DesignId = orderInfo.DesignId;
             o.CustomerId = orderInfo.CustomerId;
             o.Color = orderInfo.Color;
@@ -183,48 +185,206 @@ namespace BnWS.Business
             }
             return o.OrderId;
         }
-        public List<ZZOrderReview> GetShoppingCart(string customerId)
+
+        public bool DeleteOrder(Guid orderId)
         {
-            using (var db=GetDbContext())
+            using (var uow = GetUnitOfWork())
             {
-                var orders = (from o in db.ZZ_Order
-                    join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
-                    where o.OrderStatus == 0 && o.CustomerId == customerId
-                              select new ZZOrderReview()
-                    {
-                        OrderId = o.OrderId,
-                        CustomerId = o.CustomerId,
-                        DesignId = o.DesignId,
-                        OrderStatus = o.OrderStatus,
-                        Color = o.Color,
-                        Quiantity = o.Quiantity,
-                        TotalAmount = o.TotalAmount,
-                        Preview = d.Preview1
-                    }).ToList();
-                return orders;
+                var order=uow.Repository<ZZ_Order>().Find(orderId);
+                if (order != null && order.OrderStatus < (int)ZZOrderStatus.Paid)
+                {
+                    uow.Repository<ZZ_Order>().Delete(order);
+                    uow.Save();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
+            
         }
-
-        public void PlaceOrder(List<Guid> orders, Guid addressId)
+        public bool RequestRefund(Guid orderId)
         {
-            var submissionId = Guid.NewGuid().ToString().Replace("-", "");
-            //submission id
-            //calculate price
-            //wx paymentid
+            using (var uow = GetUnitOfWork())
+            {
+                var order=uow.Repository<ZZ_Order>().Find(orderId);
+                if (order != null && (order.OrderStatus == (int)ZZOrderStatus.Paid
+                    || order.OrderStatus == (int)ZZOrderStatus.Processing
+                    ))
+                {
+                    order.OrderStatus =(int)ZZOrderStatus.PendingRefund;
+                    uow.Repository<ZZ_Order>().Update(order);
+                    uow.Save();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            
+        }
+        public JSSDKPrepay PlaceOrder(List<Guid> orderIds, Guid addressId, string ip, string customerOpenId)
+        {
+            var result = new JSSDKPrepay();
+            var submissionId =newSubmisstionId();
+            using (var uow = GetUnitOfWork())
+            {
+               var orders= uow.Repository<ZZ_Order>()
+                    .Query()
+                    .Filter(x => orderIds.Contains(x.OrderId) && x.OrderStatus < (int) ZZOrderStatus.Paid)
+                    .Get()
+                    .ToList();
+                var totalAmount = orders.Sum(x => x.TotalAmount);
+                result = WxApiHelper.Instance.Prepay(submissionId, customerOpenId, ip, (Math.Round((decimal)(totalAmount) * 100, 0)).ToString());
+                var oa = new ZZ_OrderAddress();
+                oa.AddressId = addressId;
+                oa.SubmissionId = submissionId;
+                oa.OrderAddressId = Guid.NewGuid();
+                uow.Repository<ZZ_OrderAddress>().Insert(oa);
+                orders.ForEach(x =>
+                {
+                    x.OrderStatus = (int) ZZOrderStatus.Submitted;
+                    uow.Repository<ZZ_Order>().Update(x);
+                });
+                uow.Save();
+            }
+            return result;
+        }
+        public bool ConfirmPayment(PayInfo payInfo)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                //var pay = new Pay();
+                //pay.Id = Guid.NewGuid();
+                //pay.return_code = payInfo.return_code;
+                //pay.return_msg = payInfo.return_msg;
+                //pay.appid = payInfo.appid;
+                //pay.mch_id = payInfo.mch_id;
+                //pay.device_info = payInfo.device_info;
+                //pay.nonce_str = payInfo.nonce_str;
+                //pay.sign = payInfo.sign;
+                //pay.sign_type = payInfo.sign_type;
+                //pay.result_code = payInfo.result_code;
+                //pay.err_code = payInfo.err_code;
+                //pay.err_code_des = payInfo.err_code_des;
+                //pay.openid = payInfo.openid;
+                //pay.is_subscribe = payInfo.is_subscribe;
+                //pay.trade_type = payInfo.trade_type;
+                //pay.bank_type = payInfo.bank_type;
+                //pay.total_fee = payInfo.total_fee;
+                //pay.settlement_total_fee = payInfo.settlement_total_fee;
+                //pay.fee_type = payInfo.fee_type;
+                //pay.cash_fee = payInfo.cash_fee;
+                //pay.cash_fee_type = payInfo.cash_fee_type;
+                //pay.coupon_fee = payInfo.coupon_fee;
+                //pay.coupon_count = payInfo.coupon_count;
+                //pay.transaction_id = payInfo.transaction_id;
+                //pay.out_trade_no = payInfo.out_trade_no;
+                //pay.attach = payInfo.attach;
+                //pay.time_end = payInfo.time_end;
+                //uow.Repository<Pay>().Insert(pay);
+                var orders =
+                        uow.Repository<ZZ_Order>().Query().Filter(x => x.SubmissionId == payInfo.out_trade_no).Get().ToList();
+                
+                orders.ForEach(x =>
+                {
+                    x.OrderStatus = (int) ZZOrderStatus.Paid;
+                    uow.Repository<ZZ_Order>().Update(x);
+                });
+                uow.Save();
+            }
+            return true;
+        }
+        private string newSubmisstionId()
+        {
+            return Guid.NewGuid().ToString().Replace("-", "");
         }
 
-        public List<ZZOrderReview> GetOrders(string customerId)
+        //public List<ZZOrderReview> GetOrders(string customerId)
+        //{
+        //    using (var db = GetDbContext())
+        //    {
+        //        var orders = (from o in db.ZZ_Order
+        //                      join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
+        //                      where o.OrderStatus >0 && o.CustomerId == customerId
+        //                      select new ZZOrderReview()
+        //                      {
+        //                          OrderId = o.OrderId,
+        //                          CustomerId = o.CustomerId,
+        //                          DesignId = o.DesignId,
+        //                          DesginName = d.Name,
+        //                          OrderStatus = o.OrderStatus,
+        //                          Color = o.Color,
+        //                          Quiantity = o.Quiantity,
+        //                          TotalAmount = o.TotalAmount,
+        //                          Preview = d.Preview1
+        //                      }).ToList();
+        //        return orders;
+        //    }
+        //}
+
+        public List<ZZOrderReview> GetShoppingCart(string customerId)
         {
             using (var db = GetDbContext())
             {
                 var orders = (from o in db.ZZ_Order
                               join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
-                              where o.OrderStatus >0 && o.CustomerId == customerId
+                              where o.OrderStatus == 0 && o.CustomerId == customerId
+                              orderby o.CreatedTime descending 
                               select new ZZOrderReview()
                               {
                                   OrderId = o.OrderId,
                                   CustomerId = o.CustomerId,
                                   DesignId = o.DesignId,
+                                  DesginName = d.Name,
+                                  OrderStatus = o.OrderStatus,
+                                  Color = o.Color,
+                                  Quiantity = o.Quiantity,
+                                  TotalAmount = o.TotalAmount,
+                                  Preview = d.Preview1
+                              }).ToList();
+                return orders;
+            }
+        }
+        public List<ZZOrderReview> GetShoppingCartByOrderIds(List<Guid> orderIds)
+        {
+            using (var db = GetDbContext())
+            {
+                var orders = (from o in db.ZZ_Order
+                              join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
+                              where o.OrderStatus == 0 && orderIds.Contains(o.OrderId)
+                              orderby o.CreatedTime descending 
+                              select new ZZOrderReview()
+                              {
+                                  OrderId = o.OrderId,
+                                  CustomerId = o.CustomerId,
+                                  DesignId = o.DesignId,
+                                  DesginName = d.Name,
+                                  OrderStatus = o.OrderStatus,
+                                  Color = o.Color,
+                                  Quiantity = o.Quiantity,
+                                  TotalAmount = o.TotalAmount,
+                                  Preview = d.Preview1
+                              }).ToList();
+                return orders;
+            }
+        }
+        public List<ZZOrderReview> GetRealOrders(string customerId)
+        {
+            using (var db = GetDbContext())
+            {
+                var orders = (from o in db.ZZ_Order
+                              join d in db.ZZ_Desgin on o.DesignId equals d.DesginId
+                              where o.OrderStatus >= (int)ZZOrderStatus.Paid && o.CustomerId == customerId
+                              orderby o.CreatedTime descending
+                              select new ZZOrderReview()
+                              {
+                                  OrderId = o.OrderId,
+                                  CustomerId = o.CustomerId,
+                                  DesignId = o.DesignId,
+                                  DesginName = d.Name,
                                   OrderStatus = o.OrderStatus,
                                   Color = o.Color,
                                   Quiantity = o.Quiantity,
@@ -240,20 +400,74 @@ namespace BnWS.Business
 
         public List<ZZAddress> GetAddressList(string openId)
         {
-            return null;
+            using (var db = GetDbContext())
+            {
+                var addressList = (from o in db.ZZ_Address
+                              where o.CustomerId==openId && !o.IsDeleted
+                              select new ZZAddress()
+                              {
+                                  AddressId = o.AddressId,
+                                  AddressLine1 = o.AddressLine1,
+                                  City = o.City,
+                                  ContactName = o.ContactName,
+                                  CustomerId = o.CustomerId,
+                                  IsDefault = o.IsDefault,
+                                  Province = o.Province,
+                                  Town = o.Town,
+                                  Phone = o.Phone,
+                                  CreatedTime = o.CreatedTime
+                              }).OrderByDescending(x=>x.IsDefault).ThenByDescending(x=>x.CreatedTime).ToList();
+                return addressList;
+            }
         } 
         public Guid UpdateAddress(ZZAddress address)
         {
-            if (address.AddressId == Guid.Empty)
+            var a = new ZZ_Address();
+            a.AddressId = address.AddressId;
+            a.AddressLine1 = address.AddressLine1;
+            a.City = address.City;
+            a.ContactName = address.ContactName;
+            a.CustomerId = address.CustomerId;
+            a.IsDefault = address.IsDefault;
+            a.Province = address.Province;
+            a.Town = address.Town;
+            a.Phone = address.Phone;
+            a.IsDeleted = false;
+            
+            using (var uow = GetUnitOfWork())
             {
-                address.AddressId = Guid.NewGuid();
+                if (a.AddressId == Guid.Empty)
+                {
+                    a.AddressId = Guid.NewGuid();
+                    uow.Repository<ZZ_Address>().Insert(a);
+
+                }
+                else
+                {
+                    uow.Repository<ZZ_Address>().Update(a);
+                }
+                uow.Save();
             }
-            return address.AddressId;
+            return a.AddressId;
         }
 
-        public bool DeleteAddress(Guid address)
+        public bool DeleteAddress(Guid addressId)
         {
-            return true;
+            using (var uow = GetUnitOfWork())
+            {
+                var address=uow.Repository<ZZ_Address>().Find(addressId);
+                if (address != null)
+                {
+                    address.IsDeleted = true;
+                    uow.Repository<ZZ_Address>().Update(address);
+                    uow.Save();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         #endregion

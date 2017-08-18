@@ -88,6 +88,7 @@ namespace BnWS.Entity
 
     public class ZZOrderReview : ZZOrderInfo
     {
+        public string DesginName { get; set; }
         public string Preview { get; set; }
         
     }
@@ -96,9 +97,24 @@ namespace BnWS.Entity
         public Guid AddressId { get; set; }
         public string CustomerId { get; set; }
         public string ContactName { get; set; }
+        public string Phone { get; set; }
         public string AddressLine1 { get; set; }
         public string City { get; set; }
         public string Province { get; set; }
+        public string Town { get; set; }
+        public bool IsDefault { get; set; }
+        public DateTime CreatedTime { get; set; }
+    }
 
+    public enum ZZOrderStatus
+    {
+        Draft=0,
+        Submitted=10,
+        Paid=20,
+        Processing=30,
+
+        PendingRefund=40,
+        Completed=50,
+        Refund = 60,
     }
 }

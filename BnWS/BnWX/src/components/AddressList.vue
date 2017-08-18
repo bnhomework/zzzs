@@ -1,36 +1,22 @@
 <template>
-  <div class="popup-address-container">
-    <div v-if="addressList.length==0" @click="addNewAddress" style="line-height:80px">
-      <span class="bn-icon">&#xe622;</span><span>   创建新的收货地址</span>
-    </div>
-    <div v-if="addressList.length>0&&selectedAddress!=undefined" @click="popupAddressList" style="line-height:40px">
-      <div class="content-1">
-        <span class="bn-icon">&#xe621;</span>
-        <span>{{selectedAddress.ContactName}}</span>
-        <span style="float: right;margin-right:20px">{{selectedAddress.Phone}}</span>
+  <div style="overflow-x:hidden;width:100%">
+    <div class="popup-address-container">
+      <div @click="onShowAddressDetail" style="line-height:80px">
+        <span class="bn-icon">&#xe622;</span><span>  创建新的收货地址</span>
       </div>
-      <div class="content-2" style="line-height:normal;margin-right:15px">{{selectedAddress.Province}} {{selectedAddress.City}} {{selectedAddress.Town}} {{selectedAddress.AddressLine1}}</div>
     </div>
-    <div></div>
-    <div v-transfer-dom>
-      <popup v-model="showAddressList" is-transparent>
-        <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">
-        <div class="vux-popup-picker-header">
-          <div class="vux-flexbox vux-flex-row">
-            <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-cancel" style="margin-left: 8px;" @click="showAddressList=false">取消</div>
-            <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-header-menu-right" style="margin-left: 8px;" @click="showAddressList=false">完成</div>
-          </div></div>
-          <div style="height:210px;overflow-y:auto">
-            <radio title="请选择地址" :options="addressListOptions" :value="selectedAddressId" @on-change="changeSelectedAddress"></radio>
-          </div>
-          <div @click="addNewAddress"><span class="bn-icon">&#xe622;</span><span>创建新的收货地址</span></div>
-        </div>
-      </popup>
+    <div>
+      <div v-for="item in addressListOptions" class="address-warp">
+      	<div class="right-action" @click="deleteAddress(item.key)"><span class="bn-icon">&#xe61a;</span></div>
+        <div class="address-title">{{item.value}}</div>
+        <div class="address-title">{{item.phone}}</div>
+        <div class="address-detail">{{item.inlineDesc}}</div>
+      </div>
     </div>
     <div v-transfer-dom>
       <popup v-model="showAddressDetail" is-transparent>
         <div style="width: 100%;background-color:#fff;height:100%;margin:0 auto;">
-          <!-- <div style="text-align: center;padding-top:10px"><span>新建收件地址</span><span class="bn-icon pull-right" style="padding-right:15px" @click="showAddressDetail=false">&#xe633;</span></div> -->
+          <!--  -->
           <div class="vux-popup-picker-header">
             <div class="vux-flexbox vux-flex-row">
               <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-cancel" style="margin-left: 8px;" @click="showAddressDetail=false">取消</div>
@@ -61,8 +47,8 @@ import {
   ChinaAddressV3Data,
   Cell,
   XButton,
+  Checklist,
   XInput,
-  Radio,
 } from 'vux'
 import _ from 'underscore'
 import utils from '@/mixins/utils'
@@ -77,8 +63,8 @@ export default {
     Cell,
     XAddress,
     XButton,
-    XInput,
-    Radio
+    Checklist,
+    XInput
   },
   data() {
     return {
@@ -86,9 +72,7 @@ export default {
       selectedAddress: undefined,
       addressData: ChinaAddressV3Data,
       showAddressDetail: false,
-      showAddressList: false,
-      newAddress: {},
-      selectedAddressId: ''
+      newAddress: {}
     }
   },
   created() {
@@ -103,35 +87,14 @@ export default {
       this.$http.post(url, data)
         .then(res => {
           vm.addressList = res.data;
-          if (vm.addressList.length > 0) {
-            vm.selectedAddress = vm.addressList[0];
-            vm.selectedAddressId = vm.selectedAddress.AddressId;
-          }
         });
     },
-    popupAddressList() {
-      this.showAddressList = true;
-      this.showAddressDetail = false;
-      this.selectedAddressId = this.selectedAddress.AddressId;
-    },
-    changeSelectedAddress(v) {
-      var vm = this;
-      var aid = v;
-      if (aid != '') {
-        var tmp = _.filter(vm.addressList, function(x) {
-          return x.AddressId == aid;
-        })
-        if (tmp.length > 0) {
-          vm.selectedAddress = tmp[0];
-        }
-      }
-    },
-    addNewAddress() {
-      this.newAddress = {};
-      this.showAddressList = false;
+    onShowAddressDetail() {
       this.showAddressDetail = true;
+      this.newAddress = {};
     },
     saveNewAddress() {
+      //todo save new address
       var vm = this;
       var openId = this.$store.state.bn.openId;
       if (vm.newAddress.ContactName == undefined || vm.newAddress.ContactName == '' ||
@@ -162,9 +125,17 @@ export default {
             address.AddressId = res.data;
             vm.addressList.unshift(address);
             vm.showAddressDetail = false;
-            vm.selectedAddress = vm.addressList[0];
-            vm.selectedAddressId = vm.selectedAddress.AddressId;
           }
+        });
+    },
+    deleteAddress(addressId){
+    	var vm=this;
+    	var url = this.apiServer + 'zz/DeleteAddress';
+      var data = { addressId: addressId }
+      this.$http.post(url, data)
+        .then(res => {
+          var index=_.findIndex(vm.addressList,function(x){return x.AddressId==addressId});
+          vm.addressList.splice(index,1)
         });
     },
     addressConvertToName(id) {
@@ -174,15 +145,16 @@ export default {
         return tmp[0].name;
       }
       return '';
-    },
+    }
   },
   computed: {
     addressListOptions() {
       return _.map(this.addressList, function(a) {
         return {
           key: a.AddressId,
-          value: a.ContactName + ',' + a.Phone,
-          inlineDesc: a.Province + ' ' +
+          value: '收件人：'+a.ContactName  ,
+          phone:' 联系电话：' + a.Phone,
+          inlineDesc: '地址：'+a.Province + ' ' +
             a.City + ' ' +
             a.Town + ' ' +
             a.AddressLine1 + ' '
@@ -196,10 +168,21 @@ export default {
 <style scoped>
 .popup-address-container {
   width: 100%;
-  overflow-x: hidden;
   min-height: 100px;
   background-color: #e7e8eb;
   padding: 10px;
+  position: relative;
+}
+
+.address-warp {
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  margin: 5px;
+}
+.right-action{
+	display: inline-block;
+	float: right;
 }
 
 </style>

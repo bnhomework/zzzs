@@ -40,12 +40,13 @@ namespace BnWS.Views
          [HttpPost]
         public ActionResult Pay(PayInfo payInfo)
          {
-             var bs =
-                 new ZYBS(new AppContext() {UserId = new Guid("0D321367-C97F-46B0-81B7-4EDC5D7A2829"), UserName = "WX"});
-             System.IO.Stream s = this.Request.InputStream;
-             int count = 0;
-             byte[] buffer = new byte[1024];
-             StringBuilder builder = new StringBuilder();
+             var context = new AppContext() {UserId = new Guid("0D321367-C97F-46B0-81B7-4EDC5D7A2829"), UserName = "WX"};
+             var bs =new ZzBS(context);
+             var wx = new WXBS(context);
+             var s = this.Request.InputStream;
+             var count = 0;
+             var buffer = new byte[1024];
+             var builder = new StringBuilder();
              while ((count = s.Read(buffer, 0, 1024)) > 0)
              {
                  builder.Append(Encoding.UTF8.GetString(buffer, 0, count));
@@ -55,17 +56,11 @@ namespace BnWS.Views
              s.Dispose();
              var xml = builder.ToString();
              payInfo = Utility.Deserialize<PayInfo>(xml);
-             var result = bs.ConfirmPayment(payInfo);
-             if (result)
-             {
-                 return Content("<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>");
-                 
-             }
-             else
-             {
-                 return Content("<xml><return_code><![CDATA[FAILED]]></return_code><return_msg><![CDATA[ERROR]]></return_msg></xml>");
-             }
-        }
+             var result = wx.ConfirmPayment(payInfo);
+             bs.ConfirmPayment(payInfo);
+             return Content(result ? "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>" 
+                 : "<xml><return_code><![CDATA[FAILED]]></return_code><return_msg><![CDATA[ERROR]]></return_msg></xml>");
+         }
         public ActionResult Login()
         {
             //1.get open id

@@ -283,7 +283,8 @@ namespace Bn.WeiXin
             o.spbill_create_ip = spbill_create_ip; //APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
             o.openid = openid;
             o.total_fee = total_fee;
-            prepay.prepay_id = GetPaymentId(o);
+            prepay.prepay_id = "test";//todo test
+            //prepay.prepay_id = GetPaymentId(o);
             prepay.appId = WxConfig.Appid;
             prepay.timeStamp = Utility.GetTimeSpan();
             prepay.nonceStr = Utility.GenerateNonceStr();

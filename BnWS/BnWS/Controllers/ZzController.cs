@@ -76,20 +76,73 @@ namespace BnWS.Views
           return new JsonResult() { Data = orderId };
         }
         [HttpPost]
+        public ActionResult PlaceOrder(List<Guid> orderIds,Guid addressId,string openId )
+        {
+            var result = BS.PlaceOrder(orderIds, addressId, Request.UserHostAddress, openId);
+            return new JsonResult() { Data = result };
+        }
+        [HttpPost]
         public ActionResult DeleteOrder(Guid orderId)
         {
             //var o = BS.de(orderId);
-            return new JsonResult() { Data = "OK" };
+           var deleted= BS.DeleteOrder(orderId);
+            return new JsonResult() { Data = deleted };
         }
 
+        [HttpPost]
+        public ActionResult GetShoppingCart(string openId)
+        {
+            var orders = BS.GetShoppingCart(openId);
+            return new JsonResult() { Data = orders, MaxJsonLength = int.MaxValue };
+        }
+        [HttpPost]
+        public ActionResult GetShoppingCartByOrderIds(List<Guid> orderIds)
+        {
+            var orders = BS.GetShoppingCartByOrderIds(orderIds);
+            return new JsonResult() { Data = orders ,MaxJsonLength = int.MaxValue};
+        }
+
+
+        [HttpPost]
+        public ActionResult GetRealOrders(string openId)
+        {
+            var orders = BS.GetRealOrders(openId);
+            return new JsonResult() { Data = orders, MaxJsonLength = int.MaxValue };
+        }
+        [HttpPost]
+        public ActionResult RequestRefund(Guid orderId)
+        {
+             BS.RequestRefund(orderId);
+            return new JsonResult() { Data = "OK" };
+        }
+        
+        [HttpPost]
         public ActionResult UpdateOrders(List<Guid> orders)
         {
+            //todo
             return new JsonResult() { Data = "OK" };
         }
 
-        public ActionResult UpdateAddress()
+        #region address
+        [HttpPost]
+        public ActionResult GetCustomerAddress(string openId)
         {
+            var addressList = BS.GetAddressList(openId);
+            return new JsonResult() { Data = addressList, MaxJsonLength = int.MaxValue };
+        }
+
+        [HttpPost]
+        public ActionResult UpdateAddress(ZZAddress address)
+        {
+            var addressId=BS.UpdateAddress(address);
+            return new JsonResult() { Data = addressId };
+        }
+        [HttpPost]
+        public ActionResult DeleteAddress(Guid addressId)
+        {
+            BS.DeleteAddress(addressId);
             return new JsonResult() { Data = "OK" };
         }
+        #endregion
     }
 }

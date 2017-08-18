@@ -271,6 +271,10 @@
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
           <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+          <Property Name="IsDefault" Type="bit" Nullable="false" />
+          <Property Name="Town" Type="nvarchar" MaxLength="256" />
+          <Property Name="IsDeleted" Type="bit" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -1191,6 +1195,10 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+          <Property Name="Town" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="ZZ_Order">
           <Key>
@@ -1575,6 +1583,10 @@ warning 6002: The table/view 'zzzs.dbo.ZZ_Category' does not have a primary key 
           <EntitySetMapping Name="ZZ_Address">
             <EntityTypeMapping TypeName="BnAppModel.ZZ_Address">
               <MappingFragment StoreEntitySet="ZZ_Address">
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="IsDeleted" ColumnName="IsDeleted" />
+                <ScalarProperty Name="Town" ColumnName="Town" />
+                <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
                 <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
                 <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />

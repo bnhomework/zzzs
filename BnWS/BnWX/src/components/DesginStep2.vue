@@ -12,7 +12,7 @@
     </div> -->
     <div v-transfer-dom>
       <popup v-model="saveDialogVisible" height="270px" is-transparent>
-        <div style="width: 95%;background-color:#fff;height:250px;margin:0 auto;border-radius:5px;padding-top:10px;">
+        <div style="width: 100%;background-color:#fff;height:100%;margin:0 auto;border-radius:5px;padding-top:10px;">
           <group>
             <x-input title="名字:" v-model="desginName"></x-input>
             <x-input title="标签:" v-model="desginTags"></x-input>

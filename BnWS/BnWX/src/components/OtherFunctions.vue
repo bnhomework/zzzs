@@ -8,7 +8,8 @@
           <div class="planet planet-11" p-id="234"></div>
           <div class="planet planet-12" p-id="235"></div>
         </div>
-        <img :src="getImgSrc(this.$store.state.bn.userInfo.Avatar)">
+        <div style="width:100px;height:100px;margin:0 auto">
+        <img style="width:100%" :src="getImgSrc(this.$store.state.bn.userInfo.Avatar)"></div>
         <div class="uname">{{this.$store.state.bn.userInfo.UserName}}</div>
       </div>
       <div class="functions">
@@ -22,10 +23,10 @@
           <grid-item @on-item-click="goTo({name:'shoppingCart'})" label="购物车">
             <span slot="icon" class="bn-icon">&#xe665;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="订单">
+          <grid-item @on-item-click="goTo({name:'OrderList'})" label="订单">
             <span slot="icon" class="bn-icon">&#xe637;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="地址">
+          <grid-item @on-item-click="goTo({name:'AddressList'})" label="地址">
             <span slot="icon" class="bn-icon">&#xe621;</span>
           </grid-item>
           <grid-item @on-item-click="goTo({name:'DesginList'})" label="消息">
@@ -108,13 +109,15 @@ export default {
   top: -55px;
   padding-top: 55px;
   overflow: hidden;
+  z-index: 200;
 }
 
 .top-warp img {
-  margin-top: 10px;
+  margin-top: 50px;
   width: 40%;
   /*border:2px solid #f1f1f1;*/
   border-radius: 400px;
+
 }
 
 .top-warp .uname {
@@ -128,7 +131,8 @@ export default {
   /*position: fixed;*/
   width: 100%;
   /*bottom: 56px;*/
-  margin-top: 220px
+  margin-top: 220px;
+  overflow-y: hidden;
 }
 
 
@@ -136,7 +140,7 @@ export default {
 .planet-wrap {
   position: fixed;
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
   top: 50px;
   left: 0
 }
