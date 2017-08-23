@@ -130,6 +130,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PlateformController.cs" />
     <Compile Include="Controllers\ShopController.cs" />
@@ -424,6 +425,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
+    <Folder Include="Temp\" />
     <Folder Include="Upload\desgin\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\ZY\" />
@@ -444,6 +446,17 @@
     <Content Include="Views\Plateform\Index.cshtml" />
     <None Include="Properties\PublishProfiles\test.pubxml" />
     <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Home\Index_v1.cshtml" />
+    <Content Include="Views\ZzManage\OrderManagement.cshtml" />
+    <Content Include="Views\ZzManage\Deliver.cshtml" />
+    <Content Include="Views\ZzManage\Refund.cshtml" />
+    <Content Include="Views\ZzManage\ProductCategory.cshtml" />
+    <Content Include="Views\ZzManage\Product.cshtml" />
+    <Content Include="Views\ZzManage\OrderReport.cshtml" />
+    <Content Include="Views\ZzManage\UserReport.cshtml" />
+    <Content Include="Views\ZzManage\SalesReport.cshtml" />
+    <Content Include="Views\ZzManage\Pendding.cshtml" />
+    <Content Include="Views\ZzManage\ViewOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bn.WeiXin.Handlers\Bn.WeiXin.Handlers.csproj">

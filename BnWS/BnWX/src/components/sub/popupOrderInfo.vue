@@ -16,7 +16,7 @@
             <div v-for="c in design.Colors" class="option" style="margin:5px" @click="onPickColor(c)" v-bind:class="{active:c==color}">{{c}}</div>
           </div>
           <div>
-            <x-number :min="1" :value="quantity" title="数量:"></x-number>
+            <x-number :min="1" v-model="quantity" title="数量:"></x-number>
           </div>
         </div>
         <div style="width: 100%;text-align:center;position:fixed;bottom:0px">

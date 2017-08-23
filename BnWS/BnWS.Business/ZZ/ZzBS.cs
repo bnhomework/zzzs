@@ -13,7 +13,7 @@ using Repository;
 
 namespace BnWS.Business
 {
-    public class ZzBS : BaseBS
+    public class ZzBS : ZzBaseBS
     {
         public ZzBS() : base()
         {
@@ -27,7 +27,7 @@ namespace BnWS.Business
 
         public List<ZZ_Template> SearchTemplateByCondistion(TemplateCondition condition)
         {
-            var templatePred = PredicateBuilder.New<ZZ_Template>(true);
+            var templatePred = PredicateBuilder.New<ZZ_Template>(x=>!x.IsDeleted);
             if (condition.Category.HasValue)
             {
                 templatePred = templatePred.And(x => x.Category==condition.Category.Value);
@@ -180,10 +180,54 @@ namespace BnWS.Business
             o.TotalAmount = orderInfo.Quiantity*unitPrice;
             using (var uow = GetUnitOfWork())
             {
+                var s = GetCurrentSeq("TrackingNo");
+                s.Seq += 1;
+                o.TrackingNumber = BuildTrackingNo(s);
+                uow.Repository<T_S_Sequence>().Update(s);
                 uow.Repository<ZZ_Order>().Insert(o);
+                InsertOrderStatusHistory(uow, o.OrderId, (int)ZZOrderStatus.Draft);
                 uow.Save();
             }
             return o.OrderId;
+        }
+
+        private string BuildTrackingNo(T_S_Sequence s)
+        {
+            var r=new Random().Next(10, 99);
+            return string.Format("{0}{1:D2}{2:D2}{3}", ((char)(s.Year - 2000+55)).ToString(), s.Month, s.Seq, r);
+        }
+        private T_S_Sequence GetCurrentSeq(string type)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+                var current = DateTime.Now;
+                T_S_Sequence s = uow.Repository<T_S_Sequence>()
+                    .Query()
+                    .Filter(
+                        x =>
+                            x.SeqType == type && x.Year == current.Year && x.Month == current.Month 
+                            //&&x.Day == current.Day
+                            ).Get().FirstOrDefault();
+                if (s == null)
+                {
+                    s = new T_S_Sequence();
+                    s.Id = Guid.NewGuid();
+                    s.SeqType = type;
+                    s.Year = current.Year;
+                    s.Month = current.Month;
+                    s.Day = current.Day;
+                    s.Seq = 0;
+                    uow.Repository<T_S_Sequence>().Insert(s);
+                    uow.Save();
+                    return uow.Repository<T_S_Sequence>()
+                    .Query()
+                    .Filter(
+                        x =>
+                            x.SeqType == type && x.Year == current.Year && x.Month == current.Month &&
+                            x.Day == current.Day).Get().FirstOrDefault();
+                }
+                return s;
+            }
         }
 
         public bool DeleteOrder(Guid orderId)
@@ -245,7 +289,8 @@ namespace BnWS.Business
                 uow.Repository<ZZ_OrderAddress>().Insert(oa);
                 orders.ForEach(x =>
                 {
-                    x.OrderStatus = (int) ZZOrderStatus.Submitted;
+                    x.OrderStatus = (int)ZZOrderStatus.Submitted;
+                    InsertOrderStatusHistory(uow, x.OrderId, (int)ZZOrderStatus.Submitted);
                     uow.Repository<ZZ_Order>().Update(x);
                 });
                 uow.Save();
@@ -291,6 +336,8 @@ namespace BnWS.Business
                 orders.ForEach(x =>
                 {
                     x.OrderStatus = (int) ZZOrderStatus.Paid;
+                    x.CheckOutDate = DateTime.Now;
+                    InsertOrderStatusHistory(uow, x.OrderId, (int)ZZOrderStatus.Submitted);
                     uow.Repository<ZZ_Order>().Update(x);
                 });
                 uow.Save();
@@ -336,6 +383,7 @@ namespace BnWS.Business
                               select new ZZOrderReview()
                               {
                                   OrderId = o.OrderId,
+                                  TrackingNumber = o.TrackingNumber,
                                   CustomerId = o.CustomerId,
                                   DesignId = o.DesignId,
                                   DesginName = d.Name,
@@ -359,6 +407,7 @@ namespace BnWS.Business
                               select new ZZOrderReview()
                               {
                                   OrderId = o.OrderId,
+                                  TrackingNumber = o.TrackingNumber,
                                   CustomerId = o.CustomerId,
                                   DesignId = o.DesignId,
                                   DesginName = d.Name,
@@ -382,6 +431,7 @@ namespace BnWS.Business
                               select new ZZOrderReview()
                               {
                                   OrderId = o.OrderId,
+                                  TrackingNumber = o.TrackingNumber,
                                   CustomerId = o.CustomerId,
                                   DesignId = o.DesignId,
                                   DesginName = d.Name,

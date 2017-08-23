@@ -107,7 +107,7 @@ namespace BnWS.Business
         {
             using (var uow = GetUnitOfWork())
             {
-                return uow.Repository<T_S_Function>().Query().Get().ToList();
+                return uow.Repository<T_S_Function>().Query().Get().OrderBy(x=>x.Seq).ToList();
             }
         }
 

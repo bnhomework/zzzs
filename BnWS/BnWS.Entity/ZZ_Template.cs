@@ -28,5 +28,6 @@ namespace BnWS.Entity
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
         public string ColorCode { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

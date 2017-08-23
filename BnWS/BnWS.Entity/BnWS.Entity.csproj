@@ -104,6 +104,9 @@
     <Compile Include="T_S_Role_Function.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="T_S_Sequence.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="T_S_User.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
@@ -140,10 +143,16 @@
     <Compile Include="ZZ_Desgin.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ZZ_LogisticsInfo.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZZ_Order.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZZ_OrderAddress.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZZ_OrderStatusHistory.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
     <Compile Include="ZZ_Template.cs">

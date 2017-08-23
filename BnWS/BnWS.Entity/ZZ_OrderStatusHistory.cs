@@ -13,24 +13,17 @@ namespace BnWS.Entity
     using System.Collections.Generic;
     
     using Repository;
-    public partial class ZZ_Order:EntityBase,IAuditableEntity
+    public partial class ZZ_OrderStatusHistory:EntityBase,IAuditableEntity
     {
+        public System.Guid Id { get; set; }
         public System.Guid OrderId { get; set; }
-        public string CustomerId { get; set; }
-        public System.Guid DesignId { get; set; }
-        public string Color { get; set; }
-        public int Quiantity { get; set; }
         public int OrderStatus { get; set; }
-        public decimal TotalAmount { get; set; }
-        public string SubmissionId { get; set; }
+        public System.DateTime StatusDate { get; set; }
         public int VersionNo { get; set; }
         public System.Guid TransactionId { get; set; }
         public string CreatedBy { get; set; }
         public System.DateTime CreatedTime { get; set; }
         public string UpdatedBy { get; set; }
         public System.DateTime UpdatedTime { get; set; }
-        public Nullable<System.DateTime> CheckOutDate { get; set; }
-        public Nullable<System.DateTime> FinishDate { get; set; }
-        public string TrackingNumber { get; set; }
     }
 }

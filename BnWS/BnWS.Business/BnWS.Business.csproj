@@ -66,6 +66,7 @@
     <Compile Include="ZY\ShopBS.cs" />
     <Compile Include="WXBS.cs" />
     <Compile Include="ZY\ZYBS.cs" />
+    <Compile Include="ZZ\ZzBaseBS.cs" />
     <Compile Include="ZZ\ZzBS.cs" />
     <Compile Include="ZZ\ZZManagementBS.cs" />
   </ItemGroup>

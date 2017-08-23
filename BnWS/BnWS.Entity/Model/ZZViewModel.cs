@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.Server;
 
 namespace BnWS.Entity
 {
@@ -77,6 +78,7 @@ namespace BnWS.Entity
     public class ZZOrderInfo
     {
         public Guid OrderId { get; set; }
+        public string TrackingNumber { get; set; }
         public string CustomerId { get; set; }
         public Guid DesignId { get; set; }
         public string Color { get; set; }
@@ -112,9 +114,72 @@ namespace BnWS.Entity
         Submitted=10,
         Paid=20,
         Processing=30,
-
         PendingRefund=40,
         Completed=50,
         Refund = 60,
     }
+
+#region zzmanage
+
+    public class OrderSearchCondition
+    {
+        public DateTime? DateFrom { get; set; }
+        public DateTime? DateTo { get; set; }
+        public int? OrderStatus { get; set; }
+        public int? ProductType { get; set; }
+        public string CustomerName { get; set; }
+        public string TrackingNumber { get; set; }
+    }
+
+    public class ZZOrderSummary
+    {
+        public Guid OrderId { get; set; }
+        public string TrackingNumber { get; set; }
+        public DateTime CheckOutDate { get; set; }
+        public string CustomerName { get; set; }
+        public int OrderStatus { get; set; }
+        public string ProductType { get; set; }
+        public string DesginName { get; set; }
+        public string Preview { get; set; }
+        public decimal Quiantity { get; set; }
+        public decimal TotalAmount { get; set; }
+    }
+
+    public class ZZOrderDetail : ZZOrderSummary
+    {
+        public string OrderStatusDesc { get; set; }
+        public string Desginer { get; set; }
+
+        public string Color { get; set; }
+        public string ColorCode { get; set; }
+
+        public string Preview1 { get; set; }
+        public string Preview2 { get; set; }
+
+        public string CustomerImg1 { get; set; }
+        public string CustomerImg2 { get; set; }
+
+        //address
+        public string ContactName { get; set; }
+        public string AddressLine1 { get; set; }
+        public string Town { get; set; }
+        public string City { get; set; }
+        public string Province { get; set; }
+        public string Phone { get; set; }
+    }
+
+
+    public class LogisticsInfo
+    {
+        public Guid OrderId { get; set; }
+        public string ExpressCompany { get; set; }
+        public string ExpressTrackingNo { get; set; }
+        public string Comments { get; set; }
+    }
+
+    public class ZZTemplate : ZZ_Template
+    {
+        public decimal UnitPrice { get; set; }
+    }
+#endregion
 }

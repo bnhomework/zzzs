@@ -1,0 +1,227 @@
+﻿@{
+    ViewBag.Title = "订单管理";
+    Layout = "~/Views/Shared/_Manage.cshtml";
+}
+
+<!DOCTYPE html>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>订单查询</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group" id="selectedDateFrom" style="width: 300px">
+                                <label class="font-noraml">下单日期从</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" data-bind="value:DateFrom">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group" id="selectedDateTo" style="width: 300px">
+                                <label class="font-noraml">到</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" data-bind="value:DateTo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="font-noraml">订单状态</label>
+                                <div class="input-group">
+                                    <select data-placeholder="" class="chosen-select" style="width:300px;" tabindex="2"
+                                            data-bind="options: allStatus,optionsText: 'StatusName',value:OrderStatus"></select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="font-noraml">商品类型</label>
+                                <div class="input-group">
+                                    <select data-placeholder="选择店铺..." class="chosen-select" style="width:300px;" tabindex="2"
+                                            data-bind="options: productTypes,optionsText: 'Name',value:ProductType"></select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group" id="selectedDateFrom" style="width: 300px">
+                                <label class="font-noraml">客户</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" data-bind="value:CustomerName">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group" id="selectedDateFrom" style="width: 300px">
+                                <label class="font-noraml">订单号</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" data-bind="value:TrackingNumber">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="font-noraml">&nbsp;</label>
+                                    <div class="input-group">
+                                        <div class="btn btn-primary" data-bind="click:loadOrders">查找</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5></h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>订单号</th>
+                                    <th>下单日期</th>
+                                    <th>客户</th>
+                                    <th>设计名</th>
+                                    <th>商品类型</th>
+                                    <th>订单状态</th>
+                                    <th>数量</th>
+                                    <th>金额</th>
+                                </tr>
+                            </thead>
+                            <tbody data-bind="foreach:Orders">
+                                <tr>
+                                    <td ><a data-bind="click:$root.gotoViewOrder"><span data-bind="text:TrackingNumber"></span></a></td>
+                                    <td data-bind="text:CheckOutDate"></td>
+                                    <td data-bind="text:CustomerName"></td>
+                                    <td data-bind="text:DesginName"></td>
+                                    <td data-bind="text:ProductType"></td>
+                                    <td data-bind="text:$root.displayStatus(OrderStatus)"></td>
+                                    <td data-bind="text:Quiantity"></td>
+                                    <td data-bind="text:TotalAmount"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+        function ViewModel() {
+            var self = this;
+
+            self.DateFrom = ko.observable('@DateTime.Now.AddDays(-7).Date');
+            self.DateTo = ko.observable('@DateTime.Now.Date');
+            self.CustomerName = ko.observable();
+            self.TrackingNumber = ko.observable();
+            self.OrderStatus = ko.observable();
+            self.ProductType = ko.observable({});
+
+            self.allStatus = [{ StatusName: '显示所有' }, { StatusName: '未付款', Id: '10' }, { StatusName: '已付款', Id: '20' }
+                , { StatusName: '生产中', Id: '30' }
+                 , { StatusName: '已完成', Id: '50' }
+                  , { StatusName: '申请退款', Id: '40' }
+                , { StatusName: '已退款', Id: '60' }];
+            self.productTypes = ko.observableArray();
+            self.Orders = ko.observableArray([]);
+            self.init = function() {
+                $('.input-group.date').datepicker({
+                    todayBtn: "linked",
+                    keyboardNavigation: false,
+                    forceParse: false,
+                    calendarWeeks: true,
+                    autoclose: true
+                });
+                self.loadProductTypes();
+            };
+            self.gotoViewOrder = function(data) {
+                var url = '/zzmanage/vieworder?orderId=' + data.OrderId;
+                bnApp.open(url, '订单：' + data.TrackingNumber);
+            };
+            self.loadProductTypes = function() {
+                bnApp.showLoading();
+                $.ajax({
+                    url: '@Url.Action("GetProductTypes")',
+                    type: "GET",
+                    success: function(result) {
+                        result.unshift({ Name: '显示所有' });
+                        self.productTypes.removeAll();
+                        self.productTypes(result);
+                        $('.chosen-select').chosen();
+                        bnApp.hideLoading();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            };
+            self.loadOrders = function() {
+                bnApp.showLoading();
+                var condition = {
+                    DateFrom: self.DateFrom(), DateTo: self.DateTo(), ProductType: self.ProductType().Id, OrderStatus: self.OrderStatus().Id
+                    , CustomerName: self.CustomerName()
+                    , TrackingNumber: self.TrackingNumber()
+                };
+                $.ajax({
+                    url: '@Url.Action("SearchOrderByCriteria")',
+                    type: "Post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ condition: condition }),
+                    success: function(result) {
+                        self.Orders.removeAll();
+                        self.Orders(result);
+                        bnApp.hideLoading();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            };
+            self.displayStatus = function(s) {
+                var l = self.allStatus.filter(function(x) { return x.Id == s; });
+                if (l.length > 0) {
+                    return l[0].StatusName;
+                }
+                return 'NA';
+            }
+        }
+
+        var viewModel = new ViewModel();
+        ko.applyBindings(viewModel);
+
+        viewModel.init();
+    </script>
+}

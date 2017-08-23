@@ -66,7 +66,7 @@ export default {
       var url = this.apiServer + 'zz/GetTemplates';
       var data = {
         condition: {
-          Category: 0
+          Category: 1
         }
       }
       this.$http.post(url, data)
