@@ -1,6 +1,6 @@
 ﻿@model BnWS.Entity.LoginViewModel
 @{
-    Layout = "~/Views/Shared/_Manage.cshtml";
+    Layout = "";
 }
 <!DOCTYPE html>
 <html>
@@ -16,45 +16,311 @@
     <link href="~/Content/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
 
     <link href="~/Content/css/animate.min.css" rel="stylesheet">
-    <link href="~/Content/css/style.min862f.css?v=4.1.0" rel="stylesheet">
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
+    <style>
+          html {
+              height: 100%;
+          }
+
+           .vertical-align-middle {
+              vertical-align: middle;
+          }
+          .vertical-align:before {
+              display: inline-block;
+              height: 100%;
+              vertical-align: middle;
+              content: "";
+          }
+
+        .vertical-align-bottom, .vertical-align-middle {
+              display: inline-block;
+              max-width: 100%;
+              font-size: 14px;
+          }
+          .page-login {
+              height: 100%;
+              min-height: 600px;
+              padding-top: 0;
+              overflow: hidden;
+          }
+
+              .page-login:before {
+                  background-image: url("../images/login.jpg");
+              }
+
+              .page-login .page-content {
+                  padding-right: 500px;
+              }
+
+              .page-login.page-dark.layout-full:after {
+                  background-color: rgba(38,50,56,.6);
+              }
+
+              .page-login .page-brand-info {
+                  height: 100%;
+              }
+
+                  .page-login .page-brand-info .page-brand {
+                      padding: 0 60px 60px;
+                  }
+
+                      .page-login .page-brand-info .page-brand .brand-img {
+                          vertical-align: middle;
+                      }
+
+                      .page-login .page-brand-info .page-brand h2 {
+                          max-width: 650px;
+                          color: #fff;
+                      }
+
+                      .page-login .page-brand-info .page-brand .list-icons {
+                          padding-left: 0;
+                          margin: 30px 0;
+                      }
+
+          .page-login-main {
+              position: absolute;
+              top: 0;
+              right: 0;
+              height: 100%;
+              min-height: 600px;
+              padding: 150px 60px 180px;
+              padding: 0 60px;
+              color: #76838f;
+              background: #fff;
+          }
+
+              .page-login-main > .alert {
+                  position: absolute;
+                  top: 0;
+                  right: 0;
+                  left: 0;
+                  text-align: center;
+                  border-radius: 0;
+              }
+
+              .page-login-main .vertical-align {
+                  height: 100%;
+                  -webkit-box-sizing: border-box;
+                  -moz-box-sizing: border-box;
+                  box-sizing: border-box;
+                  padding-bottom: 65px;
+              }
+
+              .page-login-main > .alert {
+                  padding-right: 10px;
+              }
+
+                  .page-login-main > .alert + .vertical-align {
+                      padding-top: 65px;
+                  }
+
+          .page-login .login-form {
+              width: 350px;
+              margin: 45px 0 20px;
+          }
+
+              .page-login .login-form .form-control {
+                  height: 42px;
+              }
+
+          input.page-login .login-form .form-control {
+              padding: 0 12px;
+          }
+
+          .page-login .login-form .btn {
+              height: 42px;
+          }
+
+          .page-login .login-form.fv-form-bootstrap .form-control-feedback {
+              margin: 6px;
+              background-color: transparent;
+          }
+
+          .page-login .login-form .input-group + .form-control-feedback {
+              display: none !important;
+          }
+
+          .page-login .login-form > button {
+              padding: 8px 0;
+          }
+
+          .page-login .page-copyright {
+              position: absolute;
+              right: 0;
+              bottom: 15px;
+              left: 0;
+              text-align: center;
+          }
+
+          .btn-block {
+              display: block;
+              width: 100%;
+          }
+
+          .btn-primary {
+              color: #fff;
+              background-color: #62a8ea !important;
+              border-color: #62a8ea !important;
+          }
+          .page-dark.layout-full:before {
+              position: fixed;
+              top: 0;
+              left: 0;
+              z-index: -1;
+              width: 100%;
+              height: 100%;
+              content: "";
+              background-position: center top;
+              -webkit-background-size: cover;
+              background-size: cover;
+          }
+          .page-login:before {
+              background-image: url(../content/img/login.jpg);
+          }
+          .page-dark.layout-full:after {
+              position: fixed;
+              top: 0;
+              left: 0;
+              z-index: -1;
+              width: 100%;
+              height: 100%;
+              content: "";
+              background-color: rgba(38,50,56,.6);
+          }
+          @@media(max-height:600px) {
+              .page-login .page-copyright {
+                  display: none;
+              }
+          }
+
+          @@media(max-width:992px) {
+              .page-brand {
+                  width: 100%;
+                  padding: 0 !important;
+                  text-align: center;
+              }
+
+                  .page-brand .brand {
+                      width: 100%;
+                  }
+          }
+
+          @@media(max-width:768px) {
+              .page-login {
+                  overflow: auto;
+                  background: #fff;
+                  background-image: none;
+              }
+
+                  .page-login .login-form {
+                      width: auto;
+                  }
+          }
+
+          @@media(max-width:480px) {
+              .page-login .page-content {
+                  padding-right: 0;
+              }
+
+              .page-login-main {
+                  width: 100%;
+              }
+
+              .page-login .login-form {
+                  width: auto;
+              }
+          }
+          .height-full {
+              height: 100%
+          }
+    </style>
     <script>if (window.top !== window.self) { window.top.location = window.location; }</script>
+
 </head>
 
-<body class="gray-bg">
+<body class="page-login layout-full page-dark">
+    <div class="page height-full">
+        <div class="page-content height-full">
+            <div class="page-brand-info vertical-align animation-slide-left hidden-xs">
+                <div class="page-brand vertical-align-middle">
+                    <div class="brand">
+                        <svg version="1.1" id="admui_logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                             viewBox="0 0 152.1 42.8" style="enable-background:new 0 0 152.1 42.8;" xml:space="preserve" fill="#fff">
+<g>
+                        
+                        <g>
+                        <path class="st1" d="M42,42.7c-2.4-1-9.9-3.9-20.6-3.9S3.2,41.7,0.8,42.7c-0.6,0.2-0.9-0.1-0.8-0.9c0.6-9.3,8-20.3,18.5-22.3
+			c0.7-0.2,1.4,0.3,0.8,0.8c-3.7,2.6-6.4,9.4-6.4,10.9c0,1.8,5.4,2.4,8.5,2.4s8.5-0.7,8.5-2.4c0-1.5-2.8-8.3-6.4-10.9
+			c-0.6-0.6,0.1-1,0.8-0.8c10.5,1.9,17.9,13,18.5,22.3C42.9,42.7,42.6,42.9,42,42.7z" />
+                        <path class="st2" d="M42,42.7c-2.4-1-9.9-3.9-20.6-3.9S3.2,41.7,0.8,42.7c-0.2,0.1-0.4,0.1-0.5,0c6-5,12.8-6,18.7-6.7
+			c7.1-0.8,10.9-3.1,10.9-4.8c0-1.5-2.8-8.3-6.4-10.9c-0.6-0.6,0.1-1,0.8-0.8c10.5,1.9,17.9,13,18.5,22.3
+			C42.9,42.7,42.6,42.9,42,42.7z" />
+	</g>
+                        <g>
+                        <path class="st3" d="M21.4,0c5.2,0,9.4,4.2,9.4,9.4s-4.2,9.4-9.4,9.4S12,14.6,12,9.4S16.2,0,21.4,0z" />
+                        <path class="st4" d="M30.8,9.4c0,5.2-4.2,9.4-9.4,9.4c-1.8,0-3.5-0.5-4.9-1.4c1.1,0.4,2.2,0.6,3.4,0.6c5.2,0,9.4-4.2,9.4-9.4
+			c0-3.4-1.8-6.3-4.5-8C28.3,2,30.8,5.4,30.8,9.4z" />
+	</g>
+</g>
+</svg>
+                    </div>
+                    <h2 class="hidden-sm">创意制衣后台管理系统</h2>
+                    @*<ul class="list-icons hidden-sm">
+                            <li>
+                                <i class="wb-check" aria-hidden="true"></i> Admui 是一个基于最新 Web
+                                技术的企业级通用管理系统快速开发框架，可以帮助企业极大的提高工作效率，节省开发成本，提升品牌形象。
+                            </li>
+                            <li><i class="wb-check" aria-hidden="true"></i> 您可以 Admui 为基础，快速开发各种MIS系统，如CMS、OA、CRM、ERP、POS等。</li>
+                            <li>
+                                <i class="wb-check" aria-hidden="true"></i> Admui 紧贴业务特性，涵盖了大量的常用组件和基础功能，最大程度上帮助企业节省时间成本和费用开支。
+                            </li>
+                        </ul>*@
 
-    <div class="middle-box text-center loginscreen  animated fadeInDown">
-        <div>
-            <div>
-
-                <h1 class="logo-name">ZY</h1>
-
+                </div>
             </div>
-            <h3>欢迎使用 </h3>
+            <div class="page-login-main animation-fade">
 
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
-            {
+                <div class="vertical-align">
+                    <div class="vertical-align-middle" style="width: 350px">
+                        <div class="brand visible-xs text-center">
+                            <img class="brand-img" src="http://cdn.admui.com/demo/1.1.0/images/logo.svg" height="50" alt="Admui">
+                        </div>
+                        <h3 class="hidden-xs">登录</h3>
+                        <p class="hidden-xs">创意制衣后台管理系统</p>
+                        <br/>
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                        {
 
-                <div class="form-group">
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "用户名" ,required=""})
+                            <div class="form-group">
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "用户名", required = "" })
+                            </div>
+                            <div class="form-group">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "密码", required = "" })
+                            </div>
+                        <br/>
+                            <button type="submit" class="btn btn-primary block full-width m-b" style="width:100%">登 录</button>
+                        }
+                    </div>
                 </div>
-                <div class="form-group">
-                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "密码" ,required=""})
-                </div>
-                <button type="submit" class="btn btn-primary block full-width m-b">登 录</button>
-            }
-
+                <footer class="page-copyright">
+                    <p>
+                        2017 ©bn
+                    </p>
+                </footer>
+            </div>
         </div>
     </div>
+
     <script src="~/Content/js/jquery.min.js?v=2.1.4"></script>
     <script src="~/Content/js/bootstrap.min.js?v=3.3.6"></script>
     @section scripts{
         <script type="text/javascript">
             $(function () {
                 var error = '@ViewBag.Message';
-                if (error != null&&error!='') {
+                if (error != null && error != '') {
                     bnApp.showError(error);
                 }
             })

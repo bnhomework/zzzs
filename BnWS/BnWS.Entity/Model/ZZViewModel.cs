@@ -156,6 +156,7 @@ namespace BnWS.Entity
         public string Preview1 { get; set; }
         public string Preview2 { get; set; }
 
+        public string DesginSettings { get; set; }
         public string CustomerImg1 { get; set; }
         public string CustomerImg2 { get; set; }
 
@@ -168,6 +169,13 @@ namespace BnWS.Entity
         public string Phone { get; set; }
     }
 
+    public class ZZDesignSetting
+    {
+        public string front { get; set; }
+        public string frontTxt { get; set; }
+        public string back { get; set; }
+        public string backTxt { get; set; }
+    }
 
     public class LogisticsInfo
     {

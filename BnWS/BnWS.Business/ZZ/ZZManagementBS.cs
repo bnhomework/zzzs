@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using BnWS.Entity;
 using LinqKit;
+using Newtonsoft.Json;
 
 namespace BnWS.Business
 {
@@ -372,6 +373,7 @@ namespace BnWS.Business
                               Preview1 = d.Preview1,
                               Preview2 = d.Preview2,
                               Color = o.Color,
+                              DesginSettings = d.DesginSettings,
                               ContactName = ad.ContactName,
                               Phone = ad.Phone,
                               AddressLine1 = ad.AddressLine1,
@@ -396,9 +398,12 @@ namespace BnWS.Business
                 return;
             d.Preview1 = warpPath(d.Preview1);
             d.Preview2 = warpPath(d.Preview2);
-            d.CustomerImg1 = warpPath(d.CustomerImg1);
-            d.CustomerImg2 = warpPath(d.CustomerImg2);
+
+            var s = JsonConvert.DeserializeObject<ZZDesignSetting>(d.DesginSettings);
+            d.CustomerImg1 = warpPath(s.front);
+            d.CustomerImg2 = warpPath(s.back);
             d.OrderStatusDesc = getOrderStatusById(d.OrderStatus);
+
         }
 
         private string warpPath(string p)

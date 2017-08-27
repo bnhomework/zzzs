@@ -51,7 +51,7 @@
                             </dl>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display: none">
                         <div class="col-sm-12">
                             <dl class="dl-horizontal">
                                 <dt>当前进度：</dt>
@@ -64,6 +64,48 @@
                             </dl>
                         </div>
                     </div>
+                    <div class="row m-t-sm">
+                        <div class="col-sm-12">
+                            <div class="panel blank-panel">
+                                <div class="panel-heading">
+                                    <div class="panel-options">
+                                        <ul class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#tab-2" data-toggle="tab">客户素材</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="panel-body">
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="tab-2">
+                                            <div class="photos">
+                                                @if (!string.IsNullOrEmpty(Model.CustomerImg1))
+                                                {
+                                                    <a target="_blank" href="@Model.CustomerImg1">
+                                                        <img alt="image" class="feed-photo" src="@Model.CustomerImg1">
+                                                    </a>
+
+                                                }
+                                                @if (!string.IsNullOrEmpty(Model.CustomerImg2))
+                                                {
+                                                    <a target="_blank" href="@Model.CustomerImg2">
+                                                        <img alt="image" class="feed-photo" src="@Model.CustomerImg2">
+                                                    </a>
+
+                                                }
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row m-t-sm">
                         <div class="col-sm-12">
                             <div class="panel blank-panel">
@@ -101,47 +143,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row m-t-sm">
-                        <div class="col-sm-12">
-                            <div class="panel blank-panel">
-                                <div class="panel-heading">
-                                    <div class="panel-options">
-                                        <ul class="nav nav-tabs">
-                                            <li class="active">
-                                                <a href="#tab-2" data-toggle="tab">客户素材</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
 
-                                <div class="panel-body">
-                                    <div class="tab-content">
-                                        <div class="tab-pane active" id="tab-2">
-                                            <div class="photos">
-                                                @if (!string.IsNullOrEmpty(Model.Preview1))
-                                                {
-                                                <a target="_blank" href="@Model.Preview1">
-                                                    <img alt="image" class="feed-photo" src="@Model.Preview1">
-                                                </a>
-
-                                                }
-                                                @if (!string.IsNullOrEmpty(Model.Preview2))
-                                                {
-                                                <a target="_blank" href="@Model.Preview2">
-                                                    <img alt="image" class="feed-photo" src="@Model.Preview2">
-                                                </a>
-
-                                                }
-                                            </div>
-
-
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
