@@ -121,6 +121,21 @@ namespace BnWS.Entity
 
 #region zzmanage
 
+    public class AddressSearchCondition
+    {
+        public string CustomerName { get; set; }
+    }
+
+    public class ZZAddressInfo
+    {
+        public Guid AddressId { get; set; }
+        public string CustomerName { get; set; }
+        public string ContactName { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public bool IsDeleted { get; set; }
+    }
     public class OrderSearchCondition
     {
         public DateTime? DateFrom { get; set; }

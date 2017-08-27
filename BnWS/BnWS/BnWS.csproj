@@ -457,6 +457,8 @@
     <Content Include="Views\ZzManage\SalesReport.cshtml" />
     <Content Include="Views\ZzManage\Pendding.cshtml" />
     <Content Include="Views\ZzManage\ViewOrder.cshtml" />
+    <Content Include="Views\Account\Login_v1.cshtml" />
+    <Content Include="Views\ZzManage\CustomerAddress.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Bn.WeiXin.Handlers\Bn.WeiXin.Handlers.csproj">

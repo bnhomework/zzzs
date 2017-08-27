@@ -104,8 +104,18 @@ namespace BnWS.Views
         }
         #endregion
 
+        public ActionResult CustomerAddress()
+        {
+            return View();
+        }
 
-
+        public ActionResult SearchCustomerAddress(AddressSearchCondition condition)
+        {
+            var addresslist = BS.SearchCustomerAddress(condition);
+            var result = new JsonNetResult() { Data = addresslist, MaxJsonLength = int.MaxValue };
+            result.Settings.DateFormatString = "yyyy-MM-dd";
+            return result; 
+        }
         #region 商品管理
 
         public ActionResult ProductCategory()

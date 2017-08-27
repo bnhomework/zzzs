@@ -107,6 +107,25 @@ namespace BnWS.Business
             return result;
         }
 
+        public List<ZZAddressInfo> SearchCustomerAddress(AddressSearchCondition condition)
+        {
+            using (var db=GetDbContext())
+            {
+                var tmp = from a in db.ZZ_Address
+                    join c in db.ZY_Customer on a.CustomerId equals c.OpenId
+                    select new ZZAddressInfo()
+                    {
+                        CustomerName = c.UserName,
+                        CreatedDate = a.CreatedTime,
+                        Address = a.Province + " " + a.City + " " + a.Town + " " + a.AddressLine1,
+                        ContactName = a.ContactName,
+                        Phone = a.Phone,
+                        IsDeleted = a.IsDeleted,
+                        AddressId = a.AddressId
+                    };
+                return tmp.ToList();
+            }
+        } 
 
         public List<ZZTemplate> SearchTemplateByCondistion2(TemplateCondition condition)
         {
