@@ -4,3 +4,12 @@
     height: 34px;
     padding: 6px 12px;
 }
+
+.ibox-title {
+    
+     border-style: none
+}
+ .ibox-content{
+     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+     border-style: none
+}
