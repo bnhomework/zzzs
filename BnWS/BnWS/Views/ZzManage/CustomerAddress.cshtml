@@ -31,7 +31,7 @@
                                 <div class="form-group">
                                     <label class="font-noraml">&nbsp;</label>
                                     <div class="input-group">
-                                        <div class="btn btn-primary" data-bind="click:loadOrders">查找</div>
+                                        <div class="btn btn-primary" data-bind="click:loadAddressList">查找</div>
                                     </div>
                                 </div>
                             </div>
@@ -58,26 +58,20 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>订单号</th>
-                                    <th>下单日期</th>
                                     <th>客户</th>
-                                    <th>设计名</th>
-                                    <th>商品类型</th>
-                                    <th>订单状态</th>
-                                    <th>数量</th>
-                                    <th>金额</th>
+                                    <th>收件人</th>
+                                    <th>电话</th>
+                                    <th>地址</th>
+                                    <th>创建日期</th>
                                 </tr>
                             </thead>
-                            <tbody data-bind="foreach:Orders">
+                            <tbody data-bind="foreach:addressList">
                                 <tr>
-                                    <td><a data-bind="click:$root.gotoViewOrder"><span data-bind="text:TrackingNumber"></span></a></td>
-                                    <td data-bind="text:CheckOutDate"></td>
                                     <td data-bind="text:CustomerName"></td>
-                                    <td data-bind="text:DesginName"></td>
-                                    <td data-bind="text:ProductType"></td>
-                                    <td data-bind="text:$root.displayStatus(OrderStatus)"></td>
-                                    <td data-bind="text:Quiantity"></td>
-                                    <td data-bind="text:TotalAmount"></td>
+                                    <td data-bind="text:ContactName"></td>
+                                    <td data-bind="text:Phone"></td>
+                                    <td data-bind="text:Address"></td>
+                                    <td data-bind="text:CreatedDate"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -94,67 +88,25 @@
         function ViewModel() {
             var self = this;
 
-            self.DateFrom = ko.observable('@DateTime.Now.AddDays(-7).Date');
-            self.DateTo = ko.observable('@DateTime.Now.Date');
             self.CustomerName = ko.observable();
             self.TrackingNumber = ko.observable();
-            self.OrderStatus = ko.observable();
-            self.ProductType = ko.observable({});
-
-            self.allStatus = [{ StatusName: '显示所有' }, { StatusName: '未付款', Id: '10' }, { StatusName: '已付款', Id: '20' }
-                , { StatusName: '生产中', Id: '30' }
-                 , { StatusName: '已完成', Id: '50' }
-                  , { StatusName: '申请退款', Id: '40' }
-                , { StatusName: '已退款', Id: '60' }];
-            self.productTypes = ko.observableArray();
-            self.Orders = ko.observableArray([]);
+            
+            self.addressList = ko.observableArray([]);
             self.init = function() {
-                $('.input-group.date').datepicker({
-                    todayBtn: "linked",
-                    keyboardNavigation: false,
-                    forceParse: false,
-                    calendarWeeks: true,
-                    autoclose: true
-                });
-                self.loadProductTypes();
+               
             };
-            self.gotoViewOrder = function(data) {
-                var url = '/zzmanage/vieworder?orderId=' + data.OrderId;
-                bnApp.open(url, '订单：' + data.TrackingNumber);
-            };
-            self.loadProductTypes = function() {
+            self.loadAddressList = function() {
                 bnApp.showLoading();
-                $.ajax({
-                    url: '@Url.Action("GetProductTypes")',
-                    type: "GET",
-                    success: function(result) {
-                        result.unshift({ Name: '显示所有' });
-                        self.productTypes.removeAll();
-                        self.productTypes(result);
-                        $('.chosen-select').chosen();
-                        bnApp.hideLoading();
-                    },
-                    error: function(error) {
-                        bnApp.showError(error);
-                        bnApp.hideLoading();
-                    }
-                });
-            };
-            self.loadOrders = function() {
-                bnApp.showLoading();
-                var condition = {
-                    DateFrom: self.DateFrom(), DateTo: self.DateTo(), ProductType: self.ProductType().Id, OrderStatus: self.OrderStatus().Id
-                    , CustomerName: self.CustomerName()
-                    , TrackingNumber: self.TrackingNumber()
+                var condition = {CustomerName: self.CustomerName()
                 };
                 $.ajax({
-                    url: '@Url.Action("SearchOrderByCriteria")',
+                    url: '@Url.Action("SearchCustomerAddress")',
                     type: "Post",
                     contentType: 'application/json; charset=utf-8',
                     data: JSON.stringify({ condition: condition }),
                     success: function(result) {
-                        self.Orders.removeAll();
-                        self.Orders(result);
+                        self.addressList.removeAll();
+                        self.addressList(result);
                         bnApp.hideLoading();
                     },
                     error: function(error) {
@@ -163,13 +115,6 @@
                     }
                 });
             };
-            self.displayStatus = function(s) {
-                var l = self.allStatus.filter(function(x) { return x.Id == s; });
-                if (l.length > 0) {
-                    return l[0].StatusName;
-                }
-                return 'NA';
-            }
         }
 
         var viewModel = new ViewModel();

@@ -111,8 +111,13 @@ namespace BnWS.Business
         {
             using (var db=GetDbContext())
             {
+                var customerPred = PredicateBuilder.New<ZY_Customer>(true);
+                if (!string.IsNullOrEmpty(condition.CustomerName))
+                {
+                    customerPred = customerPred.And(x => x.UserName.Contains(condition.CustomerName));
+                }
                 var tmp = from a in db.ZZ_Address
-                    join c in db.ZY_Customer on a.CustomerId equals c.OpenId
+                    join c in db.ZY_Customer.AsExpandable().Where(customerPred) on a.CustomerId equals c.OpenId
                     select new ZZAddressInfo()
                     {
                         CustomerName = c.UserName,
@@ -123,7 +128,7 @@ namespace BnWS.Business
                         IsDeleted = a.IsDeleted,
                         AddressId = a.AddressId
                     };
-                return tmp.ToList();
+                return tmp.OrderBy(x=>x.CustomerName).ThenByDescending(x=>x.CreatedDate).ToList();
             }
         } 
 
