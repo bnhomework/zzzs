@@ -17,7 +17,7 @@
           <grid-item @on-item-click="goTo({name:'DesginList'})" label="我的设计">
             <span slot="icon" class="bn-icon">&#xe60b;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="我的收藏">
+          <grid-item @on-item-click="goTo({name:'FavoriteList'})" label="我的收藏">
             <span slot="icon" class="bn-icon">&#xe623;</span>
           </grid-item>
           <grid-item @on-item-click="goTo({name:'shoppingCart'})" label="购物车">

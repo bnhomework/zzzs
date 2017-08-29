@@ -329,6 +329,20 @@
           <Property Name="TemplateId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="IsPublic" Type="bit" Nullable="false" />
         </EntityType>
+        <EntityType Name="ZZ_DesginFollow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DesginId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CustomerId" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="ZZ_LogisticsInfo">
           <Key>
             <PropertyRef Name="Id" />
@@ -586,6 +600,7 @@
           <EntitySet Name="ZZ_Address" EntityType="Self.ZZ_Address" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Category" EntityType="Self.ZZ_Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Desgin" EntityType="Self.ZZ_Desgin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ZZ_DesginFollow" EntityType="Self.ZZ_DesginFollow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_LogisticsInfo" EntityType="Self.ZZ_LogisticsInfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_Order" EntityType="Self.ZZ_Order" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ZZ_OrderAddress" EntityType="Self.ZZ_OrderAddress" Schema="dbo" store:Type="Tables" />
@@ -724,6 +739,7 @@
           <EntitySet Name="ZZ_LogisticsInfo" EntityType="BnAppModel.ZZ_LogisticsInfo" />
           <EntitySet Name="ZZ_Category" EntityType="BnAppModel.ZZ_Category" />
           <EntitySet Name="T_S_Sequence" EntityType="BnAppModel.T_S_Sequence" />
+          <EntitySet Name="ZZ_DesginFollow" EntityType="BnAppModel.ZZ_DesginFollow" />
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -1316,6 +1332,20 @@
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="ZZ_DesginFollow">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="DesginId" Type="Guid" Nullable="false" />
+          <Property Name="CustomerId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1772,6 +1802,21 @@
                 <ScalarProperty Name="Month" ColumnName="Month" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="SeqType" ColumnName="SeqType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ZZ_DesginFollow">
+            <EntityTypeMapping TypeName="BnAppModel.ZZ_DesginFollow">
+              <MappingFragment StoreEntitySet="ZZ_DesginFollow">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="DesginId" ColumnName="DesginId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

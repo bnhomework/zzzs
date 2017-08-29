@@ -1,32 +1,27 @@
 <template>
   <div class="router-view">
-    <div class="vux-demo">
-      <img class="logo" :src="homelogo">
-      <h1></h1>
-    </div>
-    <group title="附近店铺">
-      <cell title="Vux" :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in shops" :key="item.shopId">
-        <img slot="icon" width="100" style="display:block;margin-right:5px;" :src="getImgSrc(item.imgUrl)">
-        <span slot="title">{{item.shopName}}</span>
-        <span slot="inline-desc">{{item.description}}</span>
-      </cell>
+    <swiper :list="imgList" auto style="width:100%;margin:0 auto;" height="180px" dots-class="custom-bottom" dots-position="center"></swiper>
+    
+    <group title="牛X设计">
+      
+      <div v-for="item in publicDesigns">{{item}}</div>
     </group>
   </div>
 </template>
 <script>
-import { Group, Cell } from 'vux'
+import { Group, Cell , Swiper} from 'vux'
 import utils from '@/mixins/utils'
 
 export default {
   mixins: [utils],
   components: {
     Group,
-    Cell
+    Cell, Swiper
   },
   data() {
     return {
-      shops: [],
-      homelogo: require('@/assets/img/home.jpg')
+      publicDesigns: [],
+      imgs:['/upload/home/a1.jpg','/upload/home/a2.jpg','/upload/home/a3.jpg','/upload/home/a4.jpg']
     }
   },
   created() {
@@ -42,33 +37,31 @@ export default {
         });
         vm.$store.dispatch('loadCustomerInfo', openId);
       }
-
-      this.$wechat.getLocation({
-        type: 'wgs84',
-        success: function(res) {
-          var userLocation = {
-            longitude: res.longitude,
-            latitude: res.latitude
-          };
-          vm.$store.commit('updateUserLocation', { userLocation: userLocation });
-          vm.loadShops();
-        },
-        fail: function() {
-          vm.loadShops();
-        }
-      });
-      // vm.loadShops();//test
+      vm.loadPublicDesigns(openId);
     },
-    loadShops(condition) {
-      var url = this.apiServer + 'zy/shops';
-      condition = condition || this.$store.state.bn.userLocation || {};
+    loadPublicDesigns(openId) {
+      var url = this.apiServer + 'zz/GetPublicDesgins';
       var data = {
-        condition: condition
+        openId: openId
       };
       var vm = this;
       this.$http.post(url, data).then(res => {
-        this.shops = res.data;
+        this.publicDesigns = res.data;
       });
+    }
+  },
+  computed: {
+    imgList() {
+      var imgs = this.imgs;
+      if (!imgs) return [];
+      var self = this;
+      var result = imgs.map((x) => {
+        return {
+          url: 'javascript:',
+          img: self.getImgSrc(x)
+        }
+      });
+      return result
     }
   }
 }

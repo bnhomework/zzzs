@@ -143,6 +143,9 @@
     <Compile Include="ZZ_Desgin.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ZZ_DesginFollow.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZZ_LogisticsInfo.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>

@@ -6,6 +6,7 @@
           <div class="desgin-header">
             <span v-show="!item.IsPublic" @click.prevent.stop="setIsPublic(item,true)" class="bn-icon">&#xe6c9;</span>
             <span v-show="item.IsPublic" @click.prevent.stop="setIsPublic(item,false)" class="bn-icon">&#xe6ca;</span>
+            {{item.IsPublic?'已公开':'未公开'}}
           </div>
           <img :src="item.Preview1">
           <div style="display:inline-block;vertical-align:top;">

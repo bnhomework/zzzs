@@ -13,6 +13,7 @@ const router = new Router({
     ,{ path: '/DesginStep2', name: 'DesginStep2', component: (resolve) => require(['@/components/DesginStep2.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'设计',componentName:'创意设计'}}
     ,{ path: '/OtherFunctions', name: 'OF1', component: (resolve) => require(['@/components/OtherFunctions.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'我的',componentName:'我的'}}
     ,{ path: '/DesginList', name: 'DesginList', component: (resolve) => require(['@/components/DesginList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'我的设计',componentName:'我的设计'}}
+    ,{ path: '/FavoriteList', name: 'FavoriteList', component: (resolve) => require(['@/components/FavoriteList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'收藏',componentName:'我的'}}
     ,{ path: '/Desgin', name: 'Desgin', component: (resolve) => require(['@/components/Desgin.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'设计',componentName:'设计'}}
     ,{ path: '/submitOrders', name: 'submitOrders', component: (resolve) => require(['@/components/submitOrders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'提交订单'}}
     ,{ path: '/shoppingCart', name: 'shoppingCart', component: (resolve) => require(['@/components/submitOrders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'提交订单'}}

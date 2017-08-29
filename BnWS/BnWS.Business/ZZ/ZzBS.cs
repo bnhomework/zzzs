@@ -93,12 +93,11 @@ namespace BnWS.Business
             using (var db = GetDbContext())
             {
                 //todo test
-                //return db.ZZ_Desgin.AsExpandable()//.Where(x => x.CustomerId == openId)
-                //    .OrderByDescending(x=>x.CreatedTime).ToList();
-                return (from d in db.ZZ_Desgin.AsExpandable()//.Where(x => x.CustomerId == openId)
+                return (from d in db.ZZ_Desgin.AsExpandable().Where(x => x.CustomerId == openId)
                     join t in db.ZZ_Template on d.TemplateId equals t.TemplateId
                     join c in db.ZZ_Category on t.Category equals c.CategoryId
                     join u in db.ZY_Customer on d.CustomerId equals  u.OpenId
+                    orderby d.CreatedTime descending 
                     select new ZZDesign()
                     {
                         Id = d.DesginId,
@@ -519,6 +518,97 @@ namespace BnWS.Business
                 }
             }
         }
+
+        #endregion
+
+        #region follow
+
+        public List<zzPublicDesgin> GetPublicDesgins(string customerId)
+        {
+            using (var db = GetDbContext())
+            {
+
+                return (from d in db.ZZ_Desgin.Where(x => x.IsPublic)
+                        join t in db.ZZ_Template on d.TemplateId equals t.TemplateId
+                        join c in db.ZZ_Category on t.Category equals c.CategoryId
+                        join u in db.ZY_Customer on d.CustomerId equals u.OpenId
+                        select new zzPublicDesgin()
+                        {
+                            Id = d.DesginId,
+                            TemplateId = d.TemplateId,
+                            CustomerId = d.CustomerId,
+                            Name = d.Name,
+                            Tags = d.Tags,
+                            Preview1 = d.Preview1,
+                            Preview2 = d.Preview2,
+                            UnitPrice = c.UnitPrice,
+                            Designer = u.UserName,
+                            Follows = db.ZZ_DesginFollow.Count(x=>x.DesginId==d.DesginId),
+                            IsFollowed = db.ZZ_DesginFollow.Any(x => x.DesginId == d.DesginId && x.CustomerId == customerId)
+                        }).OrderByDescending(x=>x.Follows).ToList();
+            }
+        }
+
+        public List<zzPublicDesgin> GetMyFollowedDesgins(string customerId)
+        {
+            using (var db = GetDbContext())
+            {
+
+                return (from d in db.ZZ_Desgin.Where(x => x.IsPublic)
+                        join t in db.ZZ_Template on d.TemplateId equals t.TemplateId
+                        join c in db.ZZ_Category on t.Category equals c.CategoryId
+                        join u in db.ZY_Customer on d.CustomerId equals u.OpenId
+                        join f in db.ZZ_DesginFollow on d.DesginId equals f.DesginId
+                        orderby f.CreatedTime descending 
+                        select new zzPublicDesgin()
+                        {
+                            Id = d.DesginId,
+                            TemplateId = d.TemplateId,
+                            CustomerId = d.CustomerId,
+                            Name = d.Name,
+                            Tags = d.Tags,
+                            Preview1 = d.Preview1,
+                            Preview2 = d.Preview2,
+                            UnitPrice = c.UnitPrice,
+                            Designer = u.UserName,
+                            //Follows = db.ZZ_DesginFollow.Count(x => x.DesginId == d.DesginId),
+                            IsFollowed = true
+                        }).ToList();
+            }
+        }
+        public void UpdateDesginFollowStatus(Guid designId, string customerId, bool follow)
+        {
+            using (var uow = GetUnitOfWork())
+            {
+               var f= uow.Repository<ZZ_DesginFollow>()
+                    .Query()
+                    .Filter(x => x.DesginId == designId && customerId == x.CustomerId)
+                    .Get()
+                    .FirstOrDefault();
+                if (follow)
+                {
+                    if (f == null)
+                    {
+                        f=new ZZ_DesginFollow();
+                        f.Id = Guid.NewGuid();
+                        f.DesginId = designId;
+                        f.CustomerId = customerId;
+                        uow.Repository<ZZ_DesginFollow>().Insert(f);
+                        uow.Save();
+                    }
+                }
+                else
+                {
+                    if (f != null)
+                    {
+                        uow.Repository<ZZ_DesginFollow>().Delete(f);
+                        uow.Save();
+                    }
+                }
+
+            }
+        }
+
 
         #endregion
     }

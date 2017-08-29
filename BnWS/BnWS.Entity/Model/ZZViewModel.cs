@@ -36,6 +36,13 @@ namespace BnWS.Entity
         //template info
         public List<string> Colors { get; set; } 
     }
+
+    public class zzPublicDesgin:ZZDesign
+    {
+        public int Follows { get; set; }
+        public bool IsFollowed { get; set; }
+    }
+    
     public static class TempalteEx
     {
         public static string GetDefaultImg(this ZZ_Template t,int imageType=0,string ext="png")

@@ -144,5 +144,36 @@ namespace BnWS.Views
             return new JsonResult() { Data = "OK" };
         }
         #endregion
+
+        [HttpPost]
+        public ActionResult GetPublicDesgins(string openId)
+        {
+            var desgins = BS.GetPublicDesgins(openId); 
+            return new JsonResult()
+            {
+                Data = desgins,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
+        [HttpPost]
+        public ActionResult GetMyFollowedDesgins(string openId)
+        {
+            var desgins = BS.GetMyFollowedDesgins(openId);
+            return new JsonResult()
+            {
+                Data = desgins,
+                MaxJsonLength = int.MaxValue
+            };
+        }
+
+        #region follow
+        [HttpPost]
+        public ActionResult UpdateDesginFollowStatus(Guid designId, string customerId, bool follow)
+        {
+            BS.UpdateDesginFollowStatus(designId,customerId,follow);
+            return new JsonResult() { Data = "OK" }; 
+        }
+        #endregion
     }
 }

@@ -12,6 +12,15 @@
       <a v-show="!showEdit" @click="showEdit=true">编辑</a>
       <a v-show="showEdit" @click="showEdit=false">完成</a>
     </div>
+
+    <div v-show="loadingData==false&&orders.length==0" style="text-align:center;margin-top:40%">
+      您的购物车还是空的,快去添加商品吧....
+      
+      <br/>
+      <div></div>
+      <br/>
+      <x-button mini plain  type="primary" link="/DesginList">去添加商品</x-button>
+    </div>
     <div class="weui-cells weui-cells_checkbox">
       <label v-for="o in orderListOptions" :for="'checkbox_bn'+o.key" class="weui-cell weui-check_label">
         <div class="weui-cell__hd">
@@ -44,7 +53,8 @@ import {
   Group,
   TransferDom,
   Checklist,
-  Cell
+  Cell,
+    XButton
 } from 'vux'
 import utils from '@/mixins/utils'
 import _ from 'underscore'
@@ -58,12 +68,14 @@ export default {
     Group,
     Checklist,
     Cell,
-    popupAddress
+    popupAddress,
+    XButton
   },
   data() {
     return {
       showEdit: false,
       orders: [],
+      loadingData:false,
       selectedOrders: [],
     }
   },
@@ -72,6 +84,7 @@ export default {
   },
   methods: {
     loadOrders() {
+      this.loadOrders=true;
       var orderIds = this.$route.params.orderIds;
       var vm = this;
       var url = this.apiServer + 'zz/GetShoppingCart';
@@ -82,6 +95,7 @@ export default {
       }
       this.$http.post(url, data)
         .then(res => {
+          vm.loadOrders=false;
           vm.orders = res.data;
           vm.selectedOrders = _.pluck(vm.orders, 'OrderId');
         });
