@@ -120,9 +120,9 @@ export default {
 }
 
 .demo5-item {
-  width: 100px;
-  height: 40px;
-  line-height: 40px;
+  width: 50px;
+  /*height: 40px;*/
+  line-height: 30px;
   text-align: center;
   border-radius: 3px;
   border: 1px solid #ccc;

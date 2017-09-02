@@ -3,9 +3,9 @@
     <div v-for="item in designs">
       <div class="desgin-warp">
         <div class="preview-warp" @click.stop="goTo({name:'Desgin',params:{designId:item.DesignId}})">
-          <div class="desgin-header">
-            <span v-show="!item.IsPublic" @click.prevent.stop="setIsPublic(item,true)" class="bn-icon">&#xe6c9;</span>
-            <span v-show="item.IsPublic" @click.prevent.stop="setIsPublic(item,false)" class="bn-icon">&#xe6ca;</span>
+          <div class="desgin-header" @click.prevent.stop="setIsPublic(item,!item.IsPublic)">
+            <span v-show="!item.IsPublic"  class="bn-icon">&#xe6c9;</span>
+            <span v-show="item.IsPublic"  class="bn-icon">&#xe6ca;</span>
             {{item.IsPublic?'已公开':'未公开'}}
           </div>
           <img :src="item.Preview1">
@@ -14,11 +14,20 @@
             <div style="font-size:10px;color:#5e5e5e">
               <span v-for="tag in desginTags(item.Tags)" class="tag content-2">{{tag}}</span>
             </div>
+            <div v-if="item.IsPublic" ><span class="bn-icon" style="font-size:14px;margin-right:5px">&#xe60e;</span>{{item.Follows||0}}</div>
             <div><span class="amount">￥{{item.UnitPrice}}</span></div>
           </div>
           <div class="btn-order" @click="">开始订购</div>
         </div>
       </div>
+    </div>
+    <div v-show="loadingData==false&&designs.length==0" style="text-align:center;margin-top:40%">
+      您还没有创业设计,快去创建吧....
+      
+      <br/>
+      <div></div>
+      <br/>
+      <x-button mini plain  type="primary" link="/DesginStep1">去设计页面</x-button>
     </div>
     <div id="shareit" v-show="showShare" @click="showShare=false">
       <img class="arrow" :src="shareIcon">
@@ -43,6 +52,7 @@ export default {
     return {
       showShare: false,
       shareIcon: require('@/assets/img/share.png'),
+      loadingData:false,
       designs: []
     }
   },
@@ -61,14 +71,17 @@ export default {
       }
     },
     loadDesigns() {
+
       var url = this.apiServer + 'zz/GetDesginList';
       var data = {
         openId: this.$store.state.bn.openId
       };
       var vm = this;
+      vm.loadingData=true;
       this.$http.post(url, data)
         .then(res => {
           vm.designs = res.data;
+          vm.loadingData=false;
         });
     },
     desginTags(t) {

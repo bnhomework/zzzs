@@ -108,7 +108,10 @@ namespace BnWS.Business
                         Preview1 = d.Preview1,
                         Preview2 = d.Preview2,
                         UnitPrice = c.UnitPrice,
-                        Designer = u.UserName
+                        Designer = u.UserName,
+                        DesignerAvatar = u.Avatar,
+                        IsPublic = d.IsPublic,
+                        Follows = db.ZZ_DesginFollow.Count(x => x.DesginId == d.DesginId),
                     }).ToList();
             }
         }
@@ -131,6 +134,7 @@ namespace BnWS.Business
                             Preview2 = d.Preview2,
                             UnitPrice = c.UnitPrice,
                             Designer = u.UserName,
+                            DesignerAvatar=u.Avatar,
                             Colors = db.ZZ_Template.Where(x=>x.Category==t.Category).Select(x=>x.Color).Distinct().ToList()
                         }).FirstOrDefault();
                 return de;
@@ -543,9 +547,14 @@ namespace BnWS.Business
                             Preview2 = d.Preview2,
                             UnitPrice = c.UnitPrice,
                             Designer = u.UserName,
+                            DesignerAvatar = u.Avatar,
+                            CreatedTime = d.CreatedTime,
                             Follows = db.ZZ_DesginFollow.Count(x=>x.DesginId==d.DesginId),
                             IsFollowed = db.ZZ_DesginFollow.Any(x => x.DesginId == d.DesginId && x.CustomerId == customerId)
-                        }).OrderByDescending(x=>x.Follows).ToList();
+                        }).OrderByDescending(x=>x.Follows).ThenByDescending(x=>x.CreatedTime)
+                        .Take(100)
+                        //.Where(x=>x.Follows>0)
+                        .ToList();
             }
         }
 
@@ -571,6 +580,7 @@ namespace BnWS.Business
                             Preview2 = d.Preview2,
                             UnitPrice = c.UnitPrice,
                             Designer = u.UserName,
+                            DesignerAvatar = u.Avatar,
                             //Follows = db.ZZ_DesginFollow.Count(x => x.DesginId == d.DesginId),
                             IsFollowed = true
                         }).ToList();

@@ -26,13 +26,17 @@
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe7a4;</span>
           <span slot="label">主页</span>
         </tabbar-item>
-        <tabbar-item :link="{name:'OrderList'}" :selected="(route.name||'').indexOf('OrderList')>=0">
-          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe64e;</span>
-          <span slot="label">订单</span>
-        </tabbar-item>
         <tabbar-item :link="{name:'DesginStep1'}" :selected="(route.name||'').indexOf('DesginStep')>=0">
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe602;</span>
           <span slot="label">创意设计</span>
+        </tabbar-item>
+        <tabbar-item :link="{name:'DesginList'}" :selected="(route.name||'').indexOf('DesginList')>=0">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe60b;</span>
+          <span slot="label">我的设计</span>
+        </tabbar-item>
+        <tabbar-item :link="{name:'OrderList'}" :selected="(route.name||'').indexOf('OrderList')>=0">
+          <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe637;</span>
+          <span slot="label">订单</span>
         </tabbar-item>
         <tabbar-item :link="{name:'OF1'}" :selected="(route.name||'').indexOf('OF')>=0">
           <span class="zy-icon-22 zy-tabbar-icon-home" slot="icon" style="position:relative;top: -2px;">&#xe624;</span>
@@ -287,12 +291,12 @@ span.amount{
 }
 
 @font-face {
-  font-family: 'bn-icon';  /* project id 338215 */
-  src: url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.eot');
-  src: url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.woff') format('woff'),
-  url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_338215_6epegsi20m5cdi.svg#iconfont') format('svg');
+  font-family: 'bn-icon';  /* project id 338215 */ 
+  src: url('//at.alicdn.com/t/font_338215_erf1aywi8o69wwmi.eot');
+  src: url('//at.alicdn.com/t/font_338215_erf1aywi8o69wwmi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_338215_erf1aywi8o69wwmi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_338215_erf1aywi8o69wwmi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_338215_erf1aywi8o69wwmi.svg#iconfont') format('svg');
 }
 
 .demo-icon {

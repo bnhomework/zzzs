@@ -10,15 +10,16 @@
     <div style="margin-top:46px">
     </div>
     <div class="vux-form-preview weui-form-preview" v-for="item in ordersToShow" style="margin-bottom:20px">
-      <div class="weui-form-preview__hd">
+      <!-- <div class="weui-form-preview__hd">
         <span style="border:1px solid #f85;padding:4px;border-radius:4px;color:#f85">{{getOrderStatus(item.OrderStatus)}}</span>
-      </div>
-      <div class="weui-form-preview__bd" style="text-align:left">
+      </div> -->
+      <div class="weui-form-preview__bd" style="text-align:left;margin-top:20px;margin-bottom:20px">
         <img :src="item.Preview" style="width:30%;min-height:90px">
         <div style="display:inline-block;width:65%;vertical-align: top; height:100%">
           <p class="content-1">{{item.DesginName}}</p>
           <p>颜色：{{item.Color}} </p>
           <span class="amount" style="position:absolute;bottom:50px;">￥ {{item.TotalAmount}}</span>
+          <span class="pull-right" style="font-size:10px;position:absolute;top:10px;right:15px;border:1px solid #f85;padding:2px;border-radius:4px;color:#f85">{{getOrderStatus(item.OrderStatus)}}</span>
           <span class="pull-right" style="position:absolute;bottom:55px;right:15px;font-size:16px">x {{item.Quiantity}}</span>
         </div>
       </div>

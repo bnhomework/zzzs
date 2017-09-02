@@ -2,7 +2,7 @@
   <div style="width:100%;">
     <div v-for="item in designs">
       <div class="desgin-warp">
-        <div class="preview-warp" @click.stop="goTo({name:'Desgin',params:{designId:item.DesignId}})">
+        <div class="preview-warp" @click.stop="goTo({name:'Desgin',params:{designId:item.Id}})">
           <!-- <div class="desgin-header">
             <span v-show="!item.IsPublic" @click.prevent.stop="setIsPublic(item,true)" class="bn-icon">&#xe6c9;</span>
             <span v-show="item.IsPublic" @click.prevent.stop="setIsPublic(item,false)" class="bn-icon">&#xe6ca;</span>

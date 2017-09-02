@@ -10,11 +10,15 @@
         <span class="amount">￥{{design.UnitPrice}}</span>
         <span style="float:right;padding-right:5px" class="content-1">{{design.Name}}</span>
       </div>
-      <div>
+      <div style="min-height:22px">
         <span class="tag content-2" v-for="t in desginTags">
           {{t}}
         </span>
-        <span style="float:right;padding-right:5px" class="content-2">设计师：{{design.Designer}}</span>
+        <div style="float:right;padding-right:5px" class="content-2">
+        <span>设计师：</span>
+        <img :src="getImgSrc(design.DesignerAvatar)" class="small-avatar"> 
+        <span>{{design.Designer}}</span>
+        </div>
       </div>
     </div>
     <br/>
@@ -26,8 +30,8 @@
       <div class="responsive-wrapper">
         <div class="mini-btn-2-1">
           <!-- <a href="javascript:;" class="js-im-icon new-btn service"><i>&#xe665;</i><span>test</span></a> -->
-          <a class="new-btn buy-cart" @click="goTo('favorite')">
-            <i>&#xe623;</i><span class="desc">收藏</span>
+          <a class="new-btn buy-cart" @click="goTo('FavoriteList')">
+            <i>&#xe623;</i><span class="desc">收藏夹</span>
           </a>
           <a class="new-btn buy-cart" style=""  @click="goTo('shoppingCart')">
             <i>&#xe665;</i><span class="desc">购物车</span>

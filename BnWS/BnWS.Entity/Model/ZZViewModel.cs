@@ -32,6 +32,8 @@ namespace BnWS.Entity
         public decimal UnitPrice { get; set; }
         public bool IsPublic { get; set; }
         public string Designer { get; set; }
+        public string DesignerAvatar { get; set; }
+        public int Follows { get; set; }
 
         //template info
         public List<string> Colors { get; set; } 
@@ -39,8 +41,8 @@ namespace BnWS.Entity
 
     public class zzPublicDesgin:ZZDesign
     {
-        public int Follows { get; set; }
         public bool IsFollowed { get; set; }
+        public DateTime CreatedTime { get; set; }
     }
     
     public static class TempalteEx

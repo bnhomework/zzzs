@@ -8,7 +8,7 @@
           <div class="planet planet-11" p-id="234"></div>
           <div class="planet planet-12" p-id="235"></div>
         </div>
-        <div style="width:100px;height:100px;margin:0 auto">
+        <div style="width:100px;height:100px;margin:0 auto;margin-top:50px">
         <img style="width:100%" :src="getImgSrc(this.$store.state.bn.userInfo.Avatar)"></div>
         <div class="uname">{{this.$store.state.bn.userInfo.UserName}}</div>
       </div>
@@ -113,7 +113,6 @@ export default {
 }
 
 .top-warp img {
-  margin-top: 50px;
   width: 40%;
   /*border:2px solid #f1f1f1;*/
   border-radius: 400px;

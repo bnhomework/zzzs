@@ -47,7 +47,8 @@ namespace BnWS.Views
                 DesignId=x.Id,
                 x.Name,
                 x.Tags,
-                x.IsPublic
+                x.IsPublic,
+                x.Follows
                 ,x.UnitPrice
             }), MaxJsonLength = int.MaxValue };
         }
