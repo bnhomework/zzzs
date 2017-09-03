@@ -199,18 +199,20 @@ export default {
       vm.Preview2_120='';
       vm.saveDialogVisible = true;
       //todo save image to server
-      saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {scale: 1}, function(uri) {
+      saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, {scale: 1}, function(uri) {
         vm.Preview1 = uri;
+        vm.Preview1_120 =uri;
       })
-      saveSVGasPNG.svgAsPngUri(this.$refs.back.$el, {scale: 1}, function(uri) {
+      //  saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, {scale: 0.5}, function(uri) {
+      //   vm.Preview1_120 = uri;
+      // })
+      saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, {scale: 1}, function(uri) {
         vm.Preview2 = uri;
-      })
-       saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {scale: 0.3}, function(uri) {
-        vm.Preview1_120 = uri;
-      })
-      saveSVGasPNG.svgAsPngUri(this.$refs.back.$el, {scale: 0.3}, function(uri) {
         vm.Preview2_120 = uri;
       })
+      // saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, {scale: 0.5}, function(uri) {
+      //   vm.Preview2_120 = uri;
+      // })
     },
     saveDesign() {
       var vm = this;
