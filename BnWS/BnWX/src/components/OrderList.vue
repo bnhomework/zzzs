@@ -14,7 +14,7 @@
         <span style="border:1px solid #f85;padding:4px;border-radius:4px;color:#f85">{{getOrderStatus(item.OrderStatus)}}</span>
       </div> -->
       <div class="weui-form-preview__bd" style="text-align:left;margin-top:20px;margin-bottom:20px">
-        <img :src="item.Preview" style="width:30%;min-height:90px">
+        <img :src="getImgSrc(item.Preview)" style="width:30%;min-height:90px">
         <div style="display:inline-block;width:65%;vertical-align: top; height:100%">
           <p class="content-1">{{item.DesginName}}</p>
           <p>颜色：{{item.Color}} </p>

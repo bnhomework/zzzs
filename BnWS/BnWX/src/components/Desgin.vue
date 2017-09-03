@@ -2,8 +2,8 @@
   <div style="width:100%">
     <div>
       <div></div>
-      <img style="width:100%" :src="design.Preview1" v-show="isFront">
-      <img style="width:100%" :src="design.Preview2" v-show="!isFront">
+      <img style="width:100%" :src="getOriginalImage(design.Preview1)" v-show="isFront">
+      <img style="width:100%" :src="getOriginalImage(design.Preview2)" v-show="!isFront">
     </div>
     <div style="padding:15px; background-color:#ffffff;">
       <div>
@@ -112,6 +112,12 @@ export default {
       this.showCardModel=false;
       this.showCardModel=true;
       this.action=1;
+    },
+    getOriginalImage(f){
+      if(f){
+      f=f.replace('_120.','.');
+      }
+      return this.getImgSrc(f);
     }
     ,
     share(orderId, stype) {

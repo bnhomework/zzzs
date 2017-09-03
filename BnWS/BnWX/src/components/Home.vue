@@ -4,7 +4,7 @@
      <group-title>牛X设计</group-title>
     <grid :rows="2">
       <grid-item v-for="item in publicDesigns" >
-        <img slot="icon" :src="item.Preview1" @click="goTo({name:'Desgin',params:{designId:item.Id}})">
+        <img slot="icon" :src="getImgSrc(item.Preview1)" @click="goTo({name:'Desgin',params:{designId:item.Id}})">
         <div slot="label" style="text-align: left">
           <!-- <div>{{item.Name}}</div> -->
           <img :src="getImgSrc(item.DesignerAvatar)" class="small-avatar">

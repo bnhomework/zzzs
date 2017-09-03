@@ -199,10 +199,10 @@ export default {
       vm.Preview2_120='';
       vm.saveDialogVisible = true;
       //todo save image to server
-      saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {}, function(uri) {
+      saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {scale: 1}, function(uri) {
         vm.Preview1 = uri;
       })
-      saveSVGasPNG.svgAsPngUri(this.$refs.back.$el, {}, function(uri) {
+      saveSVGasPNG.svgAsPngUri(this.$refs.back.$el, {scale: 1}, function(uri) {
         vm.Preview2 = uri;
       })
        saveSVGasPNG.svgAsPngUri(this.$refs.front.$el, {scale: 0.3}, function(uri) {
@@ -299,7 +299,6 @@ export default {
   },
   computed: {
     bgImg_f() {
-
       return this.template.FrontImg;
     },
     bgImg_b() {

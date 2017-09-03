@@ -15,7 +15,7 @@
 
     <div v-show="loadingData==false&&orders.length==0" style="text-align:center;margin-top:40%">
       您的购物车还是空的,快去添加商品吧....
-      
+
       <br/>
       <div></div>
       <br/>
@@ -27,7 +27,7 @@
           <input type="checkbox" name="vux-checkbox-bn" :id="'checkbox_bn'+o.key" class="weui-check" :value="o.key" v-model="selectedOrders"> <i class="weui-icon-checked vux-checklist-icon-checked"></i></div>
         <div class="weui-cell__bd">
           <!-- <div> -->
-          <img :src="o.preview" style="width:30%;min-height:90px">
+          <img :src="getImgSrc(o.preview)" style="width:30%;min-height:90px">
           <div style="display:inline-block;width:65%;vertical-align: top; height:100%">
             <p class="content-1">{{o.value}}</p>
             <p>{{o.inlineDesc}}</p>

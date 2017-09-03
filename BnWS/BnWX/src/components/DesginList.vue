@@ -8,7 +8,7 @@
             <span v-show="item.IsPublic"  class="bn-icon">&#xe6ca;</span>
             {{item.IsPublic?'已公开':'未公开'}}
           </div>
-          <img :src="item.Preview1">
+          <img :src="getImgSrc(item.Preview1)">
           <div style="display:inline-block;vertical-align:top;">
             <div class="content-1">{{item.Name}}</div>
             <div style="font-size:10px;color:#5e5e5e">

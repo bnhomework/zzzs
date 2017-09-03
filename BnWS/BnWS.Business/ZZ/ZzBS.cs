@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -9,6 +10,7 @@ using Bn.WeiXin;
 using Bn.WeiXin.GZH;
 using BnWS.Entity;
 using LinqKit;
+using Newtonsoft.Json;
 using Repository;
 
 namespace BnWS.Business
@@ -45,34 +47,16 @@ namespace BnWS.Business
                 return db.ZZ_Template.AsExpandable().Where(templatePred).ToList();
             }
         }
-        private string SaveByteArrayAsImage(Guid id, string raw,string name,string ext="png")
-        {
-            var folder = Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", id.ToString());
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-            var fileName = string.Format("{0}.{1}", name, ext);
-            var localFullOutputPath = Path.Combine(folder, fileName);
-            var base64String = raw.Split(',')[1];
-            byte[] bytes = Convert.FromBase64String(base64String);
-
-            Image image;
-            using (var ms = new MemoryStream(bytes))
-            {
-                image = Image.FromStream(ms);
-            }
-            image.Save(localFullOutputPath);
-            return string.Format(@"upload/{0}/{1}", id, fileName);
-        }
-
+       
         public void SaveDesgin(ZZDesign zzDesign)
         {
             using (var uow=GetUnitOfWork())
             {
+                var id = Guid.NewGuid();
+                zzDesign.DesginSettings = HandleDesginSettings(id,zzDesign.DesginSettings);
                 var d = new ZZ_Desgin()
                 {
-                    DesginId = Guid.NewGuid(),
+                    DesginId = id,
                     TemplateId = zzDesign.TemplateId,
                     CustomerId = zzDesign.CustomerId,
                     Name = zzDesign.Name,
@@ -85,6 +69,42 @@ namespace BnWS.Business
                 SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2, "2");
                 uow.Repository<ZZ_Desgin>().Insert(d);
                 uow.Save();
+            }
+        }
+
+        private string HandleDesginSettings(Guid desginId,string raw)
+        {
+            try
+            {
+
+                var settings = JsonConvert.DeserializeObject<dynamic>(raw);
+                if (settings.front != null && settings.front != "")
+                {
+                    var ext = settings.front.ToString().Split(';')[0].Replace("data:image/", "");
+                    if (ext == "jgp")
+                    {
+                        ext = "jpeg";
+                    }
+                    settings.front = SaveByteArrayAsImage(desginId, settings.front.ToString(), string.Format("{0}_1", desginId), ext);
+
+                }
+                if (settings.back != null && settings.back != "")
+                {
+
+                    var ext = settings.back.ToString().Split(';')[0].Replace("data:image/", ""); 
+                    if (ext == "jgp")
+                    {
+                        ext = "jpeg";
+                    }
+                    settings.back = SaveByteArrayAsImage(desginId, settings.back.ToString(), string.Format("{0}_2", desginId), ext);
+
+                }
+                return JsonConvert.SerializeObject(settings);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                throw;
             }
         }
 

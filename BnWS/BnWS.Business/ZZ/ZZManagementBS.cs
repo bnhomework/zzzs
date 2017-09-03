@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Web;
 using BnWS.Entity;
 using LinqKit;
 using Newtonsoft.Json;
@@ -384,6 +386,7 @@ namespace BnWS.Business
                           select new ZZOrderDetail()
                           {
                               OrderId = o.OrderId,
+                              DesignId = o.DesignId,
                               TrackingNumber = o.TrackingNumber,
                               CheckOutDate = o.CheckOutDate.Value,
                               CustomerName = u.UserName,
@@ -424,16 +427,17 @@ namespace BnWS.Business
             d.Preview2 = warpPath(d.Preview2);
 
             var s = JsonConvert.DeserializeObject<ZZDesignSetting>(d.DesginSettings);
-            d.CustomerImg1 = warpPath(s.front);
-            d.CustomerImg2 = warpPath(s.back);
+            d.CustomerImg1 = warpPath(s.front,d.DesignId,string.Format("{0}_1",d.DesignId));
+            d.CustomerImg2 = warpPath(s.back,d.DesignId,string.Format("{0}_2",d.DesignId));
             d.OrderStatusDesc = getOrderStatusById(d.OrderStatus);
 
         }
 
-        private string warpPath(string p)
+        private string warpPath(string p,Guid designId=default(Guid),string fileName="")
         {
             if (string.IsNullOrEmpty(p))
                 return p;
+            //p = HandleRawImage(p, designId, fileName);
             p = p.ToLower();
             if (p.StartsWith("upload/"))
             {
@@ -445,6 +449,27 @@ namespace BnWS.Business
                 p = p.Replace("_120.", ".");
             }
             return p;
+        }
+
+        private string HandleRawImage(string raw,Guid designId,string fileName)
+        {
+            if (!raw.StartsWith("data:image"))
+            {
+                return raw;
+            }
+            var folder = Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", designId.ToString());
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            
+            var ext = raw.Split(';')[0].Replace("data:image/","");
+            var fileFullName = string.Format("{0}/{1}.{2}", folder, fileName, ext);
+            if (!File.Exists(fileFullName))
+            {
+                SaveByteArrayAsImage(designId, raw, fileName, ext);
+            }
+            return string.Format("upload/{0}/{1}.{2}", designId, fileName, ext);
         }
 
         private string getOrderStatusById(int s)

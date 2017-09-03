@@ -158,6 +158,7 @@ namespace BnWS.Entity
     public class ZZOrderSummary
     {
         public Guid OrderId { get; set; }
+        public Guid DesignId { get; set; }
         public string TrackingNumber { get; set; }
         public DateTime CheckOutDate { get; set; }
         public string CustomerName { get; set; }
