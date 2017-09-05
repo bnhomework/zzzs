@@ -4,7 +4,7 @@
       <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">
         <div style="font-size:12px;padding-left:5px;">
           <div class="preview" style="padding-top:5px;border-bottom:1px solid #f5f5f5">
-            <img :src="design.Preview1" width="15%" style="border:1px solid #e5e5e5">
+            <img :src="getImgSrc(design.Preview1)" width="15%" style="border:1px solid #e5e5e5">
             <div style="float:right;text-align:left;width:77%">{{design.Name}}
               <div>
                 <span class="amount" style="font-size:14px">￥{{design.UnitPrice}}</span>

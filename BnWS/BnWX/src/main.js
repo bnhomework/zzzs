@@ -9,7 +9,7 @@ import AlloyFingerVue from '@/../node_modules/alloyfinger/vue/alloy_finger.vue.j
 
 import store from './store'
 import router from './router'
-import { AjaxPlugin, WechatPlugin,ToastPlugin ,ConfirmPlugin} from 'vux'
+import { AjaxPlugin, WechatPlugin,ToastPlugin ,ConfirmPlugin,LoadingPlugin} from 'vux'
 
 window.AlloyFinger=AlloyFinger
 Vue.use(ToastPlugin)
@@ -17,6 +17,7 @@ Vue.use(AjaxPlugin)
 Vue.use(WechatPlugin)
 Vue.use(AlloyFingerVue);
 Vue.use(ConfirmPlugin)
+Vue.use(LoadingPlugin)
 window.wx=window.wx||Vue.wechat;
 FastClick.attach(document.body)
 Vue.config.productionTip = false
