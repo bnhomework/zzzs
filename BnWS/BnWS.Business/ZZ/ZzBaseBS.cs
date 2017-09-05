@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -38,6 +39,8 @@ namespace BnWS.Business
             {
                 Directory.CreateDirectory(folder);
             }
+            //Debug.WriteLine(string.Format("------------{0}-------------",name));
+            //Debug.WriteLine(raw);
             var fileName = string.Format("{0}.{1}", name, ext);
             var localFullOutputPath = Path.Combine(folder, fileName);
             var base64String = raw.Split(',')[1];

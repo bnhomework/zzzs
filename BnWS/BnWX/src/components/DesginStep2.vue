@@ -195,21 +195,25 @@ export default {
       var vm = this;
       vm.Preview1 = '';
       vm.Preview2 = '';
-      vm.Preview1_120='';
-      vm.Preview2_120='';
+      vm.Preview1_120 = '';
+      vm.Preview2_120 = '';
       vm.saveDialogVisible = true;
       //todo save image to server
-      saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, {scale: 1}, function(uri) {
+      saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, { scale: 1 }, function(uri) {
         vm.Preview1 = uri;
-        vm.Preview1_120 =uri;
+        vm.Preview1_120 = uri;
+        saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, { scale: 1 }, function(uri) {
+          vm.Preview2 = uri;
+          vm.Preview2_120 = uri;
+        })
       })
       //  saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, {scale: 0.5}, function(uri) {
       //   vm.Preview1_120 = uri;
       // })
-      saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, {scale: 1}, function(uri) {
-        vm.Preview2 = uri;
-        vm.Preview2_120 = uri;
-      })
+      // saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, {scale: 1}, function(uri) {
+      //   vm.Preview2 = uri;
+      //   vm.Preview2_120 = uri;
+      // })
       // saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, {scale: 0.5}, function(uri) {
       //   vm.Preview2_120 = uri;
       // })
@@ -223,7 +227,7 @@ export default {
       var data = {
         zzDesign: {
           CustomerId: this.$store.state.bn.openId,
-          TemplateId:this.template.TemplateId,
+          TemplateId: this.template.TemplateId,
           Name: this.desginName,
           Tags: this.desginTags,
           DesginSettings: JSON.stringify(this.desgin),
@@ -234,8 +238,12 @@ export default {
         }
       };
       var vm = this;
+      vm.$vux.loading.show({
+        text: '正在保存...'
+      })
       this.$http.post(url, data)
         .then(res => {
+          vm.$vux.loading.hide()
           vm.$vux.toast.show({
             text: '保存成功',
             type: 'success'
@@ -244,6 +252,7 @@ export default {
             name: 'DesginList'
           })
         }).catch(err => {
+          vm.$vux.loading.hide()
           vm.$vux.toast.show({
             text: '出错啦~~',
             type: 'cancel'
