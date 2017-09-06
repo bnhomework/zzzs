@@ -147,9 +147,9 @@ namespace BnWS.Views
         #endregion
 
         [HttpPost]
-        public ActionResult GetPublicDesgins(string openId)
+        public ActionResult GetPublicDesgins(string customerId)
         {
-            var desgins = BS.GetPublicDesgins(openId); 
+            var desgins = BS.GetPublicDesgins(customerId); 
             return new JsonResult()
             {
                 Data = desgins,
@@ -158,9 +158,9 @@ namespace BnWS.Views
         }
 
         [HttpPost]
-        public ActionResult GetMyFollowedDesgins(string openId)
+        public ActionResult GetMyFollowedDesgins(string customerId)
         {
-            var desgins = BS.GetMyFollowedDesgins(openId);
+            var desgins = BS.GetMyFollowedDesgins(customerId);
             return new JsonResult()
             {
                 Data = desgins,

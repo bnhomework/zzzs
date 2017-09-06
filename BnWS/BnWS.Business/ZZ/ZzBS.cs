@@ -588,6 +588,7 @@ namespace BnWS.Business
                         join c in db.ZZ_Category on t.Category equals c.CategoryId
                         join u in db.ZY_Customer on d.CustomerId equals u.OpenId
                         join f in db.ZZ_DesginFollow on d.DesginId equals f.DesginId
+                        where f.CustomerId==customerId
                         orderby f.CreatedTime descending 
                         select new zzPublicDesgin()
                         {
