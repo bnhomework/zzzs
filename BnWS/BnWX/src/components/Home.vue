@@ -47,12 +47,12 @@ export default {
         });
         vm.$store.dispatch('loadCustomerInfo', openId);
       }
-      vm.loadPublicDesigns(openId);
+      vm.loadPublicDesigns();
     },
-    loadPublicDesigns(openId) {
+    loadPublicDesigns() {
       var url = this.apiServer + 'zz/GetPublicDesgins';
       var data = {
-        openId: openId
+        customerId: this.$store.state.bn.openId
       };
       var vm = this;
       this.$http.post(url, data).then(res => {

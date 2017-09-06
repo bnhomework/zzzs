@@ -7,7 +7,7 @@
             <span v-show="!item.IsPublic" @click.prevent.stop="setIsPublic(item,true)" class="bn-icon">&#xe6c9;</span>
             <span v-show="item.IsPublic" @click.prevent.stop="setIsPublic(item,false)" class="bn-icon">&#xe6ca;</span>
           </div> -->
-          <img :src="item.Preview1">
+          <img :src="getImgSrc(item.Preview1)">
           <div style="display:inline-block;vertical-align:top;">
             <div class="content-1">{{item.Name}}</div>
             <div style="font-size:10px;color:#5e5e5e">
@@ -58,7 +58,7 @@ export default {
       this.loadingData=true;
       var url = this.apiServer + 'zz/GetMyFollowedDesgins';
       var data = {
-        openId: this.$store.state.bn.openId
+        customerId: this.$store.state.bn.openId
       };
       var vm = this;
       this.$http.post(url, data)

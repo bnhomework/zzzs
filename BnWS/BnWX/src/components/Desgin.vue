@@ -1,7 +1,7 @@
 <template>
   <div style="width:100%">
-    <div>
-      <div></div>
+    <div >
+      <div @click="isFront=!isFront" class="switch">{{!isFront?'前':'后'}}</div>
       <img style="width:100%" :src="getOriginalImage(design.Preview1)" v-show="isFront">
       <img style="width:100%" :src="getOriginalImage(design.Preview2)" v-show="!isFront">
     </div>
@@ -221,6 +221,21 @@ export default {
 
 .big-btn-2-1 .big-btn {
   width: 50%;
+}
+
+.switch {
+  position: fixed;
+  right: 0px;
+  margin: 10px;
+  padding: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  border-radius: 30px;
+  border: solid 1px #5d5d5d
+}
+
+.switch:hover {
+  border: solid 1px #1d1d1d
 }
 
 /*.big-btn {

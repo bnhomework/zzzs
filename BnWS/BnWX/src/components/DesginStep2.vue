@@ -289,13 +289,47 @@ export default {
       var vm = this;
       //if not ios
       // vm.mylogos.push(i)
-      //if ios
-      this.$wechat.getLocalImgData({
-        localId: i, // 图片的localID
-        success: function(res) {
-          vm.mylogos.push(res.localData); // localData是图片的base64数据，可以用img标签显示
+      if (window.__wxjs_is_wkwebview) {
+        //if ios
+        this.$wechat.getLocalImgData({
+          localId: i, // 图片的localID
+          success: function(res) {
+            vm.mylogos.push(res.localData); // localData是图片的base64数据，可以用img标签显示
+          }
+        });
+
+      } else {
+        // var reader = new FileReader();
+        // reader.readAsDataURL(i);
+        // reader.onload = function(e) {
+        //   vm.mylogos.push(this.result);
+        // }
+       vm.$wechat.uploadImage({
+    localId: i, // 需要上传的图片的本地ID，由chooseImage接口获得
+    isShowProgressTips: 1, // 默认为1，显示进度提示
+    success: function (res) {
+        var serverId = res.serverId; // 返回图片的服务器端ID
+    }
+});
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        var img = new Image();
+        img.crossOrigin="anonymous";
+        var href=i;
+        if (href) {
+          img.src = href;
+          img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            // image.setAttributeNS("http://www.w3.org/1999/xlink", "href", canvas.toDataURL('image/png'));
+            vm.mylogos.push(canvas.toDataURL());
+          }
+          img.onerror = function() {
+            console.log("Could not load "+href);
+          }
         }
-      });
+      }
     },
     setLogo(l) {
       if (this.isbackend) {

@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;overflow-x:hidden;margin-bottom:46px">
+  <div style="width:100%;overflow-x:hidden;margin-bottom:46px;height:100%">
     <popup-address ref="pickAddress"></popup-address>
     <!--    <group>
       <cell :value="item.dist" :link="{path:'/shop/'+item.shopId}" v-for="item in orders" :key="item.shopId">
@@ -42,7 +42,7 @@
       </label>
     </div>
     <!-- <checklist :options="orderListOptions" v-model="selectedOrders"></checklist> -->
-    <div class="bottom-fix">
+    <div class="bottom-fix" style="position:absolute !important">
       <span class="amount" style="line-height:50px;font-size:16px;position:absolute;left:25px">合计：  ￥{{totalAmount}}</span>
       <a class="big-btn red-btn pull-right" style="width:30%" @click="checkOut" v-bind:class="{'disable-btn':selectedOrders.length==0}">结算<span v-show="selectedOrders.length>0">({{selectedOrders.length}})</span></a>
     </div>
