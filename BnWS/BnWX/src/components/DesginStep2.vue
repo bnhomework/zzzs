@@ -299,23 +299,37 @@ export default {
         });
 
       } else {
-        // var reader = new FileReader();
-        // reader.readAsDataURL(i);
-        // reader.onload = function(e) {
-        //   vm.mylogos.push(this.result);
-        // }
-       vm.$wechat.uploadImage({
-    localId: i, // 需要上传的图片的本地ID，由chooseImage接口获得
-    isShowProgressTips: 1, // 默认为1，显示进度提示
-    success: function (res) {
-        var serverId = res.serverId; // 返回图片的服务器端ID
-    }
-});
-        var canvas = document.createElement('canvas');
+        vm.$wechat.uploadImage({
+          localId: i, // 需要上传的图片的本地ID，由chooseImage接口获得
+          isShowProgressTips: 1, // 默认为1，显示进度提示
+          success: function(res) {
+            var serverId = res.serverId; // 返回图片的服务器端ID
+            vm.loadImageFromWX(serverId);
+          }
+        });
+        
+      }
+    },
+    loadImageFromWX(serverId){
+      var vm=this;
+      var url = this.apiServer + 'wx/loadImageFromWX';
+      vm.$http.post(url, {serverId:serverId})
+        .then(res => {
+          
+        }).catch(err => {
+          vm.$vux.toast.show({
+            text: '图片加载出错啦~~',
+            type: 'cancel'
+          })
+        });
+    },
+    convertImageToBase64(url){
+      var vm = this;
+      var canvas = document.createElement('canvas');
         var ctx = canvas.getContext('2d');
         var img = new Image();
-        img.crossOrigin="anonymous";
-        var href=i;
+        img.crossOrigin = "anonymous";
+        var href = url;
         if (href) {
           img.src = href;
           img.onload = function() {
@@ -326,10 +340,9 @@ export default {
             vm.mylogos.push(canvas.toDataURL());
           }
           img.onerror = function() {
-            console.log("Could not load "+href);
+            console.log("Could not load " + href);
           }
         }
-      }
     },
     setLogo(l) {
       if (this.isbackend) {
