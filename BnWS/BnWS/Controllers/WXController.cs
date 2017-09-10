@@ -121,17 +121,19 @@ namespace BnWS.Views
         {
             try
             {
-
-                var url = WxApiHelper.Instance.loadImageFromWX(serverId);
+                var ext = "jpeg";
+                var url = WxApiHelper.Instance.loadImageFromWX(serverId,out ext);
+                Debug.WriteLine(url);
                 var mywebclient = new WebClient();
-                var ext = url.Reverse().ToString().Split('.')[0].Reverse().ToString();
+                
                 var fileName = string.Format("{0}.{1}",
                     DateTime.Now.ToString("yyyyMMddHHmmssfff") + (new Random()).Next().ToString().Substring(0, 4), ext);
 
                 var serverPath = string.Format("{0}\\temp\\{1}", WxConfig.WebServerUrl, fileName);
 
-                var savepath = string.Format("{0}\\{1}", Server.MapPath("Temp"), fileName);
-
+                var savepath = string.Format("{0}\\temp\\{1}", Server.MapPath("~"), fileName);
+                Debug.WriteLine(url);
+                Debug.WriteLine(savepath);
                 mywebclient.DownloadFile(url, savepath);
                 return new JsonResult() { Data = serverPath };
 

@@ -315,7 +315,7 @@ export default {
       var url = this.apiServer + 'wx/loadImageFromWX';
       vm.$http.post(url, {serverId:serverId})
         .then(res => {
-          
+          vm.convertImageToBase64(res.data)
         }).catch(err => {
           vm.$vux.toast.show({
             text: '图片加载出错啦~~',

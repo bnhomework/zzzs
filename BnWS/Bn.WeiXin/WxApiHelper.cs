@@ -308,16 +308,22 @@ namespace Bn.WeiXin
             return uif;
         }
 
-        public string loadImageFromWX(string serverId)
+        public string loadImageFromWX(string serverId,out string ext)
         {
            string stUrl = string.Format("http://file.api.weixin.qq.com/cgi-bin/media/get?access_token={0}&media_id={1}", GetAccessToken(), serverId);
            var req = (HttpWebRequest)WebRequest.Create(stUrl);
 
            req.Method = "GET";
+            ext = "jpeg";
            using (var wr = req.GetResponse())
            {
                var myResponse = (HttpWebResponse)req.GetResponse();
-
+              var ct= myResponse.ContentType;
+               Debug.WriteLine(ct);
+               if (ct.Split('/').Length > 1)
+               {
+                   ext = ct.Split('/')[1];
+               }
                return myResponse.ResponseUri.ToString();
 
            } 
