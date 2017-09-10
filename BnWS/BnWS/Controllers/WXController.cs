@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Text;
 using Bn.WeiXin;
 using System.Web.Mvc;
@@ -111,6 +114,33 @@ namespace BnWS.Views
             var user = new WXBS().GetWXUserInfo(openId);
 
             return new JsonResult() { Data = new{user.UserName,user.Avatar,user.OpenId}, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+        }
+
+        [HttpPost]
+        public ActionResult loadImageFromWX(string serverId)
+        {
+            try
+            {
+
+                var url = WxApiHelper.Instance.loadImageFromWX(serverId);
+                var mywebclient = new WebClient();
+                var ext = url.Reverse().ToString().Split('.')[0].Reverse().ToString();
+                var fileName = string.Format("{0}.{1}",
+                    DateTime.Now.ToString("yyyyMMddHHmmssfff") + (new Random()).Next().ToString().Substring(0, 4), ext);
+
+                var serverPath = string.Format("{0}\\temp\\{1}", WxConfig.WebServerUrl, fileName);
+
+                var savepath = string.Format("{0}\\{1}", Server.MapPath("Temp"), fileName);
+
+                mywebclient.DownloadFile(url, savepath);
+                return new JsonResult() { Data = serverPath };
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                throw;
+            }
         }
     }
 }

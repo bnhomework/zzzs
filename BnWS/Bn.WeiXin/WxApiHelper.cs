@@ -307,6 +307,22 @@ namespace Bn.WeiXin
             var uif = GetJosnData<WXUserInfo>(data, " https://api.weixin.qq.com/sns/userinfo");
             return uif;
         }
+
+        public string loadImageFromWX(string serverId)
+        {
+           string stUrl = string.Format("http://file.api.weixin.qq.com/cgi-bin/media/get?access_token={0}&media_id={1}", GetAccessToken(), serverId);
+           var req = (HttpWebRequest)WebRequest.Create(stUrl);
+
+           req.Method = "GET";
+           using (var wr = req.GetResponse())
+           {
+               var myResponse = (HttpWebResponse)req.GetResponse();
+
+               return myResponse.ResponseUri.ToString();
+
+           } 
+        }
+
     }
     
 }
