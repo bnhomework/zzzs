@@ -1,6 +1,6 @@
 <template>
   <div class="popup-address-container">
-    <div v-if="addressList.length==0" @click="addNewAddress" style="line-height:80px">
+    <div v-if="addressList.length==0" @click="addNewAddress" style="line-height:80px;padding:5px">
       <span class="bn-icon">&#xe622;</span><span>   创建新的收货地址</span>
     </div>
     <div v-if="addressList.length>0&&selectedAddress!=undefined" @click="popupAddressList" style="line-height:40px">
@@ -11,15 +11,16 @@
       </div>
       <div class="content-2" style="line-height:normal;margin-right:15px">{{selectedAddress.Province}} {{selectedAddress.City}} {{selectedAddress.Town}} {{selectedAddress.AddressLine1}}</div>
     </div>
-    <div></div>
+    <div style="width: 100%;height: 21px; background-repeat:repeat-x;" :style="{backgroundImage: 'url(' + eb + ')'}"></div>
     <div v-transfer-dom>
       <popup v-model="showAddressList" is-transparent>
         <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">
-        <div class="vux-popup-picker-header">
-          <div class="vux-flexbox vux-flex-row">
-            <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-cancel" style="margin-left: 8px;" @click="showAddressList=false">取消</div>
-            <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-header-menu-right" style="margin-left: 8px;" @click="showAddressList=false">完成</div>
-          </div></div>
+          <div class="vux-popup-picker-header">
+            <div class="vux-flexbox vux-flex-row">
+              <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-cancel" style="margin-left: 8px;" @click="showAddressList=false">取消</div>
+              <div class="vux-flexbox-item vux-popup-picker-header-menu vux-popup-picker-header-menu-right" style="margin-left: 8px;" @click="showAddressList=false">完成</div>
+            </div>
+          </div>
           <div style="height:210px;overflow-y:auto">
             <radio title="请选择地址" :options="addressListOptions" :value="selectedAddressId" @on-change="changeSelectedAddress"></radio>
           </div>
@@ -88,7 +89,8 @@ export default {
       showAddressDetail: false,
       showAddressList: false,
       newAddress: {},
-      selectedAddressId: ''
+      selectedAddressId: '',
+      eb:require('@/assets/img/e.jpg')
     }
   },
   created() {
@@ -199,7 +201,6 @@ export default {
   overflow-x: hidden;
   min-height: 100px;
   background-color: #e7e8eb;
-  padding: 10px;
 }
 
 </style>

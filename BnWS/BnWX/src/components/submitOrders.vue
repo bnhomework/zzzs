@@ -77,6 +77,7 @@ export default {
       orders: [],
       loadingData:false,
       selectedOrders: [],
+      eb:require('@/assets/img/e.jpg')
     }
   },
   created() {

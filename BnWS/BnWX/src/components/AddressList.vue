@@ -1,9 +1,10 @@
 <template>
   <div style="overflow-x:hidden;width:100%">
     <div class="popup-address-container">
-      <div @click="onShowAddressDetail" style="line-height:80px">
+      <div @click="onShowAddressDetail" style="line-height:80px;padding:5px">
         <span class="bn-icon">&#xe622;</span><span>  创建新的收货地址</span>
       </div>
+      <div style="width: 100%;height: 21px;background-repeat:repeat-x;" :style="{backgroundImage: 'url(' + eb + ')'}"></div>
     </div>
     <div>
       <div v-for="item in addressListOptions" class="address-warp">
@@ -72,7 +73,8 @@ export default {
       selectedAddress: undefined,
       addressData: ChinaAddressV3Data,
       showAddressDetail: false,
-      newAddress: {}
+      newAddress: {},
+      eb:require('@/assets/img/e.jpg')
     }
   },
   created() {
@@ -170,7 +172,7 @@ export default {
   width: 100%;
   min-height: 100px;
   background-color: #e7e8eb;
-  padding: 10px;
+  /*padding: 10px;*/
   position: relative;
 }
 
