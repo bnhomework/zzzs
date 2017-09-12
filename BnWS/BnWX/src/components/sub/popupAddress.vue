@@ -3,7 +3,7 @@
     <div v-if="addressList.length==0" @click="addNewAddress" style="line-height:80px;padding:5px">
       <span class="bn-icon">&#xe622;</span><span>   创建新的收货地址</span>
     </div>
-    <div v-if="addressList.length>0&&selectedAddress!=undefined" @click="popupAddressList" style="line-height:40px">
+    <div v-if="addressList.length>0&&selectedAddress!=undefined" @click="popupAddressList" style="line-height:40px;min-height:80px;padding:5px">
       <div class="content-1">
         <span class="bn-icon">&#xe621;</span>
         <span>{{selectedAddress.ContactName}}</span>
