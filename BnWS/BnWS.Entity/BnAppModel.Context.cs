@@ -51,6 +51,7 @@ namespace BnWS.Entity
         public virtual DbSet<ZZ_Category> ZZ_Category { get; set; }
         public virtual DbSet<T_S_Sequence> T_S_Sequence { get; set; }
         public virtual DbSet<ZZ_DesginFollow> ZZ_DesginFollow { get; set; }
+        public virtual DbSet<T_S_Message> T_S_Message { get; set; }
     
         public virtual ObjectResult<sp_GetDesks_Result> sp_GetDesks(Nullable<System.Guid> shopId, Nullable<System.DateTime> date)
         {

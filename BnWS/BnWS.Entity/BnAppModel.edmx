@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="BnAppModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Pay">
           <Key>
             <PropertyRef Name="Id" />
@@ -69,6 +69,22 @@
           <Property Name="Icon" Type="varchar" MaxLength="128" />
           <Property Name="ParentId" Type="uniqueidentifier" />
           <Property Name="Seq" Type="int" Nullable="false" />
+          <Property Name="VersionNo" Type="int" Nullable="false" />
+          <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedTime" Type="datetime" Nullable="false" />
+          <Property Name="UpdatedBy" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="UpdatedTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="T_S_Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="256" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="256" />
+          <Property Name="Content" Type="nvarchar" MaxLength="2000" />
+          <Property Name="ReadTime" Type="datetime" />
           <Property Name="VersionNo" Type="int" Nullable="false" />
           <Property Name="TransactionId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="128" Nullable="false" />
@@ -585,6 +601,7 @@
           <EntitySet Name="Pay" EntityType="Self.Pay" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_Code" EntityType="Self.T_S_Code" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_Function" EntityType="Self.T_S_Function" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="T_S_Message" EntityType="Self.T_S_Message" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_Role" EntityType="Self.T_S_Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_Role_Function" EntityType="Self.T_S_Role_Function" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="T_S_Sequence" EntityType="Self.T_S_Sequence" Schema="dbo" store:Type="Tables" />
@@ -740,6 +757,7 @@
           <EntitySet Name="ZZ_Category" EntityType="BnAppModel.ZZ_Category" />
           <EntitySet Name="T_S_Sequence" EntityType="BnAppModel.T_S_Sequence" />
           <EntitySet Name="ZZ_DesginFollow" EntityType="BnAppModel.ZZ_DesginFollow" />
+          <EntitySet Name="T_S_Message" EntityType="BnAppModel.T_S_Message" />
         </EntityContainer>
         <EntityType Name="T_S_Code">
           <Key>
@@ -1346,6 +1364,22 @@
           <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="T_S_Message">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="ReadTime" Type="DateTime" Precision="3" />
+          <Property Name="VersionNo" Type="Int32" Nullable="false" />
+          <Property Name="TransactionId" Type="Guid" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="UpdatedTime" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1817,6 +1851,23 @@
                 <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
                 <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
                 <ScalarProperty Name="DesginId" ColumnName="DesginId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="T_S_Message">
+            <EntityTypeMapping TypeName="BnAppModel.T_S_Message">
+              <MappingFragment StoreEntitySet="T_S_Message">
+                <ScalarProperty Name="UpdatedTime" ColumnName="UpdatedTime" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="TransactionId" ColumnName="TransactionId" />
+                <ScalarProperty Name="VersionNo" ColumnName="VersionNo" />
+                <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

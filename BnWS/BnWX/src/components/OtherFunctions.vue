@@ -29,13 +29,13 @@
           <grid-item @on-item-click="goTo({name:'AddressList'})" label="地址">
             <span slot="icon" class="bn-icon">&#xe621;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="消息">
-            <span slot="icon" class="bn-icon">&#xe895;</span>
+          <grid-item @on-item-click="goTo({name:'MessageList'})" label="消息">
+            <span slot="icon"><span class="bn-icon">&#xe895;</span><badge v-show="messageCount>0">{{messageCount}}</badge></span>
           </grid-item>
           <grid-item @on-item-click="goTo({name:'DesginList'})" label="分享">
             <span slot="icon" class="bn-icon">&#xe6a0;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="联系客服">
+          <grid-item @on-item-click="goTo({name:'ContactUS'})" label="联系客服">
             <span slot="icon" class="bn-icon">&#xe619;</span>
           </grid-item>
         </grid>
@@ -45,10 +45,10 @@
             <span slot="icon" class="bn-icon"></span>
             <span slot="label">&nbsp;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="意见反馈">
+          <grid-item @on-item-click="goTo({name:'Feedback'})" label="意见反馈">
             <span slot="icon" class="bn-icon">&#xe676;</span>
           </grid-item>
-          <grid-item @on-item-click="goTo({name:'DesginList'})" label="关于我们">
+          <grid-item @on-item-click="goTo({name:'AboutUS'})" label="关于我们">
             <span slot="icon" class="bn-icon">&#xe618;</span>
           </grid-item>
           <grid-item label="">
@@ -63,7 +63,7 @@
 <script>
 import {
   Grid,
-  GridItem,
+  GridItem,Badge,
   GroupTitle
 }
 from 'vux'
@@ -72,21 +72,34 @@ export default {
   mixins: [utils],
   components: {
     Grid,
-    GridItem,
+    GridItem,Badge,
     GroupTitle
   },
   data() {
     return {
+      messageCount:0,
       sex: 1,
       selectedColor: '#E2DDDB',
       templates: [],
       xxxx: 'dddd'
-
     }
+  },
+  created(){
+    this.loadMessages();
   },
   methods: {
     onItemClick() {
 
+    },
+    loadMessages(){
+      var vm = this;
+      var openId = this.$store.state.bn.openId;
+      var url = this.apiServer + 'Common/GetNumberOfUnreadMessages';;
+      var data = { userId: openId }
+      this.$http.post(url, data)
+        .then(res => {
+          vm.messageCount = parseInt(res.data)||0;
+        });
     }
   }
 }

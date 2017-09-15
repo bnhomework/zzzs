@@ -11,6 +11,20 @@ namespace BnWS.Business
 {
     public class ZzBaseBS : BaseBS
     {
+        private CommonBS _commonBS;
+
+        protected CommonBS _CommonBS
+        {
+            get
+            {
+                if (_commonBS == null)
+                {
+                    _commonBS = new CommonBS(this.AppContext);
+                }
+                return _commonBS;
+            }
+        }
+
         public ZzBaseBS() : base()
         {
             

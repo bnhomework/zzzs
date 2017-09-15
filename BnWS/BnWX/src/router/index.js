@@ -19,6 +19,10 @@ const router = new Router({
     ,{ path: '/shoppingCart', name: 'shoppingCart', component: (resolve) => require(['@/components/submitOrders.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'提交订单'}}
     ,{ path: '/AddressList', name: 'AddressList', component: (resolve) => require(['@/components/AddressList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'收货地址'}}
     ,{ path: '/OrderList', name: 'OrderList', component: (resolve) => require(['@/components/OrderList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'我的订单'}}
+    ,{ path: '/MessageList', name: 'MessageList', component: (resolve) => require(['@/components/MessageList.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'我的消息'}}
+    ,{ path: '/AboutUS', name: 'AboutUS', component: (resolve) => require(['@/components/AboutUS.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'关于我们'}}
+    ,{ path: '/ContactUS', name: 'ContactUS', component: (resolve) => require(['@/components/ContactUS.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'联系客服'}}
+    ,{ path: '/Feedback', name: 'Feedback', component: (resolve) => require(['@/components/Feedback.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'意见反馈'}}
     ,{ path: '/LogisticsInfo', name: 'LogisticsInfo', component: (resolve) => require(['@/components/LogisticsInfo.vue'], resolve),meta: { allowAnonymous: true, showTabbar:true,title:'物流信息'}}
     ,{path:'*',redirect:{name:'home'}}
     ,{path:'/401',name:'401',component: (resolve) => require(['@/components/OtherFunctions.vue'], resolve),meta: { allowAnonymous: true, showTabbar:false,title:'Opps',componentName:'Opps'}}

@@ -16,7 +16,8 @@ store.registerModule('bn', {
     route: {},
     direction: 'forward',
     WX_Config: undefined,
-    userLocation: undefined
+    userLocation: undefined,
+    unreadMessages:0
   },
   mutations: {
     updateOpenId(state, payload) {
@@ -42,6 +43,9 @@ store.registerModule('bn', {
     },
     updateUserInfo(state, payload) {
       state.userInfo = payload.userInfo
+    },
+    updateUnreadMessages(state, payload) {
+      state.unreadMessages = payload.unreadMessages
     }
 
   },

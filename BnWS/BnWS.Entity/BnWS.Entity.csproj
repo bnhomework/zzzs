@@ -98,6 +98,9 @@
     <Compile Include="T_S_Function.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="T_S_Message.cs">
+      <DependentUpon>BnAppModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="T_S_Role.cs">
       <DependentUpon>BnAppModel.tt</DependentUpon>
     </Compile>

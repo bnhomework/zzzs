@@ -22,4 +22,17 @@ namespace BnWS.Entity
         public string NewPassword { get; set; }
     }
 
+    public class NotificationMessage
+    {
+        public string UserId { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+    }
+
+    public class NotificationMessageReview : NotificationMessage
+    {
+        public Guid Id { get; set; }
+        public DateTime CreatedTime { get; set; }
+        public DateTime? ReadTime { get; set; }
+    }
 }

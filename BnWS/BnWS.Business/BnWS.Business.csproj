@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AccountBS.cs" />
     <Compile Include="BaseBS.cs" />
+    <Compile Include="CommonBS.cs" />
     <Compile Include="PermissionBS.cs" />
     <Compile Include="ZY\PlateFormBS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

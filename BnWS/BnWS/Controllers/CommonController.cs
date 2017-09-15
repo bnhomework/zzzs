@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
+using BnWS.Business;
 
 namespace BnWS.Controllers
 {
@@ -27,6 +28,31 @@ namespace BnWS.Controllers
             } 
            
             return new JsonResult() { Data = fileNames };
+        }
+         [HttpPost]
+        public ActionResult GetMessagesByUserId(string userId)
+        {
+            var bs = new CommonBS(this.AppContext);
+            var messages = bs.GetMessagesByUserId(userId);
+            var result = new JsonNetResult() { Data = messages, MaxJsonLength = int.MaxValue };
+            result.Settings.DateFormatString = "yyyy-MM-dd";
+            return result;
+        }
+         [HttpPost]
+        public ActionResult GetNumberOfUnreadMessages(string userId)
+        {
+            var bs = new CommonBS(this.AppContext);
+            var messages = bs.GetNumberOfUnreadMessages(userId);
+            var result = new JsonNetResult() { Data = messages };
+            return result;
+        }
+         [HttpPost]
+         public ActionResult MarkMessageReaded(List<Guid> messageIds)
+        {
+            var bs = new CommonBS(this.AppContext);
+            bs.MarkMessageReaded(messageIds);
+            var result = new JsonNetResult() { Data = "OK" };
+            return result;
         }
     }
 }

@@ -306,6 +306,12 @@ namespace BnWS.Business
                     order.OrderStatus = (int) ZZOrderStatus.Processing;
                     uow.Repository<ZZ_Order>().Update(order);
                     InsertOrderStatusHistory(uow, orderId, (int) ZZOrderStatus.Processing);
+                    _CommonBS.InsertMessage(uow,new NotificationMessage()
+                    {
+                        UserId = order.CustomerId,
+                        Title = string.Format("订单状态更新：{0}",order.TrackingNumber),
+                        Content = string.Format("您的订单【{0}】已经开始生产", order.TrackingNumber)
+                    });
                     uow.Save();
                 }
                 else
@@ -335,6 +341,12 @@ namespace BnWS.Business
                     li.ExpressTrackingNo = logisticsInfo.ExpressTrackingNo;
                     li.Comments = logisticsInfo.Comments;
                     uow.Repository<ZZ_LogisticsInfo>().Insert(li);
+                    _CommonBS.InsertMessage(uow, new NotificationMessage()
+                    {
+                        UserId = order.CustomerId,
+                        Title = string.Format("订单状态更新：{0}", order.TrackingNumber),
+                        Content = string.Format("您的订单【{0}】已经完成。快递公司：{1},快递号：{2}.", order.TrackingNumber,li.ExpressCompany,li.ExpressTrackingNo)
+                    });
                     uow.Save();
                 }
                 else
@@ -357,6 +369,12 @@ namespace BnWS.Business
                     order.OrderStatus = (int) ZZOrderStatus.Refund;
                     uow.Repository<ZZ_Order>().Update(order);
                     InsertOrderStatusHistory(uow, orderId, (int) ZZOrderStatus.Refund);
+                    _CommonBS.InsertMessage(uow, new NotificationMessage()
+                    {
+                        UserId = order.CustomerId,
+                        Title = string.Format("订单状态更新：{0}", order.TrackingNumber),
+                        Content = string.Format("您订单【{0}】的退款请求，商家已同意退款。", order.TrackingNumber)
+                    });
                     uow.Save();
                 }
                 else
