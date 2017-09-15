@@ -65,14 +65,24 @@ export default {
   border-radius: 5px;
   margin: 5px;
 }
-.messages-title{
-  
-}
-.messages-date{
 
+.messages-title {
+  color: #5d5d5d;
+  line-height: 30px;
+  font-weight: bold;
+  border-left: 5px solid #00CC99;
+  padding-left: 5px;
 }
-messages-detail{
-  
+
+.messages-date {
+  font-size: 12px;
+  padding: 5px;
+}
+
+.messages-detail {
+  font-size: 12px;
+  color: #6d6d6d;
+  padding: 5px;
 }
 
 </style>

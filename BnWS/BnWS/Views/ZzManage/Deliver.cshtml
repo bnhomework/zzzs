@@ -146,19 +146,19 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">快递公司</label>
                             <div class="col-sm-10">
-                                <input type="text" data-bind="value:LogisticsInfo.ExpressCompany" class="form-control">
+                                <input type="text" data-bind="value:LogisticsInfo().ExpressCompany" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">快递号</label>
                             <div class="col-sm-10">
-                                <input type="text" data-bind="value:LogisticsInfo.ExpressTrackingNo" class="form-control">
+                                <input type="text" data-bind="value:LogisticsInfo().ExpressTrackingNo" class="form-control">
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">备注</label>
                             <div class="col-sm-10">
-                                <textarea data-bind="value:LogisticsInfo.Comments" class="form-control" rows="3"></textarea>
+                                <textarea data-bind="value:LogisticsInfo().Comments" class="form-control" rows="3"></textarea>
                             </div>
                         </div>
 
@@ -191,7 +191,7 @@
             self.OrderStatus = ko.observable();
             self.ProductType = ko.observable({});
 
-            self.LogisticsInfo = {};
+            self.LogisticsInfo = ko.observable({});
             self.detailModal = $('#detailModal');
             self.allStatus = [
                 { StatusName: '显示所有' }, { StatusName: '未付款', Id: '10' }, { StatusName: '已付款', Id: '20' }, { StatusName: '生产中', Id: '30' }, { StatusName: '已完成', Id: '50' }, { StatusName: '申请退款', Id: '40' }, { StatusName: '已退款', Id: '60' }
@@ -209,7 +209,7 @@
                 self.loadProductTypes();
                 self.loadOrders();
             };
-            self.gotoViewOrder = function (data) {
+            self.gotoViewOrder = function(data) {
                 var url = '/zzmanage/vieworder?orderId=' + data.OrderId;
                 bnApp.open(url, '订单：' + data.TrackingNumber);
             };
@@ -253,7 +253,7 @@
                 });
             };
             self.ShowLogisticsInfo = function(orderId) {
-                self.LogisticsInfo=new LIVM({ OrderId: orderId });
+                self.LogisticsInfo(new LIVM({ OrderId: orderId }));
                 self.detailModal.modal("show");
 
             }
@@ -273,7 +273,7 @@
                     url: '@Url.Action("CompleteOrder")',
                     type: "Post",
                     contentType: 'application/json; charset=utf-8',
-                    data: JSON.stringify({logisticsInfo:data}),
+                    data: JSON.stringify({ logisticsInfo: data }),
                     success: function(result) {
                         bnApp.hideLoading();
                         if (result) {

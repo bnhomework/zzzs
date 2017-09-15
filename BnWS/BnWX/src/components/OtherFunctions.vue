@@ -30,7 +30,7 @@
             <span slot="icon" class="bn-icon">&#xe621;</span>
           </grid-item>
           <grid-item @on-item-click="goTo({name:'MessageList'})" label="消息">
-            <span slot="icon"><span class="bn-icon">&#xe895;</span><badge v-show="messageCount>0">{{messageCount}}</badge></span>
+            <span slot="icon"><span class="bn-icon">&#xe895;</span><badge v-show="messageCount>0" :text="messageCount" style="position:absolute"></badge></span>
           </grid-item>
           <grid-item @on-item-click="goTo({name:'DesginList'})" label="分享">
             <span slot="icon" class="bn-icon">&#xe6a0;</span>
