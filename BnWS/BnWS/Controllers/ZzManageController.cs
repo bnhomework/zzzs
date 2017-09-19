@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web.Mvc;
@@ -224,6 +225,58 @@ namespace BnWS.Views
         public ActionResult OrderReport()
         {
             return View();
+        }
+        [HttpPost]
+        public ActionResult GetOrderReport(ReportCondition c)
+        {
+            var now = DateTime.Now;
+            c.FromDate = now.AddMonths(-12);
+            c.ToDate = now;
+
+            var data = BS.GetOrderReport(c);
+            var list = new List<OrderReportInfo>();
+            for (DateTime i = c.FromDate.Value; i <= c.ToDate; i=i.AddMonths(1))
+            {
+                var m = i.ToString("yyyy-MM");
+                var d = data.FirstOrDefault(x => x.CheckOutTime == m);
+                if (d != null)
+                {
+                    list.Add(d);
+                }
+                else
+                {
+                    list.Add(new OrderReportInfo(){CheckOutTime = m});
+                }
+            }
+            var result = new JsonNetResult() { Data = list, MaxJsonLength = int.MaxValue };
+            result.Settings.DateFormatString = "yyyy-MM-dd";
+            return result; 
+        }
+        [HttpPost]
+        public ActionResult GetClientReport(ReportCondition c)
+        {
+            var now = DateTime.Now;
+            c.FromDate = now.AddMonths(-12);
+            c.ToDate = now;
+
+            var data = BS.GetClientReport(c);
+            var list = new List<ClientReportInfo>();
+            for (DateTime i = c.FromDate.Value; i <= c.ToDate; i=i.AddMonths(1))
+            {
+                var m = i.ToString("yyyy-MM");
+                var d = data.FirstOrDefault(x => x.Time == m);
+                if (d != null)
+                {
+                    list.Add(d);
+                }
+                else
+                {
+                    list.Add(new ClientReportInfo() { Time = m });
+                }
+            }
+            var result = new JsonNetResult() { Data = list, MaxJsonLength = int.MaxValue };
+            result.Settings.DateFormatString = "yyyy-MM-dd";
+            return result; 
         }
 
         public ActionResult UserReport()

@@ -1,17 +1,84 @@
-﻿
-@{
-    Layout = null;
+﻿@{
+    ViewBag.Title = "订单报表";
+    Layout = "~/Views/Shared/_Manage.cshtml";
 }
 
 <!DOCTYPE html>
-
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>OrderReport</title>
-</head>
-<body>
-    <div> 
+<link href="~/Content/js/plugins/morris/morris.css" rel="stylesheet" />
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>月订单数</h5>
+                    <div class="ibox-tools">
+                        <a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                    <div id="myfirstchart" style="height: 250px;"></div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+
+</div>
+@section scripts{
+    <script src="~/Content/js/plugins/morris/raphael-2.1.0.min.js"></script>
+@*<script src="~/Content/js/plugins/morris/morris.js"></script>*@
+<script src="~/Content/js/plugins/morris/morris.min.js"></script>
+    <script type="text/javascript">
+       
+        function ViewModel() {
+            var self = this;
+
+            self.dataList = ko.observableArray([]);
+            self.init = function() {
+                self.loadList()
+            };
+            self.loadList = function() {
+                bnApp.showLoading();
+                var condition = {};
+                $.ajax({
+                    url: '@Url.Action("GetOrderReport")',
+                    type: "Post",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({ condition: condition }),
+                    success: function(result) {
+                        self.dataList.removeAll();
+                        self.dataList(result);
+                        self.renderCharts();
+                        bnApp.hideLoading();
+                    },
+                    error: function(error) {
+                        bnApp.showError(error);
+                        bnApp.hideLoading();
+                    }
+                });
+            };
+            self.renderCharts=function() {
+                new Morris.Line({
+                    // ID of the element in which to draw the chart.
+                    element: 'myfirstchart',
+                    // Chart data records -- each entry in this array corresponds to a point on
+                    // the chart.
+                    data: ko.toJS(self.dataList),
+                    // The name of the data record attribute that contains x-values.
+                    xkey: 'CheckOutTime',
+                    // A list of names of data record attributes that contain y-values.
+                    ykeys: ['Orders'],
+                    // Labels for the ykeys -- will be displayed when you hover over the
+                    // chart.
+                    labels: ['订单数']
+                });
+            }
+        }
+
+        var viewModel = new ViewModel();
+        ko.applyBindings(viewModel);
+
+        viewModel.init();
+    </script>
+}

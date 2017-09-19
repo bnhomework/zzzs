@@ -353,7 +353,9 @@
     <Content Include="Content\js\plugins\markdown\markdown.js" />
     <Content Include="Content\js\plugins\markdown\to-markdown.js" />
     <Content Include="Content\js\plugins\metisMenu\jquery.metisMenu.js" />
+    <Content Include="Content\js\plugins\morris\morris.css" />
     <Content Include="Content\js\plugins\morris\morris.js" />
+    <Content Include="Content\js\plugins\morris\morris.min.js" />
     <Content Include="Content\js\plugins\morris\raphael-2.1.0.min.js" />
     <Content Include="Content\js\plugins\nestable\jquery.nestable.js" />
     <Content Include="Content\js\plugins\nouslider\jquery.nouislider.min.js" />

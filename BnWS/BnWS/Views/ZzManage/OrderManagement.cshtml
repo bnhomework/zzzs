@@ -141,7 +141,7 @@
         function ViewModel() {
             var self = this;
 
-            self.DateFrom = ko.observable('@DateTime.Now.AddDays(-7).Date');
+            self.DateFrom = ko.observable('@DateTime.Now.AddMonths(-6).Date');
             self.DateTo = ko.observable('@DateTime.Now.Date');
             self.CustomerName = ko.observable();
             self.TrackingNumber = ko.observable();

@@ -385,6 +385,83 @@ namespace BnWS.Business
 
             return result;
         }
+
+        public List<OrderReportInfo> GetOrderReport(ReportCondition c)
+        {
+            using (var db = GetDbContext())
+            {
+                 var orderPred = PredicateBuilder.New<ZZ_Order>(x=>x.CheckOutDate!=null);
+                if (c.FromDate.HasValue)
+                {
+                    var f = c.FromDate.Value.Date;
+                    orderPred = orderPred.And(x => x.CheckOutDate >= f);
+                }
+                if (c.ToDate.HasValue)
+                {
+                    var to = c.ToDate.Value.Date.AddDays(1);
+                    orderPred = orderPred.And(x => x.CheckOutDate < to);
+                }
+                var tmp=db.ZZ_Order.AsExpandable()
+                    .Where(orderPred)
+                    .Select(x => new {x.OrderId, x.CheckOutDate, x.TotalAmount, x.Quiantity})
+                    .ToList()
+                    .Select(x=>new
+                    {
+                        x.OrderId,
+                        x.TotalAmount,
+                        x.Quiantity,
+                        CheckOutTime = x.CheckOutDate.Value.ToString("yyyy-MM")
+                    });
+
+                return tmp.ToList().GroupBy(x => x.CheckOutTime)
+                    .Select(x => new OrderReportInfo()
+                    {
+                        CheckOutTime = x.Key
+                        ,
+                        Orders = x.Count()
+                        ,
+                        Quiantity = x.Sum(y => y.Quiantity)
+                        ,
+                        TotalAmount = x.Sum(t => t.TotalAmount)
+                    }).ToList();
+            }
+
+        }
+        public List<ClientReportInfo> GetClientReport(ReportCondition c)
+        {
+            using (var db = GetDbContext())
+            {
+                var orderPred = PredicateBuilder.New<ZY_Customer>(x => x.CreatedTime != null);
+                if (c.FromDate.HasValue)
+                {
+                    var f = c.FromDate.Value.Date;
+                    orderPred = orderPred.And(x => x.CreatedTime >= f);
+                }
+                if (c.ToDate.HasValue)
+                {
+                    var to = c.ToDate.Value.Date.AddDays(1);
+                    orderPred = orderPred.And(x => x.CreatedTime < to);
+                }
+                var tmp=db.ZY_Customer.AsExpandable()
+                    .Where(orderPred)
+                    .Select(x => new { x.OpenId, x.CreatedTime })
+                    .ToList()
+                    .Select(x=>new
+                    {
+                        x.OpenId,
+                        CreatedTime = x.CreatedTime.ToString("yyyy-MM")
+                    });
+
+                return tmp.ToList().GroupBy(x => x.CreatedTime)
+                    .Select(x => new ClientReportInfo()
+                    {
+                        Time = x.Key
+                        ,
+                        Value = x.Count()
+                    }).ToList();
+            }
+
+        }
         public ZZOrderDetail GetOrderInfo(Guid orderId)
         {
             var result = new ZZOrderDetail();

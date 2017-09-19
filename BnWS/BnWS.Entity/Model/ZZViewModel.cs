@@ -170,6 +170,24 @@ namespace BnWS.Entity
         public decimal TotalAmount { get; set; }
     }
 
+    public class ReportCondition
+    {
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+    }
+    public class OrderReportInfo
+    {
+        public string CheckOutTime { get; set; }
+        public decimal TotalAmount { get; set; }
+        public int Quiantity { get; set; }
+        public int Orders { get; set; }
+    }
+    public class ClientReportInfo
+    {
+        public string Time { get; set; }
+        public int Value { get; set; }
+    }
+
     public class ZZOrderDetail : ZZOrderSummary
     {
         public string OrderStatusDesc { get; set; }
