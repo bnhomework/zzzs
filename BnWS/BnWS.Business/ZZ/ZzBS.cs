@@ -295,7 +295,7 @@ namespace BnWS.Business
         public JSSDKPrepay PlaceOrder(List<Guid> orderIds, Guid addressId, string ip, string customerOpenId)
         {
             var result = new JSSDKPrepay();
-            var submissionId =newSubmisstionId();
+            var submissionId =NewSubmisstionId();
             using (var uow = GetUnitOfWork())
             {
                var orders= uow.Repository<ZZ_Order>()
@@ -367,9 +367,18 @@ namespace BnWS.Business
             }
             return true;
         }
-        private string newSubmisstionId()
+        private string NewSubmisstionId()
         {
-            return Guid.NewGuid().ToString().Replace("-", "");
+            using (var uow = GetUnitOfWork())
+            {
+                var s = GetCurrentSeq("SubmissionId");
+                s.Seq += 1;
+                var r = new Random().Next(10, 99);
+                var sid = string.Format("S{0}{1:D2}{2:D2}{3}", ((char)(s.Year - 2000 + 55)), s.Month, s.Seq, r);
+                uow.Repository<T_S_Sequence>().Update(s);
+                uow.Save();
+                return sid;
+            }
         }
 
         //public List<ZZOrderReview> GetOrders(string customerId)
