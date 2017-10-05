@@ -192,9 +192,16 @@ export default {
       }
     },
     initFonts() {
-      this.fonts = ["Times New Roman","Buxton Sketch",'Brush Script MT','Castellar','Curlz MT','Edwardian Script ITC'
+      window.bnfonts
+      this.fonts = ["Times New Roman"];
+      if(window.bnfonts&&window.bnfonts.length>0){
+        for (var i = window.bnfonts.length - 1; i >= 0; i--) {
+          this.fonts.push(window.bnfonts[i]);
+        }
+      }
+        // ,"Buxton Sketch",'Castellar','Curlz MT','Edwardian Script ITC'
         // "Edwardianbbd4cf60119966", "againstmyselfbbd4f196e19966", "Malapropismbbd4fb03019966", "GoodVibrationsRbbd50518119966", "Helvetica-Neue-bbd50d02619966", "Jellyka_-_Love_bbd51821119966", "ChannelSlanted2bbd4784e119966"
-      ]
+     // ]
     },
     reEncode(data) {
       data = encodeURIComponent(data);
