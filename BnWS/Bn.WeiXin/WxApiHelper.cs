@@ -278,8 +278,8 @@ namespace Bn.WeiXin
             var prepay = new JSSDKPrepay();
             var o = new JSSDKPayOrder();
             o.body = WxConfig.wxpay_body;
-            o.attach = WxConfig.wxpay_attach; 
-            o.out_trade_no = out_trade_no.Substring(0, 32);
+            o.attach = WxConfig.wxpay_attach;
+            o.out_trade_no = out_trade_no;//.Substring(0, 32);
             o.spbill_create_ip = spbill_create_ip; //APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
             o.openid = openid;
             o.total_fee = total_fee;

@@ -6,6 +6,7 @@ using System.IO;
 using System.Web;
 using BnWS.Entity;
 using Repository;
+using Svg;
 
 namespace BnWS.Business
 {
@@ -84,6 +85,53 @@ namespace BnWS.Business
                 {
                     image.Save(localFullOutputPath, imageformat);
                 }
+            }
+
+            //using (var ms = new MemoryStream(bytes))
+            //{
+            //    image = Image.FromStream(ms);
+            //}
+            //image.Save(localFullOutputPath, imageformat);
+            return string.Format(@"upload/{0}/{1}", id, fileName);
+        }
+        protected string SaveByteArrayAsImage2(Guid id, string raw, string name, string ext = "png")
+        {
+            var folder = Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", id.ToString());
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+            //Debug.WriteLine(string.Format("------------{0}-------------",name));
+            //Debug.WriteLine(raw);
+            var fileName = string.Format("{0}.{1}", name, ext);
+            var localFullOutputPath = Path.Combine(folder, fileName);
+            var base64String = raw.Split(',')[1];
+            byte[] bytes = Convert.FromBase64String(base64String);
+
+            //Image image;
+
+            var ext2 = ext.ToLower();
+            ImageFormat imageformat = ImageFormat.Png;
+
+            switch (ext2)
+            {
+                case "png":
+                    imageformat = ImageFormat.Png;
+                    break;
+                case "jpg":
+                case "jpeg":
+                    imageformat = ImageFormat.Jpeg;
+                    break;
+                default:
+                    break;
+            }
+
+            using (var memoryStream = new MemoryStream(bytes))
+            {
+               
+                    var svgDocument =SvgDocument.Open<SvgDocument>(memoryStream);
+                    var bitmap = svgDocument.Draw();
+                    bitmap.Save(localFullOutputPath, ImageFormat.Png);
             }
 
             //using (var ms = new MemoryStream(bytes))

@@ -1,0 +1,4 @@
+C:\Users\sijianbn\Documents\Visual Studio 2013\Projects\ConsoleApplication1\vvvv\public\common\src\thirdparty\Svg.dll
+C:\Users\sijianbn\Documents\Visual Studio 2013\Projects\ConsoleApplication1\vvvv\public\common\src\thirdparty\Svg.pdb
+C:\Users\sijianbn\Documents\Visual Studio 2013\Projects\ConsoleApplication1\SVG-master\Source\obj\Debug\Svg.dll
+C:\Users\sijianbn\Documents\Visual Studio 2013\Projects\ConsoleApplication1\SVG-master\Source\obj\Debug\Svg.pdb

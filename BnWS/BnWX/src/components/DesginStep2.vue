@@ -18,7 +18,7 @@
             <x-input title="标签:" v-model="desginTags"></x-input>
           </group>
           <div style="padding:20px 15px;">
-            <x-button type="primary" :disabled="Preview1==''||Preview2==''||Preview1_120==''||Preview2_120==''" @click.native="saveDesign">保存</x-button>
+            <x-button type="primary" :disabled="Preview1_120==''||Preview2_120==''" @click.native="saveDesign">保存</x-button>
             <x-button @click.native="saveDialogVisible = false">取消</x-button>
           </div>
         </div>
@@ -85,8 +85,8 @@
       </tabbar-item>
       <tabbar-item :selected="selectedTab==10" @on-item-click="onItemClick(10)"><span slot="label"> <span  class="bn-icon">&#xe627;</span> 文字</span>
       </tabbar-item>
-      <tabbar-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span slot="label"> <span  class="bn-icon">&#xe608;</span> 模板</span>
-      </tabbar-item>
+      <!-- <tabbar-item :selected="selectedTab==20" @on-item-click="onItemClick(20)"><span slot="label"> <span  class="bn-icon">&#xe608;</span> 模板</span>
+      </tabbar-item> -->
       <tabbar-item :selected="selectedTab==20" @on-item-click="showSaveDialog"><span slot="label"> <span  class="bn-icon">&#xe601;</span> 完成</span>
       </tabbar-item>
     </tabbar>
@@ -152,7 +152,9 @@ export default {
       saveDialogVisible: false,
       defaultlogo: '',
       selectedTab: 0,
-      isbackend: false
+      isbackend: false,
+      FrontImg64: '',
+      BackImg64: '',
     }
   },
   created() {
@@ -161,6 +163,9 @@ export default {
   },
   methods: {
     initData() {
+      var vm = this;
+      //this.convertImageToBase64_2(this.template.FrontImg, function(u) { vm.FrontImg64 = u });
+      //this.convertImageToBase64_2(this.template.BackImg, function(u) { vm.BackImg64 = u });
       this.initColors();
       this.initFonts();
     },
@@ -187,9 +192,59 @@ export default {
       }
     },
     initFonts() {
-      this.fonts = ["Times New Roman",
-        "Edwardianbbd4cf60119966", "againstmyselfbbd4f196e19966", "Malapropismbbd4fb03019966", "GoodVibrationsRbbd50518119966", "Helvetica-Neue-bbd50d02619966", "Jellyka_-_Love_bbd51821119966", "ChannelSlanted2bbd4784e119966"
+      this.fonts = ["Times New Roman","Buxton Sketch",'Brush Script MT','Castellar','Curlz MT','Edwardian Script ITC'
+        // "Edwardianbbd4cf60119966", "againstmyselfbbd4f196e19966", "Malapropismbbd4fb03019966", "GoodVibrationsRbbd50518119966", "Helvetica-Neue-bbd50d02619966", "Jellyka_-_Love_bbd51821119966", "ChannelSlanted2bbd4784e119966"
       ]
+    },
+    reEncode(data) {
+      data = encodeURIComponent(data);
+      data = data.replace(/%([0-9A-F]{2})/g, function(match, p1) {
+        var c = String.fromCharCode('0x' + p1);
+        return c === '%' ? '%25' : c;
+      });
+      return decodeURIComponent(data);
+    },
+    convertoPNG(uri, cb) {
+      var convertToPng = function(src, w, h) {
+        var canvas = document.createElement('canvas');
+        var context = canvas.getContext('2d');
+        canvas.width = w;
+        canvas.height = h;
+
+
+        context.drawImage(src, 0, 0);
+
+        // if (options.backgroundColor) {
+        //   context.globalCompositeOperation = 'destination-over';
+        //   context.fillStyle = options.backgroundColor;
+        //   context.fillRect(0, 0, canvas.width, canvas.height);
+        // }
+
+        var png;
+        try {
+          png = canvas.toDataURL('image/png', 0.8);
+        } catch (e) {
+          if ((typeof SecurityError !== 'undefined' && e instanceof SecurityError) || e.name == "SecurityError") {
+            console.error("Rendered SVG images cannot be downloaded in this browser.");
+            return;
+          } else {
+            throw e;
+          }
+        }
+        cb(png);
+      }
+      var image = new Image();
+
+      image.onload = function() {
+        convertToPng(image, image.width, image.height);
+      }
+
+      image.onerror = function() {
+        console.error(
+          'There was an error loading the data URI as an image on the following SVG');
+      }
+
+      image.src = uri;
     },
     showSaveDialog() {
       var vm = this;
@@ -199,14 +254,60 @@ export default {
       vm.Preview2_120 = '';
       vm.saveDialogVisible = true;
       //todo save image to server
-      saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, { scale: 1 }, function(uri) {
-        vm.Preview1 = uri;
+      //  var doctype = '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" [<!ENTITY nbsp "&#160;">]>';
+
+      // var externalStyles = [];
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/46909/595e3e61f629d80e202e0ba3.css')
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/28818/595e3eedf629d80e202e0ba4.css')
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/37509/595e3f14f629d80e202e0ba5.css')
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/46908/595e3f3df629d80e202e0ba6.css')
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/46882/595e3f5ef629d80e202e0ba7.css')
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/47007/595e3f8bf629d80e202e0ba8.css')
+      // externalStyles.push('http://cdn.webfont.youziku.com/webfonts/nomal/104806/45817/595e3cfdf629d80e202e0ba1.css')
+
+      // var x = '';
+      // if (externalStyles && externalStyles.length > 0) {
+      //   for (var i = externalStyles.length - 1; i >= 0; i--) {
+      //     var es = externalStyles[i];
+      //     x += '<?xml-stylesheet type="text/css" href="' + es + '" ?>'
+      //   }
+      // }
+      // var uri1 = 'data:image/svg+xml;base64,' + window.btoa(vm.reEncode(doctype + x + vm.$refs.front.$el.outerHTML));
+      // var uri2 = 'data:image/svg+xml;base64,' + window.btoa(vm.reEncode(doctype + x + vm.$refs.back.$el.outerHTML));
+      // vm.convertoPNG(uri1, function(u) {
+      //   vm.Preview1 = u;
+      //   vm.Preview1_120 = vm.Preview1;
+      // });
+      // vm.convertoPNG(uri2, function(u) {
+      //   vm.Preview2 = u;
+      //   vm.Preview2_120 = vm.Preview2;
+      // });
+      // vm.Preview1 = 'data:image/svg+xml;base64,' + window.btoa(vm.reEncode(doctype+x + vm.$refs.front.$el.outerHTML));
+      // vm.Preview1_120 = vm.Preview1;
+      // vm.Preview2 = 'data:image/svg+xml;base64,' + window.btoa(vm.reEncode(doctype+x + vm.$refs.back.$el.outerHTML));
+      // vm.Preview2_120 = vm.Preview2;
+      // ,externalStyles:externalStyles
+      
+      var fonts='';
+      saveSVGasPNG.svgAsDataUri(vm.$refs.front.$el, { scale: 1,fonts:fonts }, function(uri) {
+        // vm.Preview1 = uri;
         vm.Preview1_120 = uri;
-        saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, { scale: 1 }, function(uri) {
-          vm.Preview2 = uri;
+        saveSVGasPNG.svgAsDataUri(vm.$refs.back.$el, { scale: 1 ,fonts:fonts}, function(uri) {
+          // vm.Preview2 = uri;
           vm.Preview2_120 = uri;
         })
       })
+
+      // saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, { scale: 1 ,fonts:fonts}, function(uri) {
+      //   vm.Preview1 = uri;
+      //   // vm.Preview1_120 = uri;
+      //   saveSVGasPNG.svgAsPngUri(vm.$refs.back.$el, { scale: 1,fonts:fonts }, function(uri) {
+      //     vm.Preview2 = uri;
+      //     // vm.Preview2_120 = uri;
+      //   })
+      // })
+
+
       //  saveSVGasPNG.svgAsPngUri(vm.$refs.front.$el, {scale: 0.5}, function(uri) {
       //   vm.Preview1_120 = uri;
       // })
@@ -307,13 +408,13 @@ export default {
             vm.loadImageFromWX(serverId);
           }
         });
-        
+
       }
     },
-    loadImageFromWX(serverId){
-      var vm=this;
+    loadImageFromWX(serverId) {
+      var vm = this;
       var url = this.apiServer + 'wx/loadImageFromWX';
-      vm.$http.post(url, {serverId:serverId})
+      vm.$http.post(url, { serverId: serverId })
         .then(res => {
           vm.convertImageToBase64(res.data)
         }).catch(err => {
@@ -323,26 +424,47 @@ export default {
           })
         });
     },
-    convertImageToBase64(url){
+    convertImageToBase64(url) {
       var vm = this;
       var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        var img = new Image();
-        img.crossOrigin = "anonymous";
-        var href = url;
-        if (href) {
-          img.src = href;
-          img.onload = function() {
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx.drawImage(img, 0, 0);
-            // image.setAttributeNS("http://www.w3.org/1999/xlink", "href", canvas.toDataURL('image/png'));
-            vm.mylogos.push(canvas.toDataURL());
-          }
-          img.onerror = function() {
-            console.log("Could not load " + href);
-          }
+      var ctx = canvas.getContext('2d');
+      var img = new Image();
+      img.crossOrigin = "anonymous";
+      var href = url;
+      if (href) {
+        img.src = href;
+        img.onload = function() {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          // image.setAttributeNS("http://www.w3.org/1999/xlink", "href", canvas.toDataURL('image/png'));
+          vm.mylogos.push(canvas.toDataURL());
         }
+        img.onerror = function() {
+          console.log("Could not load " + href);
+        }
+      }
+    },
+    convertImageToBase64_2(url, cb) {
+      var vm = this;
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+      var img = new Image();
+      img.crossOrigin = "anonymous";
+      var href = this.getImgSrc(url);
+      if (href) {
+        img.src = href;
+        img.onload = function() {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          // image.setAttributeNS("http://www.w3.org/1999/xlink", "href", canvas.toDataURL('image/png'));
+          cb(canvas.toDataURL('image/png'));
+        }
+        img.onerror = function() {
+          console.log("Could not load2 " + href);
+        }
+      }
     },
     setLogo(l) {
       if (this.isbackend) {
@@ -357,11 +479,20 @@ export default {
   },
   computed: {
     bgImg_f() {
-      return this.template.FrontImg;
+       return this.template.FrontImg;
+      // if (this.FrontImg64 == '') {
+      //   return this.template.FrontImg;
+      // } else {
+      //   return this.FrontImg64
+      // }
     },
     bgImg_b() {
-
-      return this.template.BackImg;
+       return this.template.BackImg;
+      // if (this.BackImg64 == '') {
+      //   return this.template.BackImg;
+      // } else {
+      //   return this.BackImg64
+      // }
     },
     logo_f() {
 

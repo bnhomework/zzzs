@@ -1,18 +1,18 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" :viewBox="viewBox" v-finger:pinch="pinch" v-finger:press-move="pressMove" v-finger:rotate="rotate"
+  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"  :viewBox="viewBox" v-finger:pinch="pinch" v-finger:press-move="pressMove" v-finger:rotate="rotate"
   v-finger:touch-start="touchStart" v-finger:touch-end="touchEnd">
     <defs>
       <clipPath id="areaPath">
         <path :d="areaBoarderPath" />
       </clipPath>
-      <filter1></filter1>
+      <!-- <filter1></filter1> -->
     </defs>
 
-    <image :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
-    <image :clip-path="printArea" id='bnLogo' @click="onlogoclick" :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
+    <image xmlns:xlink="http://www.w3.org/1999/xlink" :x="0" :y="0" :height="height" :width="width" v-bind:xlink:href="bgImg"></image>
+    <image xmlns:xlink="http://www.w3.org/1999/xlink" :clip-path="printArea" id='bnLogo' @click="onlogoclick" :x="logo.x" :y="logo.y" :width="logo.width" :height="logo.height" v-bind:xlink:href="logoImg" v-show="logoImg!=''">
     </image>
     <!-- <g filter="url(#filter1)"> -->
-    <text  :clip-path="printArea" :x="txtLogo.x"  :y="txtLogo.y"  @click="onlogotextclick" :font-size="txtLogo.fontSize":transform="textRotate" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
+    <text :x="txtLogo.x"  :y="txtLogo.y"  @click="onlogotextclick" :font-size="txtLogo.fontSize":transform="textRotate" :font-family="textFontFamily" :style="textStyle" text-anchor="middle" v-show="txtLogo!=undefined">{{txtLogoText}}</text>
     <!-- </g> -->
     <path :d="areaBoarderPath" :style="borderStyle" v-show="showPrintArea&&!readOnly"></path>
   </svg>
@@ -88,7 +88,7 @@ export default {
 
       },
       touchStart(){
-        this.showPrintArea=true;
+        this.showPrintArea=true&&this.controlElement == this.logo;
       },
       touchEnd(){
         this.showPrintArea=false;
@@ -221,7 +221,13 @@ export default {
         var color = this.txtLogo.color || "#000000"
         var fontFamily = this.txtLogo.fontFamily || "Times New Roman";
         var fontSize=this.txtLogo.fontSize||20;
-        return `font-family: ${fontFamily};stroke:none; fill:${color};`
+        // return `font-family: ${fontFamily};stroke:none; fill:${color};`
+        return `stroke:none; fill:${color};`
+      },
+      textFontFamily(){
+
+        var fontFamily = this.txtLogo.fontFamily || "Times New Roman";
+        return fontFamily;
       },
       controlElement() {
         if (this.controlElementId == 1) {

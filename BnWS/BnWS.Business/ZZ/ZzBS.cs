@@ -63,15 +63,32 @@ namespace BnWS.Business
                     Tags = zzDesign.Tags,
                     DesginSettings = zzDesign.DesginSettings
                 };
-                d.Preview1 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1_120, "1_120");
-                d.Preview2 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2_120, "2_120");
-                SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1, "1");
-                SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2, "2");
+                //Debug.WriteLine(zzDesign.Preview1_120);
+                if (!Directory.Exists(Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", d.DesginId.ToString())))
+                {
+                    Directory.CreateDirectory(Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", d.DesginId.ToString()));
+                }
+                File.WriteAllText(string.Format("{0}/base64_1.txt", Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", d.DesginId.ToString())), getHtml(zzDesign.Preview1_120));
+                File.WriteAllText(string.Format("{0}/base64_2.txt", Path.Combine(HttpContext.Current.Server.MapPath("~"), "upload", d.DesginId.ToString())), getHtml(zzDesign.Preview2_120));
+               
+                //d.Preview1 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview1_120, "1_120");
+                //d.Preview2 = SaveByteArrayAsImage(d.DesginId, zzDesign.Preview2_120, "2_120");
+                d.Preview1 = SaveByteArrayAsImage2(d.DesginId, zzDesign.Preview1_120, "1_120");
+                d.Preview2 = SaveByteArrayAsImage2(d.DesginId, zzDesign.Preview2_120, "2_120");
+                SaveByteArrayAsImage2(d.DesginId, zzDesign.Preview1_120, "1");
+                SaveByteArrayAsImage2(d.DesginId, zzDesign.Preview2_120, "2");
+
+
                 uow.Repository<ZZ_Desgin>().Insert(d);
                 uow.Save();
             }
         }
 
+        private string getHtml(string p)
+        {
+            return p;
+            return string.Format("<!DOCTYPE html>\n<html><head><title></title></head><body><img src=\"{0}\"></body></html>",p);
+        }
         private string HandleDesginSettings(Guid desginId,string raw)
         {
             try
@@ -294,6 +311,9 @@ namespace BnWS.Business
         }
         public JSSDKPrepay PlaceOrder(List<Guid> orderIds, Guid addressId, string ip, string customerOpenId)
         {
+            try
+            {
+
             var result = new JSSDKPrepay();
             var submissionId =NewSubmisstionId();
             using (var uow = GetUnitOfWork())
@@ -319,6 +339,12 @@ namespace BnWS.Business
                 uow.Save();
             }
             return result;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                throw;
+            }
         }
         public bool ConfirmPayment(PayInfo payInfo)
         {
