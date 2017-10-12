@@ -242,12 +242,13 @@ namespace Bn.WeiXin
             order.mch_id = WxConfig.mch_id;
             order.spbill_create_ip = order.spbill_create_ip;
             order.notify_url = WxConfig.NOTIFY_URL;
-            order.nonce_str = Utility.GenerateNonceStr();
+            order.nonce_str = Utility.GenerateNonceStr(); 
+            order.trade_type = "JSAPI";
             var raw = "appid=" + order.appid
                       + "&attach=" + order.attach
                       + "&body=" + order.body
-                      + "&detail=" + order.detail
-                      + "&goods_tag=" + order.goods_tag
+                      //+ "&detail=" + order.detail
+                      //+ "&goods_tag=" + order.goods_tag
                       + "&mch_id=" + order.mch_id
                       + "&nonce_str=" + order.nonce_str
                       + "&notify_url=" + order.notify_url
