@@ -11,7 +11,7 @@
       </div>
       <div class="content-2" style="line-height:normal;margin-right:15px">{{selectedAddress.Province}} {{selectedAddress.City}} {{selectedAddress.Town}} {{selectedAddress.AddressLine1}}</div>
     </div>
-    <div style="width: 100%;height: 21px; background-repeat:repeat-x;" :style="{backgroundImage: 'url(' + eb + ')'}"></div>
+    <div style="width: 100%;height: 10px; background-repeat:repeat-x;" :style="{backgroundImage: 'url(' + eb + ')'}"></div>
     <div v-transfer-dom>
       <popup v-model="showAddressList" is-transparent>
         <div style="width: 100%;background-color:#fff;height:300px;margin:0 auto;">

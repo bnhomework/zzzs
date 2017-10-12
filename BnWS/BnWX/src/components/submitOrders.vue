@@ -12,14 +12,12 @@
       <a v-show="!showEdit" @click="showEdit=true">编辑</a>
       <a v-show="showEdit" @click="showEdit=false">完成</a>
     </div>
-
     <div v-show="loadingData==false&&orders.length==0" style="text-align:center;margin-top:40%">
       您的购物车还是空的,快去添加商品吧....
-
       <br/>
       <div></div>
       <br/>
-      <x-button mini plain  type="primary" link="/DesginList">去添加商品</x-button>
+      <x-button mini plain type="primary" link="/DesginList">去添加商品</x-button>
     </div>
     <div class="weui-cells weui-cells_checkbox">
       <label v-for="o in orderListOptions" :for="'checkbox_bn'+o.key" class="weui-cell weui-check_label">
@@ -35,16 +33,17 @@
             <span class="pull-right" style="position:absolute;bottom:15px;right:15px">x{{o.quiantity}}</span>
             <!--  -->
           </div>
-            <a class="big-btn red-btn right-action" v-show="showEdit" @click.prevent="deleteOrder(o.key)">删除</a>
-
+          <a class="big-btn red-btn right-action" v-show="showEdit" @click.prevent="deleteOrder(o.key)">删除</a>
           <!-- </div> -->
         </div>
       </label>
     </div>
     <!-- <checklist :options="orderListOptions" v-model="selectedOrders"></checklist> -->
-    <div class="bottom-fix" style="position:absolute !important">
-      <span class="amount" style="line-height:50px;font-size:16px;position:absolute;left:25px">合计：  ￥{{totalAmount}}</span>
-      <a class="big-btn red-btn pull-right" style="width:30%" @click="checkOut" v-bind:class="{'disable-btn':selectedOrders.length==0}">结算<span v-show="selectedOrders.length>0">({{selectedOrders.length}})</span></a>
+    <div style="position:fixed;width:100%;z-index:400;bottom:46px">
+      <div style="position:absolute;width:100%;text-align:center;background-color:#fff;bottom:0px">
+        <span class="amount" style="line-height:50px;font-size:16px;">合计：  ￥{{totalAmount}}</span>
+        <a class="big-btn red-btn pull-right" style="width:30%" @click="checkOut" v-bind:class="{'disable-btn':selectedOrders.length==0}">结算<span v-show="selectedOrders.length>0">({{selectedOrders.length}})</span></a>
+      </div>
     </div>
   </div>
 </template>
@@ -54,7 +53,7 @@ import {
   TransferDom,
   Checklist,
   Cell,
-    XButton
+  XButton
 } from 'vux'
 import utils from '@/mixins/utils'
 import _ from 'underscore'
@@ -75,9 +74,9 @@ export default {
     return {
       showEdit: false,
       orders: [],
-      loadingData:false,
+      loadingData: false,
       selectedOrders: [],
-      eb:require('@/assets/img/e.jpg')
+      eb: require('@/assets/img/e.jpg')
     }
   },
   created() {
@@ -85,7 +84,7 @@ export default {
   },
   methods: {
     loadOrders() {
-      this.loadOrders=true;
+      this.loadOrders = true;
       var orderIds = this.$route.params.orderIds;
       var vm = this;
       var url = this.apiServer + 'zz/GetShoppingCart';
@@ -96,7 +95,7 @@ export default {
       }
       this.$http.post(url, data)
         .then(res => {
-          vm.loadOrders=false;
+          vm.loadOrders = false;
           vm.orders = res.data;
           vm.selectedOrders = _.pluck(vm.orders, 'OrderId');
         });
