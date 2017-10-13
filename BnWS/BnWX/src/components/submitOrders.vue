@@ -131,16 +131,17 @@ export default {
         });
     },
     checkout_ok() {
-      this.$vux.toast.show({
-        text: '出错啦~~~',
-        type: 'cancel'
-      });
+      // this.$vux.toast.show({
+      //   text: '支付成功',
+      //   type: 'success'
+      // });
+      this.loadOrders();
       // this.loadOrders();
       //todo goTo
     },
     checkout_failed() {
       this.$vux.toast.show({
-        text: '出错啦~~~',
+        text: '支付未成功~~~',
         type: 'cancel'
       });
       this.loadOrders();

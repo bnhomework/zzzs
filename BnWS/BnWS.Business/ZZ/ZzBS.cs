@@ -332,6 +332,7 @@ namespace BnWS.Business
                 uow.Repository<ZZ_OrderAddress>().Insert(oa);
                 orders.ForEach(x =>
                 {
+                    x.SubmissionId = submissionId;
                     x.OrderStatus = (int)ZZOrderStatus.Submitted;
                     InsertOrderStatusHistory(uow, x.OrderId, (int)ZZOrderStatus.Submitted);
                     uow.Repository<ZZ_Order>().Update(x);

@@ -95,9 +95,10 @@ export default {
           DesignId:vm.design.Id,
         }
       };
-      var vm = this;
+       vm.$store.commit('updateLoadingStatus', {isLoading: true})
       this.$http.post(url, data)
         .then(res => {
+           vm.$store.commit('updateLoadingStatus', {isLoading: false})
           if (vm.action == 0) {
             vm.addToCart(res.data);
           } else {
