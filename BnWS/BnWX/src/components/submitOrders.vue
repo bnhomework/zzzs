@@ -131,13 +131,8 @@ export default {
         });
     },
     checkout_ok() {
-      // this.$vux.toast.show({
-      //   text: '支付成功',
-      //   type: 'success'
-      // });
-      this.loadOrders();
-      // this.loadOrders();
-      //todo goTo
+      this.goTo({name:'OrderList'});
+      //this.loadOrders();
     },
     checkout_failed() {
       this.$vux.toast.show({
