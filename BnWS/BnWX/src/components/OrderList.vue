@@ -16,7 +16,8 @@
       <div class="weui-form-preview__bd" style="text-align:left;margin-top:20px;margin-bottom:20px">
         <img :src="getImgSrc(item.Preview)" style="width:30%;min-height:90px">
         <div style="display:inline-block;width:65%;vertical-align: top; height:100%">
-          <p class="content-1">{{item.DesginName}}</p>
+          <p>订单编号：{{item.TrackingNumber}}</p>
+          <p class="content-1">设计：{{item.DesginName}}</p>
           <p>颜色：{{item.Color}} </p>
           <span class="amount" style="position:absolute;bottom:50px;">￥ {{item.TotalAmount}}</span>
           <span class="pull-right" style="font-size:10px;position:absolute;top:10px;right:15px;border:1px solid #f85;padding:2px;border-radius:4px;color:#f85">{{getOrderStatus(item.OrderStatus)}}</span>
