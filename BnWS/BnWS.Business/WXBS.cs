@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using Bn.WeiXin.GZH;
@@ -43,8 +44,18 @@ namespace BnWS.Business
                     if (wxuser != null)
                     {
                         userName = wxuser.nickname;
+                        try
+                        {
+                            Utility.DownloadFile(wxuser.headimgurl, localheadimg);
 
-                        Utility.DownloadFile(wxuser.headimgurl, localheadimg);
+                        }
+                        catch
+                        {
+                            //
+
+                            Debug.WriteLine(wxuser.headimgurl);
+                            Debug.WriteLine(localheadimg);
+                        }
                     }
                 }
                 else

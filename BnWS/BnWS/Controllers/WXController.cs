@@ -77,6 +77,8 @@ namespace BnWS.Views
 
         public ActionResult LoginCallback(string code,string state)
         {
+            try
+            {
             var wxHelper = WxApiHelper.Instance;
             string requestData=string.Format("appid={0}&secret={1}&code={2}&grant_type=authorization_code",
                 WxConfig.Appid
@@ -94,6 +96,12 @@ namespace BnWS.Views
             else
             {
                 return RedirectToAction("WX404");
+            }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                throw;
             }
         }
 
