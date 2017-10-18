@@ -39,6 +39,10 @@ namespace BnWS.Entity
         public List<string> Colors { get; set; } 
     }
 
+    public class DesginQuery
+    {
+        public string OpenId { get; set; }
+    }
     public class zzPublicDesgin:ZZDesign
     {
         public bool IsFollowed { get; set; }

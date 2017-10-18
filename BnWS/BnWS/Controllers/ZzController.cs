@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using BnWS.Business;
 using BnWS.Controllers;
 using BnWS.Entity;
+using BnWS.Models;
 
 namespace BnWS.Views
 {
@@ -51,6 +52,18 @@ namespace BnWS.Views
                 x.Follows
                 ,x.UnitPrice
             }), MaxJsonLength = int.MaxValue };
+        }
+        [HttpPost]
+        public ActionResult GetDesginList(DesginQuery condition)
+        {
+            var c = PageSearchBuilder.Build(Request, condition);
+            var designs = BS.GetDesginList(c);
+            //designs.
+            return new JsonResult()
+            {
+                Data = designs,
+                MaxJsonLength = int.MaxValue
+            };
         }
 
         [HttpPost]

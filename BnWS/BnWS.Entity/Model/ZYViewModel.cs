@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace BnWS.Entity
 {
- 
-
     public class DeskViewModel
     {
         public Guid DeskId { get; set; }

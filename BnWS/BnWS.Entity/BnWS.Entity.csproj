@@ -78,6 +78,7 @@
     </Compile>
     <Compile Include="BnMenu.cs" />
     <Compile Include="AppContext.cs" />
+    <Compile Include="Model\PageSearch.cs" />
     <Compile Include="Model\ZYViewModel.cs" />
     <Compile Include="Model\ZZViewModel.cs" />
     <Compile Include="Model\LoginViewModel.cs" />

@@ -152,6 +152,41 @@ namespace BnWS.Business
                     }).ToList();
             }
         }
+
+        public PageResult<ZZDesign> GetDesginList(PageSearch<DesginQuery> condition)
+        {
+            using (var db = GetDbContext())
+            {
+               var prd= PredicateBuilder.New<ZZ_Desgin>(x=>x.CustomerId==condition.q.OpenId);
+
+               var items = from d in db.ZZ_Desgin.AsExpandable().Where(prd)
+                        join t in db.ZZ_Template on d.TemplateId equals t.TemplateId
+                        join c in db.ZZ_Category on t.Category equals c.CategoryId
+                        join u in db.ZY_Customer on d.CustomerId equals u.OpenId
+                        orderby d.CreatedTime descending
+                        select new ZZDesign()
+                        {
+                            Id = d.DesginId,
+                            TemplateId = d.TemplateId,
+                            CustomerId = d.CustomerId,
+                            Name = d.Name,
+                            Tags = d.Tags,
+                            Preview1 = d.Preview1,
+                            Preview2 = d.Preview2,
+                            UnitPrice = c.UnitPrice,
+                            Designer = u.UserName,
+                            DesignerAvatar = u.Avatar,
+                            IsPublic = d.IsPublic,
+                            Follows = db.ZZ_DesginFollow.Count(x => x.DesginId == d.DesginId),
+                        };
+                var lists = items //.OrderBy(u => u.CreatedTime)
+                    .Skip(condition.SkipCount)
+                    .Take(condition.pageSize)
+                    .ToList();
+                var total = items.Count();
+                return  new PageResult<ZZDesign>(lists,total);
+            }
+        }
         public ZZDesign GetDesign(Guid designId)
         {
             using (var db = GetDbContext())
