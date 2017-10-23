@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       publicDesigns: [],
-      imgs:['/upload/home/a1.jpg','/upload/home/a2.jpg','/upload/home/a3.jpg','/upload/home/a4.jpg']
+      imgs:['/upload/home/1.jpg','/upload/home/2.jpg','/upload/home/3.jpg','/upload/home/4.jpg']
     }
   },
   created() {

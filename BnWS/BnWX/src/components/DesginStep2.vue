@@ -49,9 +49,9 @@
         </scroller>
         <scroller lock-y scrollbar-x>
           <div class="box">
-            <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5','font-family':f}" v-for="f in fonts" @click="setFonts(f)">
+            <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5','font-family':f.cname}" v-for="f in fonts" @click="setFonts(f.cname)">
               <!-- <div class="box-item box-item-font" style="width:100px" :style="{'background-color':'#f5f5f5'}" v-for="f in fonts" @click="setFonts(f)"> -->
-              <div style="width:100px;height:46px" :class="f">T-Shirt</div>
+              <div style="width:100px;height:46px" :class="f.cname">{{f.cvalue}}</div>
             </div>
           </div>
         </scroller>
@@ -193,7 +193,7 @@ export default {
     },
     initFonts() {
       window.bnfonts
-      this.fonts = ["Times New Roman"];
+      this.fonts = [{cname:"Times New Roman",cvalue:'Roman'}];
       if(window.bnfonts&&window.bnfonts.length>0){
         for (var i = window.bnfonts.length - 1; i >= 0; i--) {
           this.fonts.push(window.bnfonts[i]);
